@@ -2,14 +2,14 @@
   <v-app>
     <v-layout class="h-100 w-100 bg-blue-darken-1">
       <v-main>
-        <v-container class="" style="padding: 145px 630px 50px">
+        <v-container class="" style="padding: 145px 350px 50px">
           <v-row>
             <v-col class="px-5">
               <v-card class="pa-5 rounded-lg" elevation="5">
                 <h2>Attendance System Login</h2>
                 <p>
-                  Please log in to access your attendance records and manage your
-                  attendance effortlessly.
+                  Please log in to access your attendance records and manage
+                  your attendance effortlessly.
                 </p>
                 <v-form class="mt-5">
                   <v-text-field
@@ -28,7 +28,9 @@
                     color="primary"
                     @keyup.enter="submit"
                     prepend-inner-icon="mdi-lock"
-                    :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :append-inner-icon="
+                      showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                    "
                     @click:append-inner="showPassword = !showPassword"
                   ></v-text-field>
                   <v-btn
