@@ -38,15 +38,7 @@ export default () => {
 
   const $v = useVuelidate(rules, student)
 
-  const submit = () => {
-    if ($v.value.$invalid) {
-      $v.value.$touch()
-      return
-    }
 
-    const $student = useStudentStore()
-    $student.store(student)
-  }
 
-  return {student, submit, $v}
+  return {student, $v}
 }

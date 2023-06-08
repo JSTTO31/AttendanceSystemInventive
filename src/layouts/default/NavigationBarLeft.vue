@@ -16,7 +16,7 @@
       <v-list-item
         class="my-2 rounded-lg"
         color="primary"
-        @click.prevent=""
+        :to="{name: 'Activities'}"
         title="Activities"
         prepend-icon="mdi-chart-arc"
       >

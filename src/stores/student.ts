@@ -1,6 +1,7 @@
 import { api } from "@/utils";
 import { defineStore } from "pinia";
 import { auth } from "./user";
+import { Attendance } from "./attendance";
 
 export interface Student{
   id: number;
@@ -15,6 +16,8 @@ export interface Student{
   image: string
   created_at: string;
   updated_at: string;
+  attendance: Attendance
+  attendances: Attendance[]
 }
 
 interface StudentState{
@@ -35,8 +38,16 @@ export const useStudentStore = defineStore('student', {
 
           return response;
         } catch (error) {
-
+          console.log(error)
         }
+    },
+    async get(student_id: any){
+      try {
+        const response = await api.get('students/' + student_id)
+        this.student = response.data
+      } catch (error) {
+        console.log(error)
+      }
     },
     async store(information: any) {
         try {

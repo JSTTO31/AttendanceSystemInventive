@@ -2,7 +2,8 @@
   <v-container class="pa-10" style="padding-right: 250px !important">
     <h1 class="text-h4 font-weight-bold text-grey-darken-4">Create Student</h1>
     <p>Designed a student form to gather key details.</p>
-    <v-form class="mt-5">
+    <v-card flat :disabled="isLoading">
+      <v-form class="mt-5">
       <v-row>
         <v-col>
           <v-text-field
@@ -96,17 +97,31 @@
       <div class="w-100 d-flex align-center mt-4">
         <v-btn flat>Clear</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="submit">Create</v-btn>
+        <v-btn color="primary" @click="submit" :loading="isLoading">Create</v-btn>
       </div>
     </v-form>
+    </v-card>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import useStudentForm from "@/composables/useStudentForm";
 import { showError } from "@/utils";
-
-const { student, $v, submit } = useStudentForm();
+import { useStudentStore } from "@/stores/student";
+const { student, $v } = useStudentForm();
+const isLoading = ref(false)
+const submit = () => {
+    if ($v.value.$invalid) {
+      $v.value.$touch()
+      return
+    }
+    isLoading.value = false
+    const $student = useStudentStore()
+    $student.store(student).then(() => {
+      isLoading.value = false
+    })
+  }
 </script>
 
 <style scoped></style>

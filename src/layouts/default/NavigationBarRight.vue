@@ -3,34 +3,20 @@
     v-if="!$route.name?.toString().includes('Student')"
     location="right"
     width="350"
+    class="pa-0"
+    :rail="rail"
+
   >
-    <v-layout class="h-100">
-      <v-app-bar flat class="border-b">
-        <v-btn class="rounded-0" flat icon="mdi-chevron-right"></v-btn>
+    <v-layout class="h-100 pa-0 w-100">
+      <v-app-bar flat class="border-b pa-0">
+        <v-btn v-if="rail" icon="mdi-chevron-left" class="rounded-0" @click="rail = false"></v-btn>
+        <v-btn v-else icon="mdi-chevron-right" class="rounded-0" @click="rail = true"></v-btn>
         <h3 class="text-grey-darken-3 ml-3">OJT Students</h3>
       </v-app-bar>
-      <v-main id="nav-right" style="overflow-y: scroll">
-        <div class="px-5 pt-5">
-          <v-card
-            v-for="user in students"
-            :key="user.email"
-            class="d-flex flex-column justify-center align-center pa-5 rounded-xl mb-5 py-10"
-            @click.prevent=""
-            flat
-          >
-            <v-avatar size="125" class="bg-grey-lighten-4">
-              <v-img :src="user.image"></v-img>
-            </v-avatar>
-            <v-card-text class="text-center">
-              <h2>{{ `${user.first_name} ${user.last_name}` }}</h2>
-              <h5 class="font-weight-regular">{{ user.email }}</h5>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" variant="outlined">Present</v-btn>
-              <v-btn variant="outlined" color="error">Absent</v-btn>
-            </v-card-actions>
-            <span></span>
-          </v-card>
+      <v-main id="nav-right" :style="rail ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
+>
+        <div :class="rail ? '' : 'px-5 pt-5'">
+          <AttendanceStudentCardVue v-for="student in students" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
         </div>
       </v-main>
     </v-layout>
@@ -38,27 +24,13 @@
 </template>
 
 <script setup lang="ts">
+import AttendanceStudentCardVue from "@/components/AttendanceStudentCard.vue";
+import { useAppStore } from "@/stores/app";
 import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
-
-const { students } = storeToRefs(useStudentStore());
-const exampleUser = [
-  {
-    name: "John Doe",
-    email: "johndoe@example.example",
-    image: "https://www.w3schools.com/w3images/avatar6.png",
-  },
-  {
-    name: "Jane Doe",
-    email: "janedoe@example.example",
-    image: "https://www.w3schools.com/howto/img_avatar2.png",
-  },
-  {
-    name: "Jean Doe",
-    email: "jeandoe@example.example",
-    image: "https://www.w3schools.com/howto/img_avatar.png",
-  },
-];
+import { ref } from "vue";
+const { students } = storeToRefs(useAppStore());
+const rail = ref(true)
 </script>
 
 <style scoped>

@@ -28,9 +28,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useAttendanceStore } from "@/stores/attendance";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 const { user } = storeToRefs(useUserStore());
+
+
 </script>
 
 <style scoped></style>

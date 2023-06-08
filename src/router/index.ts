@@ -1,4 +1,5 @@
 // Composables
+import { useAppStore } from '@/stores/app'
 import { useStudentStore } from '@/stores/student'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
@@ -20,9 +21,10 @@ const routes = [
       {
         path: '/student/create',
         name: 'CreateStudent',
-        component: () => import('@/views/student/Create.vue')
+        component: () => import('@/views/student/Create.vue'),
+
       },
-       {
+      {
         path: '/student',
         name: 'IndexStudent',
          component: () => import('@/views/student/Index.vue'),
@@ -35,6 +37,41 @@ const routes = [
            })
         }
       },
+      {
+        path: '/student/:student_id',
+        name: 'ShowStudent',
+        redirect: {name: 'ShowStudent.attendance'},
+         component: () => import('@/views/student/Show.vue'),
+        //@ts-ignore
+        beforeEnter: (to, from, next) => {
+          const {students, student} = storeToRefs(useStudentStore())
+          const studentExists = students.value.find(item => item.id == to.params.student_id)
+          if(studentExists){
+            student.value = studentExists
+            return next()
+          }
+
+          const $student = useStudentStore()
+
+          $student.get(to.params.student_id).then(() => {
+            return next();
+          })
+
+          return next()
+        },
+        children: [
+          {
+            path: '',
+            name: 'ShowStudent.attendance',
+            component: () => import('@/views/student/show/Attendance.vue'),
+          }
+        ]
+      },
+      {
+        path: '/activities',
+        name: 'Activities',
+        component: () => import('@/views/Activities.vue')
+      }
     ],
     meta: {
       requiresAuth: true
@@ -52,7 +89,15 @@ const router = createRouter({
   routes,
 })
 
+router.afterEach(() => {
+  const {isLoading} = storeToRefs(useAppStore())
+  isLoading.value = false
+})
+
+
 router.beforeEach((to, from, next) => {
+  const {isLoading} = storeToRefs(useAppStore())
+  isLoading.value = true
   // const {isLoging} = storeToRefs(useUserStore())
 
   // if(to.meta.requiresAuth && !isLoging.value){
