@@ -4,13 +4,30 @@
     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
     <div class="mt-4">
       <div class="w-100 pb-2 d-flex align-center justify-space-between">
-        <h3 class="font-weight-medium text-grey-darken-3">Students list</h3>
         <v-tabs color="primary">
           <v-tab class="text-capitalize">Ongoing</v-tab>
           <v-tab class="text-capitalize">Completed</v-tab>
           <v-tab class="text-capitalize">History</v-tab>
         </v-tabs>
       </div>
+      <v-card flat class="mt-2 bg-blue py-2 mb-1">
+        <v-row>
+          <v-col class="d-flex align-center" cols="4">
+          </v-col>
+          <v-col class="d-flex align-center justify-center" cols="2">
+            <span class="font-weight-medium mr-2"><v-icon class="mr-2">mdi-clock-in</v-icon>Clock in</span>
+          </v-col>
+          <v-col class="d-flex align-center justify-center" cols="2">
+            <span class="font-weight-medium mr-2"><v-icon class="mr-2">mdi-clock-out</v-icon>Clock out</span>
+          </v-col>
+          <v-col class="d-flex align-center justify-center" cols="2">
+            <span class="font-weight-medium mr-2"><v-icon class="mr-2">mdi-update</v-icon>Work time</span>
+          </v-col>
+          <v-col class="d-flex align-center justify-center" cols="2">
+            <span class="font-weight-medium mr-2"><v-icon class="mr-2">mdi-clock-fast</v-icon>Remaining</span>
+          </v-col>
+        </v-row>
+      </v-card>
       <StudentListItemVue v-for="student in students" :student="student"></StudentListItemVue>
       <div class="d-flex align-center mt-5">
         <v-spacer></v-spacer>

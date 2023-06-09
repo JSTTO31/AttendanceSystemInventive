@@ -16,14 +16,6 @@
       <v-list-item
         class="my-2 rounded-lg"
         color="primary"
-        :to="{name: 'Activities'}"
-        title="Activities"
-        prepend-icon="mdi-chart-arc"
-      >
-      </v-list-item>
-      <v-list-item
-        class="my-2 rounded-lg"
-        color="primary"
         :to="{ name: 'IndexStudent' }"
         title="Students"
         prepend-icon="mdi-school"

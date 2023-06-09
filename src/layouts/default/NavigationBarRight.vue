@@ -13,9 +13,9 @@
         <v-btn v-else icon="mdi-chevron-right" class="rounded-0" @click="rail = true"></v-btn>
         <h3 class="text-grey-darken-3 ml-3">OJT Students</h3>
       </v-app-bar>
-      <v-main id="nav-right" :style="rail ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
+      <v-main :class="rail ? 'disable-scroll' : ''" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
 >
-        <div :class="rail ? '' : 'px-5 pt-5'">
+        <div :class="rail ? '' : 'pa-5'">
           <AttendanceStudentCardVue v-for="student in students" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
         </div>
       </v-main>
@@ -31,6 +31,7 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 const { students } = storeToRefs(useAppStore());
 const rail = ref(true)
+
 </script>
 
 <style scoped>
@@ -45,5 +46,9 @@ const rail = ref(true)
 #nav-right:hover::-webkit-scrollbar-thumb {
   background-color: rgb(128, 128, 128);
   border-radius: 50px;
+}
+
+.disable-scroll::-webkit-scrollbar{
+  width: 3px !important;
 }
 </style>

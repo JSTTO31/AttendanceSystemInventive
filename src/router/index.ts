@@ -1,5 +1,6 @@
 // Composables
 import { useAppStore } from '@/stores/app'
+import { useAttendanceStore } from '@/stores/attendance'
 import { useStudentStore } from '@/stores/student'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
@@ -70,8 +71,13 @@ const routes = [
       {
         path: '/activities',
         name: 'Activities',
-        component: () => import('@/views/Activities.vue')
-      }
+        component: () => import('@/views/Activities.vue'),
+        //@ts-ignore
+        beforeEnter(to, from, next){
+          const $attendance = useAttendanceStore()
+          $attendance.getAll().then(() => next())
+        }
+      },
     ],
     meta: {
       requiresAuth: true

@@ -58,11 +58,9 @@
           <v-btn class="text-capitalize">Edit details</v-btn>
         </v-btn-toggle>
         <v-spacer></v-spacer>
-
       </v-app-bar>
       <v-main>
         <router-view></router-view>
-
       </v-main>
     </v-layout>
     </v-container>

@@ -22,6 +22,17 @@ export const useAttendanceStore = defineStore('attendance', {
     attendance: {} as Attendance,
   }),
   actions: {
+    async getAll(){
+      try {
+        const response = await api.get('attendances')
+        this.attendances = response.data;
+
+        return response;
+      } catch (error) {
+        console.log(error);
+
+      }
+    },
     async enter(student_id: number){
       try {
         const response = await api.post(`student/${student_id}/attendances`)

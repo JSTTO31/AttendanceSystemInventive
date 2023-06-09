@@ -15,16 +15,16 @@
             </div>
           </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2">Clock in:</span> 25
+            <span class="font-weight-medium mr-2"></span> {{ timeIn}}
           </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2">Clock out:</span> 25
+            <span class="font-weight-medium mr-2"></span> {{timeOut}}
           </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2">Left:</span> 255h
+            <span class="font-weight-medium mr-2"></span> {{ workTime}}
           </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
-            <v-chip color="warning"> Pending </v-chip>
+            <span class="font-weight-medium mr-2"></span> {{new Date().toLocaleTimeString()}}
           </v-col>
         </v-row>
       </v-card>
@@ -32,8 +32,18 @@
 
 <script setup lang="ts">
 import { Student } from '@/stores/student';
-
+import { computed } from '@vue/reactivity';
 const props = defineProps<{student: Student}>()
+const timeIn = computed(() => props.student.attendance && props.student.attendance.time_in ?  new Date(props.student.attendance.time_in).toLocaleTimeString() : '--')
+const timeOut = computed(() => props.student.attendance && props.student.attendance.time_out ?  new Date(props.student.attendance.time_out).toLocaleTimeString() : '--')
+const workTime = computed(() => {
+  if(props.student.attendance && props.student.attendance.time_in && props.student.attendance.time_out){
+    
+    return ''
+  }
+
+  return '--'
+})
 </script>
 
 <style scoped>
