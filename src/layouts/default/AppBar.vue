@@ -14,6 +14,7 @@
       ></v-text-field>
     </div>
     <v-spacer></v-spacer>
+    <v-btn prepend-icon="mdi-plus" color="white" class="text-capitalize mr-5" @click="$router.push({name: 'CreateStudent'})">Add student</v-btn>
     <div class="d-flex align-center">
       <v-avatar size="45">
         <v-img src="https://www.w3schools.com/w3css/img_avatar3.png"></v-img>

@@ -1,15 +1,17 @@
 import { api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
 import { useAppStore } from "./app";
+import { Student } from "./student";
 
 export interface Attendance{
   id: number;
   time_in: string;
   time_out: string;
   is_absent: boolean
-  work_time: number;
+  work_time: string;
   created_at: string;
   updated_at: string
+  student: Student
 }
 
 interface AttendanceState{

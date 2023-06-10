@@ -58,7 +58,6 @@ const routes = [
             return next();
           })
 
-          return next()
         },
         children: [
           {
@@ -98,6 +97,7 @@ const router = createRouter({
 router.afterEach(() => {
   const {isLoading} = storeToRefs(useAppStore())
   isLoading.value = false
+
 })
 
 
@@ -115,7 +115,7 @@ router.beforeEach((to, from, next) => {
 
   // }
 
-  return next()
+   next()
 })
 
 export default router

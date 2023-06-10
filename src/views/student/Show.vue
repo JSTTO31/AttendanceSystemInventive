@@ -22,8 +22,8 @@
               <h4 class=" font-weight-regular">Student OJT</h4>
             </div>
             <v-spacer></v-spacer>
-            <v-btn variant="outlined" class="mx-2" color="primary">Present</v-btn>
-            <v-btn variant="outlined" class="mx-2" color="error">Absent</v-btn>
+            <v-btn variant="outlined" class="mx-2" color="primary" @click="enter">Present</v-btn>
+            <v-btn variant="outlined" class="mx-2" color="error" @click="absent()">Absent</v-btn>
           </div>
         </v-card>
         <v-row>
@@ -47,7 +47,7 @@
         </v-col>
         <v-col>
           <v-card class="pa-5 align-center d-flex rounded-lg">
-            <v-icon size="60">mdi-clock-fast</v-icon>
+            <v-icon size="60">mdi-update</v-icon>
             <div class="px-5">
               <h4 >work time</h4>
               <h3>{{workTime}}</h3>
@@ -67,18 +67,41 @@
     <div class="py-5">
       <CalendarVue></CalendarVue>
     </div>
-  </v-container> 
+  </v-container>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue'
 import CalendarVue from '@/components/Calendar.vue';
 import { storeToRefs } from 'pinia';
 import {useStudentStore} from '../../stores/student'
 import { computed } from 'vue';
+import { useAttendanceStore } from '@/stores/attendance';
+const $attendance = useAttendanceStore()
 const {student} = storeToRefs(useStudentStore())
 const timeIn = computed(() => student.value.attendance && student.value.attendance.time_in ?  new Date(student.value.attendance.time_in).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
 const timeOut = computed(() => student.value.attendance && student.value.attendance.time_out ?  new Date(student.value.attendance.time_out).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
 const workTime = computed(() => student.value.attendance && student.value.attendance.time_in && student.value.attendance.time_out ? student.value.attendance.work_time + 'h' : '--')
+const isLoading  = ref(false)
+const enter = () => {
+  isLoading.value = true
+  $attendance.enter(student.value.id).then(() => {
+    isLoading.value = false
+  })
+}
+const leave = () => {
+  isLoading.value = true
+  $attendance.leave(student.value.id, student.value.attendance.id).then(() => {
+    isLoading.value = false
+  })
+}
+const absent = () => {
+  isLoading.value = true
+  $attendance.absent(student.value.id).then(() => {
+    isLoading.value = false
+  })
+}
+
 </script>
 
 <style scoped>

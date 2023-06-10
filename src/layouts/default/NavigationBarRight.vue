@@ -26,7 +26,6 @@
 <script setup lang="ts">
 import AttendanceStudentCardVue from "@/components/AttendanceStudentCard.vue";
 import { useAppStore } from "@/stores/app";
-import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 const { students } = storeToRefs(useAppStore());

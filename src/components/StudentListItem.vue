@@ -24,7 +24,7 @@
             <span class="font-weight-medium mr-2"></span> {{ workTime}}
           </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2"></span> {{ student.remaining + 'h'}}
+            <span class="font-weight-medium mr-2"></span> {{ parseInt(student.remaining).toFixed(0) + 'h'}}
           </v-col>
         </v-row>
       </v-card>
@@ -32,11 +32,11 @@
 
 <script setup lang="ts">
 import { Student } from '@/stores/student';
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 const props = defineProps<{student: Student}>()
 const timeIn = computed(() => props.student.attendance && props.student.attendance.time_in ?  new Date(props.student.attendance.time_in).toLocaleTimeString() : '--')
 const timeOut = computed(() => props.student.attendance && props.student.attendance.time_out ?  new Date(props.student.attendance.time_out).toLocaleTimeString() : '--')
-const workTime = computed(() => props.student.attendance && props.student.attendance.time_in && props.student.attendance.time_out ? props.student.attendance.work_time + 'h' : '--')
+const workTime = computed(() => props.student.attendance && props.student.attendance.time_in && props.student.attendance.time_out ? parseInt(props.student.attendance.work_time).toFixed(0) + 'h' : '--')
 </script>
 
 <style scoped>

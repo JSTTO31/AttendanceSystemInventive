@@ -7,8 +7,8 @@
       <v-btn icon="mdi-chevron-right" class="rounded-lg" flat color="black" variant="text"></v-btn>
     </div>
     <v-card  class="d-flex pl-1 mt-3 align-start flex-wrap  h-100"  flat>
-      <CalendarBoxDayVue v-for="day in daysInMonth" :day="day"></CalendarBoxDayVue>
-      <v-card variant="outlined" class="mr-2 my-2 d-flex align-center justify-center"  height="51" color="grey" width="51" v-for="z in 34-daysInMonth" disabled></v-card>
+      <CalendarBoxDayVue v-for="day in daysInMonth" :key="day" :day="day"></CalendarBoxDayVue>
+      <v-card variant="outlined" class="mr-2 my-2 d-flex align-center justify-center" height="51" color="grey" width="51" v-for="z in 34-daysInMonth" :key="z" disabled></v-card>
     </v-card>
   </v-card>
 </template>
@@ -16,10 +16,9 @@
 <script setup lang="ts">
 import CalendarBoxDayVue from './CalendarBoxDay.vue';
 const monthsName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const props = defineProps();
+// const props = defineProps();
 const now = new Date();
 const daysInMonth = new Date(now.getMonth() + 1, now.getFullYear(), 0).getDate()
-const days = []
 const getMonth = now.getMonth()
 const getFullYear = now.getFullYear()
 </script>
