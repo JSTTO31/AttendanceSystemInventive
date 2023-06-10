@@ -7,6 +7,7 @@ export interface Attendance{
   time_in: string;
   time_out: string;
   is_absent: boolean
+  work_time: number;
   created_at: string;
   updated_at: string
 }

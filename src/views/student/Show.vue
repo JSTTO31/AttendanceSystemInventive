@@ -1,75 +1,84 @@
 <template>
    <v-container class="h-100" v-if="student">
-    <v-layout class="h-100 w-100">
-      <v-navigation-drawer class="border-0 pt-15" width="350">
-        <v-card class="d-flex flex-column align-center px-5 " flat>
-          <v-avatar size="125" color="grey-lighten-4">
+    <v-row>
+      <v-col cols="3">
+        <v-card class="pa-5 align-center flex-column d-flex rounded-lg h-100">
+            <v-progress-circular color="primary" width="20"  :model-value="45" size="200">
+              <div class="px-5 text-center text-grey-darken-3">
+                <h1>{{ student.remaining }}h</h1>
+                <h4 class="mt-n2">Remaining</h4>
+              </div>
+            </v-progress-circular>
+          </v-card>
+      </v-col>
+      <v-col>
+        <v-card class="d-flex align-end mb-4" flat>
+          <v-avatar size="125" color="grey-lighten-4 rounded-lg">
             <v-img :src="student.image"></v-img>
           </v-avatar>
-          <div class="mt-3">
-            <h3 class="text-center">{{ student.first_name + ' ' + student.last_name }}</h3>
-            <h5 class="text-center font-weight-regular">{{ 'OJT Student'}}</h5>
-          </div>
-          <div class="w-100 mt-3">
-            <h4 class="text-grey-darken-3 my-2">Student Details</h4>
-            <div class="d-flex  text-caption my-2">
-              <v-icon color="grey-darken-3">mdi-email</v-icon>
-              <v-spacer></v-spacer>
-              <p class="text-right">{{ student.email }}</p>
+          <div class="mt-3 w-100 px-5 d-flex">
+            <div>
+              <h1 class="">{{ student.first_name + ' ' + student.last_name }}</h1>
+              <h4 class=" font-weight-regular">Student OJT</h4>
             </div>
-            <div class="d-flex  text-caption my-2">
-              <v-icon color="grey-darken-3">mdi-cellphone</v-icon>
-              <v-spacer></v-spacer>
-              <p class="text-right">0{{ student.phone_number }}</p>
-            </div>
-            <div class="d-flex  text-caption my-2">
-              <v-icon color="grey-darken-3">mdi-map-marker</v-icon>
-              <v-spacer></v-spacer>
-              <p class="text-right">{{ student.address }}</p>
-            </div>
-            <div class="d-flex  text-caption my-2">
-              <v-icon color="grey-darken-3">mdi-script</v-icon>
-              <v-spacer></v-spacer>
-              <p class="text-right">{{ student.course }}</p>
-            </div>
-            <div class="d-flex  text-caption my-2">
-              <v-icon color="grey-darken-3">mdi-town-hall</v-icon>
-              <v-spacer></v-spacer>
-              <p class="text-right">{{ student.school_name }}</p>
-            </div>
-            <div class="d-flex  text-caption my-2">
-              <v-icon color="grey-darken-3">mdi-calendar</v-icon>
-              <v-spacer></v-spacer>
-              <p class="text-right">{{ student.school_year }}</p>
-            </div>
-          </div>
-          <div class="w-100 d-flex">
-            <v-btn class="w-50" variant="outlined" color="primary" prepend-icon="mdi-cog">Edit</v-btn>
-            &nbsp;
-            <v-btn class="w-50" variant="outlined" color="error" prepend-icon="mdi-trash-can">Remove</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn variant="outlined" class="mx-2" color="primary">Present</v-btn>
+            <v-btn variant="outlined" class="mx-2" color="error">Absent</v-btn>
           </div>
         </v-card>
-      </v-navigation-drawer>
-      <v-app-bar flat >
-        <v-spacer></v-spacer>
-        <v-btn-toggle density="compact" color="primary" class="rounded-pill">
-          <v-btn class="text-capitalize" :to="{name: 'ShowStudent.attendance', params: {student_id: student.id}}">Attendance</v-btn>
-          <v-btn class="text-capitalize">Courses</v-btn>
-          <v-btn class="text-capitalize">Edit details</v-btn>
-        </v-btn-toggle>
-        <v-spacer></v-spacer>
-      </v-app-bar>
-      <v-main>
-        <router-view></router-view>
-      </v-main>
-    </v-layout>
-    </v-container>
+        <v-row>
+        <v-col>
+          <v-card class="pa-5 align-center d-flex rounded-lg">
+            <v-icon size="60">mdi-clock-in</v-icon>
+            <div class="px-5">
+              <h4 >Time in</h4>
+              <h3>{{ timeIn}}</h3>
+            </div>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card class="pa-5 align-center d-flex rounded-lg">
+            <v-icon size="60">mdi-clock-out</v-icon>
+            <div class="px-5">
+              <h4 >Time out</h4>
+              <h3>{{ timeOut}}</h3>
+            </div>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card class="pa-5 align-center d-flex rounded-lg">
+            <v-icon size="60">mdi-clock-fast</v-icon>
+            <div class="px-5">
+              <h4 >work time</h4>
+              <h3>{{workTime}}</h3>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+      </v-col>
+    </v-row>
+    <nav class="d-flex pt-5">
+      <v-tabs class="mt-4">
+        <v-tab color="primary" class="text-capitalize">Overview</v-tab>
+        <v-tab color="primary" class="text-capitalize">Courses</v-tab>
+        <v-tab color="primary" class="text-capitalize">Information</v-tab>
+      </v-tabs>
+    </nav>
+    <div class="py-5">
+      <CalendarVue></CalendarVue>
+    </div>
+  </v-container> 
 </template>
 
 <script setup lang="ts">
+import CalendarVue from '@/components/Calendar.vue';
 import { storeToRefs } from 'pinia';
 import {useStudentStore} from '../../stores/student'
+import { computed } from 'vue';
 const {student} = storeToRefs(useStudentStore())
+const timeIn = computed(() => student.value.attendance && student.value.attendance.time_in ?  new Date(student.value.attendance.time_in).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
+const timeOut = computed(() => student.value.attendance && student.value.attendance.time_out ?  new Date(student.value.attendance.time_out).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
+const workTime = computed(() => student.value.attendance && student.value.attendance.time_in && student.value.attendance.time_out ? student.value.attendance.work_time + 'h' : '--')
 </script>
 
 <style scoped>

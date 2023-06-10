@@ -17,6 +17,7 @@ export interface Student{
   created_at: string;
   updated_at: string;
   attendance: Attendance
+  remaining: number;
   attendances: Attendance[]
 }
 
