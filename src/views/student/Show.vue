@@ -19,8 +19,8 @@
             </div>
           </div>
         </v-card>
-        <VProgressLinear height="35" color="primary"  :model-value="25" class="text-subtitle-1 text-capitalize text-grey-darken-2">Time Remaining 25/550h</VProgressLinear>
-      
+        <VProgressLinear height="35" color="primary"  :model-value="25" class="text-subtitle-1 my-5  text-capitalize text-grey-darken-2">Time Remaining 25/550h</VProgressLinear>
+
         <v-row>
         <v-col>
           <v-card flat class="pa-5 align-center d-flex rounded-lg">

@@ -32,6 +32,11 @@
           </v-col>
         </v-row>
       </v-card>
+      <div v-if="students.length < 1" class="w-100 d-flex pt-15">
+        <v-avatar size="85" class="rounded-0 mx-auto my-15">
+          <v-img src="/src/assets/no-task.png"></v-img>
+        </v-avatar>
+      </div>
       <StudentListItemVue v-for="student in students" :key="student.id" :student="student"></StudentListItemVue>
       <div class="d-flex align-center mt-5" v-if="Math.ceil(pageOptions.total / pageOptions.per_page) > 1">
         <div>
@@ -74,14 +79,14 @@ onBeforeRouteUpdate((to, from, next) => {
   {
   console.log('triggered');
     console.log(query[0]);
-    
+
     $student.getAll(query[0]).then(() => {
       return next()
     })
 
     return
   }
-  
+
 
   return next()
 })

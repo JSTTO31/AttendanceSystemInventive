@@ -32,8 +32,17 @@
 import { useAttendanceStore } from "@/stores/attendance";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 const { user } = storeToRefs(useUserStore());
-
+const search = ref('')
+const router = useRouter()
+const findStudent = () => {
+  if(!search.value){
+    return
+  }
+  router.push({name: 'IndexStudent', query: {search: search.value}})
+}
 
 </script>
 

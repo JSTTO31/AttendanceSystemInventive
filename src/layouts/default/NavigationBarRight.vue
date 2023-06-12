@@ -16,7 +16,7 @@
       <v-main :class="rail ? 'disable-scroll' : ''" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
 >
         <div :class="rail ? '' : 'pa-5'">
-          <AttendanceStudentCardVue v-for="student in students" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
+          <AttendanceStudentCardVue v-for="student in students.slice(25)" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
         </div>
       </v-main>
     </v-layout>
