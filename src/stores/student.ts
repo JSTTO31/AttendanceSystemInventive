@@ -1,4 +1,4 @@
-import { api } from "@/utils";
+import { Page, api } from "@/utils";
 import { defineStore } from "pinia";
 import { auth } from "./user";
 import { Attendance } from "./attendance";
@@ -23,20 +23,23 @@ export interface Student{
 
 interface StudentState{
   students: Student[],
-  student: Student
+  student: Student,
+  pageOptions: Page
 }
 
 export const useStudentStore = defineStore('student', {
   state: () : StudentState => ({
     students: [],
-    student: {} as Student
+    student: {} as Student,
+    pageOptions: {} as Page
   }),
   actions: {
-    async getAll() {
+    async getAll(query = '') {
         try {
-          const response = await auth.get('students')
-          this.students = response.data;
-
+          const response = await api.get('/students' + query)
+          const {students, pageOptions} = response.data;
+          this.students = students;
+          this.pageOptions = pageOptions
           return response;
         } catch (error) {
           console.log(error)

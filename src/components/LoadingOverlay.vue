@@ -1,7 +1,7 @@
 <template>
-  <v-overlay :model-value="show" class="d-flex align-center justify-center" persistent>
+  <div v-if="show" class="d-flex align-center justify-center" id="overlay">
     <span class="loader"></span>
-  </v-overlay>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -9,7 +9,13 @@ const props = defineProps(['show'])
 </script>
 
 <style scoped>
-
+#overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .loader {
   width: 48px;
   height: 48px;

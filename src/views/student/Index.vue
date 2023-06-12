@@ -5,13 +5,13 @@
     <div class="mt-4">
       <div class="w-100 d-flex align-center justify-space-between">
         <div class="w-50 d-flex align-center">
-          <v-text-field density="compact" color="primary" hide-details variant="outlined" single-line  label="Find student..."></v-text-field>
+          <v-text-field density="compact" v-model="search" @keyup.enter="searchSubmit" color="primary" hide-details variant="outlined" single-line  label="Find student..."></v-text-field>
         </div>
         <v-spacer></v-spacer>
-        <v-tabs color="primary">
-          <v-tab class="text-capitalize">Ongoing</v-tab>
-          <v-tab class="text-capitalize">Completed</v-tab>
-          <v-tab class="text-capitalize">History</v-tab>
+        <v-tabs v-model="selectedTab" color="primary">
+          <v-tab class="text-capitalize" value="" @click="router.push({query: {filter: ''}})">Ongoing</v-tab>
+          <v-tab class="text-capitalize" value="completed" @click="router.push({query: {filter: 'completed'}})">Completed</v-tab>
+          <v-tab class="text-capitalize" value="all_students" @click="router.push({query: {filter: 'all_students'}})">All students</v-tab>
         </v-tabs>
       </div>
       <v-card flat class="mt-2 bg-blue py-2 mb-1">
@@ -33,9 +33,12 @@
         </v-row>
       </v-card>
       <StudentListItemVue v-for="student in students" :key="student.id" :student="student"></StudentListItemVue>
-      <div class="d-flex align-center mt-5">
+      <div class="d-flex align-center mt-5" v-if="Math.ceil(pageOptions.total / pageOptions.per_page) > 1">
+        <div>
+          Page {{page}} / {{ pageOptions.total / pageOptions.per_page }}
+        </div>
         <v-spacer></v-spacer>
-        <v-pagination length="5" color="primary"></v-pagination>
+          <v-pagination  v-model="page" :length="Math.ceil(pageOptions.total / pageOptions.per_page)" color="primary"></v-pagination>
       </div>
     </div>
   </v-container>
@@ -45,8 +48,43 @@
 import StudentListItemVue from "@/components/StudentListItem.vue";
 import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
+import { watch } from "vue";
+import { ref } from "vue";
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+const router = useRouter()
+const route = useRoute()
+const selectedTab = ref(route.query.filter || '')
+const { students, pageOptions } = storeToRefs(useStudentStore());
+const $student = useStudentStore()
+const page = ref(parseInt(route.query.page?.toString() || '1'))
+const search = ref('')
+const searchSubmit = () => {
+  router.push({query: {search: search.value}})
+}
 
-const { students } = storeToRefs(useStudentStore());
+watch(() => page.value, () => {
+  router.push({query: {page: page.value}})
+})
+
+
+onBeforeRouteUpdate((to, from, next) => {
+  //@ts-ignore
+  const query = to.fullPath.match(/\?.*/ig)
+  if(!!query)
+  {
+  console.log('triggered');
+    console.log(query[0]);
+    
+    $student.getAll(query[0]).then(() => {
+      return next()
+    })
+
+    return
+  }
+  
+
+  return next()
+})
 </script>
 
 <style scoped></style>

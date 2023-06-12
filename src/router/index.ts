@@ -31,10 +31,10 @@ const routes = [
          component: () => import('@/views/student/Index.vue'),
         //@ts-ignore
          beforeEnter: (to, from, next) => {
+           let query = to.fullPath.match(/\?.*/ig)
            const $student = useStudentStore()
-           $student.getAll().then(() => {
-          return next()
-
+           $student.getAll(query ? query : '').then(() => {
+            return next()
            })
         }
       },
@@ -92,6 +92,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, next){
+
+    return {top: 0}
+  }
 })
 
 router.afterEach(() => {
