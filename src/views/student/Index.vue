@@ -75,11 +75,8 @@ watch(() => page.value, () => {
 onBeforeRouteUpdate((to, from, next) => {
   //@ts-ignore
   const query = to.fullPath.match(/\?.*/ig)
-  if(!!query)
+  if(query)
   {
-  console.log('triggered');
-    console.log(query[0]);
-
     $student.getAll(query[0]).then(() => {
       return next()
     })

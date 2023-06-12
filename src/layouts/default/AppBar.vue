@@ -4,13 +4,15 @@
       <v-icon class="mr-1" size="35">mdi-calendar</v-icon>
       eAttendance
     </h2>
-    <div class="w-25 ml-5">
+    <div v-if="$route.name != 'IndexStudent'" class="w-25 ml-5">
       <v-text-field
+        v-model="search"
         label="find students..."
         variant="solo"
         single-line
         density="compact"
         hide-details
+        @keyup.enter="findStudent"
       ></v-text-field>
     </div>
     <v-spacer></v-spacer>
@@ -33,7 +35,7 @@ import { useAttendanceStore } from "@/stores/attendance";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { onBeforeRouteUpdate, useRouter } from "vue-router";
 const { user } = storeToRefs(useUserStore());
 const search = ref('')
 const router = useRouter()
@@ -43,6 +45,16 @@ const findStudent = () => {
   }
   router.push({name: 'IndexStudent', query: {search: search.value}})
 }
+
+
+onBeforeRouteUpdate((to, from, next) => {
+  if(search.value){
+    search.value = ''
+  }
+
+  next()
+
+})
 
 </script>
 

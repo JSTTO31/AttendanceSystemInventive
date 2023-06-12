@@ -19,6 +19,7 @@ export interface Student{
   attendance: Attendance
   remaining: string;
   attendances: Attendance[]
+  work_time_total: number
 }
 
 interface StudentState{

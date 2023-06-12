@@ -31,7 +31,7 @@ const routes = [
          component: () => import('@/views/student/Index.vue'),
         //@ts-ignore
          beforeEnter: (to, from, next) => {
-           let query = to.fullPath.match(/\?.*/ig)
+           const query = to.fullPath.match(/\?.*/ig)
            const $student = useStudentStore()
            $student.getAll(query ? query : '').then(() => {
             return next()
