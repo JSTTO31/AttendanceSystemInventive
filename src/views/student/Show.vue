@@ -14,13 +14,28 @@
               <h4 class=" font-weight-regular">OJT Student</h4>
             </div>
             <v-spacer></v-spacer>
-            <div class="d-flex align-self-start">
-              <v-btn class="rounded-lg" variant="text" icon="mdi-dots-horizontal"></v-btn>
+            <div class="d-flex align-self-start" v-if="student.attendance && student.attendance.time_in && student.attendance.time_out">
+              <v-chip
+              size="large"
+              variant="text"
+              color="primary"
+              prepend-icon="mdi-check"
+              class="w-100 text-capitalize"
+              style="font-style: italic"
+              >end proccess</v-chip
+            >
+            </div>
+            <div class="d-flex align-self-start" v-else-if="student.attendance && student.attendance.time_in">
+              <v-btn class="ml-2" @click="leave" color="error" variant="elevated" prepend-icon="mdi-logout">Leave</v-btn>
+            </div>
+            <div class="d-flex align-self-start" v-else>
+              <!-- <v-btn class="rounded-lg" variant="text" icon="mdi-dots-horizontal"></v-btn> -->
+              <v-btn class="ml-2" @click="enter" color="primary" variant="outlined">Present</v-btn>
+              <v-btn class="ml-2" @click="absent" color="error" variant="outlined">Absent</v-btn>
             </div>
           </div>
         </v-card>
-        <VProgressLinear height="35" color="primary"  :model-value="25" class="text-subtitle-1 my-5  text-capitalize text-grey-darken-2">Time Remaining 25/550h</VProgressLinear>
-
+        <VProgressLinear height="35" color="primary"  :model-value="(student.work_time_total?.toFixed(0) || 0) / 550 * 100" class="text-subtitle-1 my-5  text-capitalize text-grey-darken-2">Time Remaining {{ student.work_time_total?.toFixed(0) || 0 }}/550h</VProgressLinear>
         <v-row>
         <v-col>
           <v-card flat class="pa-5 align-center d-flex rounded-lg">
@@ -71,24 +86,36 @@
       </v-tabs>
     </nav>
     <div class="py-5">
-      <CalendarVue></CalendarVue>
+      <RouterView v-slot="{Component}">
+        <Suspense>
+            <component :is="Component"></component>
+            <template #fallback>
+              loading...
+            </template>
+        </Suspense>
+      </RouterView>
     </div>
+    <LoadingOverlay :show="isLoading"></LoadingOverlay>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import  LoadingOverlay from '../../components/LoadingOverlay.vue'
 import {ref} from 'vue'
-import CalendarVue from '@/components/Calendar.vue';
 import { storeToRefs } from 'pinia';
 import {useStudentStore} from '../../stores/student'
 import { computed } from 'vue';
 import { useAttendanceStore } from '@/stores/attendance';
+import { useRoute } from 'vue-router';
 const $attendance = useAttendanceStore()
 const {student} = storeToRefs(useStudentStore())
 const timeIn = computed(() => student.value.attendance && student.value.attendance.time_in ?  new Date(student.value.attendance.time_in).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
 const timeOut = computed(() => student.value.attendance && student.value.attendance.time_out ?  new Date(student.value.attendance.time_out).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
 const workTime = computed(() => student.value.attendance && student.value.attendance.time_in && student.value.attendance.time_out ? student.value.attendance.work_time + 'h' : '--')
 const isLoading  = ref(false)
+const route = useRoute()
+$attendance.getAllStudentAttendance(parseInt(route.params.student_id.toString()))
+
 const enter = () => {
   isLoading.value = true
   $attendance.enter(student.value.id).then(() => {

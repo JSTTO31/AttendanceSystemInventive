@@ -61,6 +61,16 @@ export const useStudentStore = defineStore('student', {
         } catch (error) {
           console.log(error);
         }
+    },
+    updateStudent(student_id: number, newStudent: Student){
+      let student = this.students.find(item => item.id == student_id)
+      if(student){
+        if(this.student.id == student.id){
+          this.student = {...this.student, ...newStudent};
+        }
+        
+        student = {...this.student, ...newStudent};
+      }
     }
   }
 })

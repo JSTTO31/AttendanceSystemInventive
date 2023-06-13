@@ -1,7 +1,7 @@
 import { api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
 import { useAppStore } from "./app";
-import { Student } from "./student";
+import { Student, useStudentStore } from "./student";
 
 export interface Attendance{
   id: number;
@@ -36,15 +36,32 @@ export const useAttendanceStore = defineStore('attendance', {
 
       }
     },
+    async getAllStudentAttendance(student_id: number){
+      try {
+        const response = await api.get(`/student/${student_id}/attendances`)
+        const {attendances, work_time_total} = response.data
+        const {students, student} = storeToRefs(useStudentStore())
+        students.value = students.value.map(item => item.id == student_id ? {...item, attendances, work_time_total} : item)       
+        student.value = {...student.value, attendances, work_time_total}
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async enter(student_id: number){
       try {
         const response = await api.post(`student/${student_id}/attendances`)
         this.attendances.unshift(response.data)
-        const {students} = storeToRefs(useAppStore())
-        const student = students.value.find(item => item.id == student_id)
-        if(student){
-          student.attendance = response.data
+        const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
+        const {students: studentsFromAppStore} = storeToRefs(useAppStore())
+        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+
+        if(student.value.id == student_id){
+          student.value.attendance = response.data
         }
+
+        return response
       } catch (error) {
         console.log(error);
       }
@@ -53,11 +70,16 @@ export const useAttendanceStore = defineStore('attendance', {
       try {
         const response = await api.put(`student/${student_id}/attendances/${attendance_id}/leave`)
         this.attendances = this.attendances.map(item => item.id == response.data.id ? response.data : item)
-        const {students} = storeToRefs(useAppStore())
-        const student = students.value.find(item => item.id == student_id)
-        if(student){
-          student.attendance = response.data
+        const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
+        const {students: studentsFromAppStore} = storeToRefs(useAppStore())
+        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+
+        if(student.value.id == student_id){
+          student.value.attendance = response.data
         }
+
+        return response
       } catch (error) {
         console.log(error);
       }
@@ -66,11 +88,16 @@ export const useAttendanceStore = defineStore('attendance', {
       try {
         const response = await api.post(`student/${student_id}/attendances/absent`)
         this.attendances.unshift(response.data)
-        const {students} = storeToRefs(useAppStore())
-        const student = students.value.find(item => item.id == student_id)
-        if(student){
-          student.attendance = response.data
+        const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
+        const {students: studentsFromAppStore} = storeToRefs(useAppStore())
+        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+
+        if(student.value.id == student_id){
+          student.value.attendance = response.data
         }
+
+        return response
       } catch (error) {
         console.log(error)
       }

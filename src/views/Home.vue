@@ -4,24 +4,21 @@
     <p>Effortlessly manage attendance with our intuitive dashboard.</p>
     <v-container fluid class="px-0">
       <v-row>
-
-      </v-row>
-      <v-row>
         <v-col cols="8">
-          <v-card flat class="border rounded-lg  d-flex justify-center flex-column align-center">
-            <v-card-title class="text-left w-100">Students progress</v-card-title>
-              <ChartBar :chart-data="chartData"></ChartBar>
+          <v-card flat class="border rounded-lg pa-5 py-8 d-flex justify-center flex-column align-center">
+            <!-- <v-card-title class="text-left w-100">Students Remaining hours</v-card-title> -->
+            <ChartBar :chart-data="chartData"></ChartBar>
           </v-card>
         </v-col>
         <v-col cols="4">
-          <v-card flat class="border rounded-lg px-5 d-flex align-center  py-3">
-            <v-icon size="45" class="mr-5">mdi-school</v-icon>
+          <v-card flat class="border rounded-lg px-5 d-flex align-center  py-4">
+            <v-icon size="55" class="mr-5">mdi-school</v-icon>
             <div>
               <h4>Number of students</h4>
-              <h2>{{ number_of_students }}</h2>
+              <h1>{{ number_of_students }}</h1>
             </div>
           </v-card>
-          <v-card flat class="border rounded-lg pa-5 justify-center d-flex align-center mt-3">
+          <v-card flat class="border rounded-lg pa-5 justify-center d-flex align-center mt-4">
             <VProgressCircular width="20" :model-value="(number_of_students - remaining) / remaining * 100" color="primary" size="199">
               <h1 class="d-flex text-h3 flex-column align-center">
                 <span>{{ remaining }}</span>

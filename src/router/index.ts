@@ -41,7 +41,8 @@ const routes = [
       {
         path: '/student/:student_id',
         name: 'ShowStudent',
-        redirect: {name: 'ShowStudent.attendance'},
+        //@ts-ignore
+        redirect: {name: 'ShowStudent.index'},
          component: () => import('@/views/student/Show.vue'),
         //@ts-ignore
         beforeEnter: (to, from, next) => {
@@ -62,20 +63,10 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'ShowStudent.attendance',
-            component: () => import('@/views/student/show/Attendance.vue'),
+            name: 'ShowStudent.index',
+            component: () => import('@/views/student/show/Index.vue'),
           }
         ]
-      },
-      {
-        path: '/activities',
-        name: 'Activities',
-        component: () => import('@/views/Activities.vue'),
-        //@ts-ignore
-        beforeEnter(to, from, next){
-          const $attendance = useAttendanceStore()
-          $attendance.getAll().then(() => next())
-        }
       },
     ],
     meta: {
