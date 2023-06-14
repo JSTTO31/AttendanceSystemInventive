@@ -87,8 +87,10 @@
 
 <script setup lang="ts">
 import { useAttendanceStore } from "@/stores/attendance";
-import { Student } from "@/stores/student";
+import { Student, useStudentStore } from "@/stores/student";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
+const {getStatusById} = storeToRefs(useStudentStore())
 const props = defineProps<{ student: Student; rail: boolean }>();
 const $attendance = useAttendanceStore();
 const isLoading = ref(false);

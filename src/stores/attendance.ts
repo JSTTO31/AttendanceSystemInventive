@@ -41,7 +41,7 @@ export const useAttendanceStore = defineStore('attendance', {
         const response = await api.get(`/student/${student_id}/attendances`)
         const {attendances, work_time_total} = response.data
         const {students, student} = storeToRefs(useStudentStore())
-        students.value = students.value.map(item => item.id == student_id ? {...item, attendances, work_time_total} : item)       
+        students.value = students.value.map(item => item.id == student_id ? {...item, attendances, work_time_total} : item)
         student.value = {...student.value, attendances, work_time_total}
 
       } catch (error) {
@@ -61,6 +61,12 @@ export const useAttendanceStore = defineStore('attendance', {
           student.value.attendance = response.data
         }
 
+        if(!student.value.attendances){
+          student.value.attendances = []
+        }
+
+        student.value.attendances.unshift(response.data)
+
         return response
       } catch (error) {
         console.log(error);
@@ -72,12 +78,18 @@ export const useAttendanceStore = defineStore('attendance', {
         this.attendances = this.attendances.map(item => item.id == response.data.id ? response.data : item)
         const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
         const {students: studentsFromAppStore} = storeToRefs(useAppStore())
-        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-
+         studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+         studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
         if(student.value.id == student_id){
           student.value.attendance = response.data
         }
+
+        console.log(response.data);
+        
+
+        student.value.attendances = student.value.attendances.map(item => item.id == attendance_id ? response.data : item)
+
+        student.value.work_time_total += response.data.work_time
 
         return response
       } catch (error) {
@@ -96,6 +108,12 @@ export const useAttendanceStore = defineStore('attendance', {
         if(student.value.id == student_id){
           student.value.attendance = response.data
         }
+
+        if(!student.value.attendances){
+          student.value.attendances = []
+        }
+
+        student.value.attendances.unshift(response.data)
 
         return response
       } catch (error) {

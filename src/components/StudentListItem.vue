@@ -1,33 +1,34 @@
 <template>
   <v-card
-        class="d-flex align-center pa-2 border-b"
-        flat
-        :to="{name: 'ShowStudent', params: {student_id: student.id}}"
-      >
-        <v-row>
-          <v-col class="d-flex align-center" cols="4">
-            <v-avatar size="65">
-              <v-img :src="student.image"></v-img>
-            </v-avatar>
-            <div class="ml-4">
-              <h4>{{ student.first_name + " " + student.last_name }}</h4>
-              <h5 class="font-weight-regular">{{ student.email }}</h5>
-            </div>
-          </v-col>
-          <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2"></span> {{ timeIn}}
-          </v-col>
-          <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2"></span> {{timeOut}}
-          </v-col>
-          <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2"></span> {{ workTime}}
-          </v-col>
-          <v-col class="d-flex align-center justify-center" cols="2">
-            <span class="font-weight-medium mr-2"></span> {{ parseInt(student.remaining).toFixed(0) + 'h'}}
-          </v-col>
-        </v-row>
-      </v-card>
+      class="d-flex align-center pa-2 border-b"
+      flat
+      :to="{name: 'ShowStudent', params: {student_id: student.id}}"
+      v-bind=""
+    >
+      <v-row>
+        <v-col class="d-flex align-center" cols="4">
+          <v-avatar size="65">
+            <v-img :src="student.image"></v-img>
+          </v-avatar>
+          <div class="ml-4">
+            <h4>{{ student.first_name + " " + student.last_name }}</h4>
+            <h5 class="font-weight-regular">{{ student.email }}</h5>
+          </div>
+        </v-col>
+        <v-col class="d-flex align-center justify-center" cols="2">
+          <span class="font-weight-medium mr-2"></span> {{ timeIn}}
+        </v-col>
+        <v-col class="d-flex align-center justify-center" cols="2">
+          <span class="font-weight-medium mr-2"></span> {{timeOut}}
+        </v-col>
+        <v-col class="d-flex align-center justify-center" cols="2">
+          <span class="font-weight-medium mr-2"></span> {{ workTime}}
+        </v-col>
+        <v-col class="d-flex align-center justify-center" cols="2">
+          <span class="font-weight-medium mr-2"></span> {{ parseInt(student.remaining).toFixed(0) + 'h'}}
+        </v-col>
+      </v-row>
+    </v-card>
 </template>
 
 <script setup lang="ts">

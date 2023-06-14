@@ -65,7 +65,12 @@ const routes = [
             path: '',
             name: 'ShowStudent.index',
             component: () => import('@/views/student/show/Index.vue'),
-          }
+          },
+          {
+            path: 'information',
+            name: 'ShowStudent.information',
+            component: () => import('@/views/student/show/Information.vue'),
+          },
         ]
       },
     ],

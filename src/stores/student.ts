@@ -34,6 +34,21 @@ export const useStudentStore = defineStore('student', {
     student: {} as Student,
     pageOptions: {} as Page
   }),
+  getters: {
+    getStatusById: state => (student_id: number) => {
+      const student = state.students.find(item => item.id == student_id)
+      if(student){
+        if(student.attendance && student.attendance.is_absent){
+          return 'absent';
+        }else if(student.attendance && student.attendance.time_in && student.attendance.time_out){
+          return 'present';
+        }else{
+          return 'in_process';
+        }
+      }
+      return ''
+    }
+   },
   actions: {
     async getAll(query = '') {
         try {
@@ -62,15 +77,5 @@ export const useStudentStore = defineStore('student', {
           console.log(error);
         }
     },
-    updateStudent(student_id: number, newStudent: Student){
-      let student = this.students.find(item => item.id == student_id)
-      if(student){
-        if(this.student.id == student.id){
-          this.student = {...this.student, ...newStudent};
-        }
-        
-        student = {...this.student, ...newStudent};
-      }
-    }
   }
 })

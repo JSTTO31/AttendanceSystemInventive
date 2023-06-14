@@ -14,7 +14,7 @@
               <h4 class=" font-weight-regular">OJT Student</h4>
             </div>
             <v-spacer></v-spacer>
-            <div class="d-flex align-self-start" v-if="student.attendance && student.attendance.time_in && student.attendance.time_out">
+            <div class="d-flex align-self-start" v-if="student.attendance && student.attendance.time_in && student.attendance.time_out || student.attendance && student.attendance.is_absent">
               <v-chip
               size="large"
               variant="text"
@@ -35,7 +35,7 @@
             </div>
           </div>
         </v-card>
-        <VProgressLinear height="35" color="primary"  :model-value="(student.work_time_total?.toFixed(0) || 0) / 550 * 100" class="text-subtitle-1 my-5  text-capitalize text-grey-darken-2">Time Remaining {{ student.work_time_total?.toFixed(0) || 0 }}/550h</VProgressLinear>
+        <VProgressLinear height="35" color="primary"  :model-value="remainingPercent" class="text-subtitle-1 my-5  text-capitalize text-grey-darken-2">Time Remaining {{ student.work_time_total?.toFixed(0) || 0 }}/550h</VProgressLinear>
         <v-row>
         <v-col>
           <v-card flat class="pa-5 align-center d-flex rounded-lg">
@@ -66,23 +66,12 @@
         </v-col>
       </v-row>
       </v-col>
-      <!-- <v-divider vertical class="my-10"></v-divider>
-      <v-col cols="4" class="d-flex align-center justify-center ">
-        <v-card flat class="pa-5 align-center flex-column d-flex rounded-lg h-100">
-            <v-progress-circular color="primary" width="20"  :model-value="45" size="200">
-              <div class="px-5 text-center text-grey-darken-3">
-                <h1>{{ student.remaining }}h</h1>
-                <h4 class="mt-n2">Remaining</h4>
-              </div>
-            </v-progress-circular>
-          </v-card>
-      </v-col> -->
     </v-row>
     <nav class="d-flex">
       <v-tabs class="mt-4">
-        <v-tab color="primary" class="text-capitalize">Overview</v-tab>
-        <v-tab color="primary" class="text-capitalize">Courses</v-tab>
-        <v-tab color="primary" class="text-capitalize">Information</v-tab>
+        <v-tab color="primary" value="index" @click="$router.push({name: 'ShowStudent.index'})" class="text-capitalize">Overview</v-tab>
+        <v-tab color="primary" value="information" @click="$router.push({name: 'ShowStudent.information'})" class="text-capitalize">Information</v-tab>
+        <!-- <v-tab color="primary" :to="{name: 'ShowStudent.course'}" class="text-capitalize">Courses</v-tab> -->
       </v-tabs>
     </nav>
     <div class="py-5">
@@ -107,6 +96,7 @@ import {useStudentStore} from '../../stores/student'
 import { computed } from 'vue';
 import { useAttendanceStore } from '@/stores/attendance';
 import { useRoute } from 'vue-router';
+// const selectedTab = computed(() => useRoute().)
 const $attendance = useAttendanceStore()
 const {student} = storeToRefs(useStudentStore())
 const timeIn = computed(() => student.value.attendance && student.value.attendance.time_in ?  new Date(student.value.attendance.time_in).toLocaleTimeString('en-us', {minute: '2-digit', hour: '2-digit'}) : '--')
@@ -114,6 +104,8 @@ const timeOut = computed(() => student.value.attendance && student.value.attenda
 const workTime = computed(() => student.value.attendance && student.value.attendance.time_in && student.value.attendance.time_out ? student.value.attendance.work_time + 'h' : '--')
 const isLoading  = ref(false)
 const route = useRoute()
+// @ts-ignore
+const remainingPercent = computed(() => (student.value.work_time_total?.toFixed(0) || 0) / 550 * 100)
 $attendance.getAllStudentAttendance(parseInt(route.params.student_id.toString()))
 
 const enter = () => {
