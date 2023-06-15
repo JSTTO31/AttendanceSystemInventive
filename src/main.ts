@@ -28,3 +28,4 @@ const app = createApp({...App, mounted(){
 registerPlugins(app)
 
 app.mount('#app')
+

@@ -13,6 +13,7 @@ export interface Student{
   school_year: string,
   address: string,
   course: string
+  gender: string
   image: string
   created_at: string;
   updated_at: string;
@@ -77,5 +78,31 @@ export const useStudentStore = defineStore('student', {
           console.log(error);
         }
     },
+    async edit(information: any){
+      try {
+        const response = await api.put('students/' + this.student.id, { ...information })
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async changeProfile(image: any){
+      const form = new FormData()
+      form.append('image', image)
+      try {
+        const response = await api.post(`/students/${this.student.id}/change-profile`, form, {
+          headers: {
+            "Content-Type": 'multipart/form-data'
+          }
+        })
+
+        this.student = {...this.student, image: response.data}
+        this.students = this.students.map(item => item.id == this.student.id ? this.student : item)
+
+        return response;
+      } catch (error) {
+        
+      }
+    }
   }
 })

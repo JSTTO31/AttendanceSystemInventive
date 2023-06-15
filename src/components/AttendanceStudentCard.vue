@@ -82,6 +82,11 @@
         size="45"
       ></v-progress-circular>
     </v-overlay>
+    <v-dialog v-model="showPolicyConfirmation">
+      <v-card>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus laudantium, quaerat reiciendis maiores suscipit similique. Nostrum nemo fugit quidem, officiis eius placeat tenetur dignissimos laborum quaerat dolor ipsam, sed officia!
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -94,11 +99,20 @@ const {getStatusById} = storeToRefs(useStudentStore())
 const props = defineProps<{ student: Student; rail: boolean }>();
 const $attendance = useAttendanceStore();
 const isLoading = ref(false);
+const showPolicyConfirmation = ref(false)
 const enter = () => {
-  isLoading.value = true;
-  $attendance.enter(props.student.id).then(() => {
-    isLoading.value = false;
-  });
+  const now = new Date()
+  
+  if(now.getHours() > 9 && now.getMinutes() > 15){
+    showPolicyConfirmation.value = true
+    
+    return;
+  }
+
+  // isLoading.value = true;
+  // $attendance.enter(props.student.id).then(() => {
+  //   isLoading.value = false;
+  // });
 };
 const leave = (student_id: number, attendance_id: number) => {
   isLoading.value = true;
