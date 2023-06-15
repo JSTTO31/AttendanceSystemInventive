@@ -48,6 +48,32 @@ export const useAttendanceStore = defineStore('attendance', {
         console.log(error)
       }
     },
+    async enterWithPolicy(student_id: number){
+      try {
+        const response = await api.post(`student/${student_id}/attendances`, {policy: true})
+        const {attendance, remaining} = response.data
+        this.attendances.unshift(attendance)
+        const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
+        const {students: studentsFromAppStore} = storeToRefs(useAppStore())
+        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, remaining: remaining, attendance: attendance} : item)
+        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, remaining: remaining, attendance: attendance} : item)
+
+        if(student.value.id == student_id){
+          student.value.attendance = attendance
+        }
+
+        if(!student.value.attendances){
+          student.value.attendances = []
+        }
+
+
+        student.value.attendances.unshift(attendance)
+
+        return response
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async enter(student_id: number){
       try {
         const response = await api.post(`student/${student_id}/attendances`)
@@ -85,7 +111,7 @@ export const useAttendanceStore = defineStore('attendance', {
         }
 
         console.log(response.data);
-        
+
 
         student.value.attendances = student.value.attendances.map(item => item.id == attendance_id ? response.data : item)
 

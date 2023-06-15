@@ -3,9 +3,7 @@
     :key="student.email"
     class="d-flex flex-column justify-center align-center rounded-xl"
     :class="rail ? 'ma-1 my-5' : 'mb-5 pa-5 py-10'"
-    @click="
-      $router.push({ name: 'ShowStudent', params: { student_id: student.id } })
-    "
+    @click="$router.push({ name: 'ShowStudent', params: { student_id: student.id } })"
     flat
   >
     <v-tooltip v-if="rail" activator="parent" location="start">{{
@@ -24,11 +22,11 @@
         v-if="!student.attendance"
       >
         <v-btn
-          prepend-icon="mdi-check"
+          prepend-icon="mdi-login"
           color="primary"
           variant="outlined"
           @click.stop="enter"
-          >Present</v-btn
+          >Enter</v-btn
         >
         <v-btn
           prepend-icon="mdi-close"
@@ -76,15 +74,42 @@
       scrim="grey-lighten-4"
       persistent
     >
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        size="45"
-      ></v-progress-circular>
+      <v-progress-circular indeterminate color="primary" size="45"></v-progress-circular>
     </v-overlay>
-    <v-dialog v-model="showPolicyConfirmation">
+    <v-dialog v-model="showPolicyConfirmation" persistent width="350">
       <v-card>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus laudantium, quaerat reiciendis maiores suscipit similique. Nostrum nemo fugit quidem, officiis eius placeat tenetur dignissimos laborum quaerat dolor ipsam, sed officia!
+        <v-card-text>
+          <h4 class="mb-3 text-warning d-flex align-center">
+            <v-icon class="mr-1">mdi-information-outline</v-icon>Policy Alert
+            <v-spacer></v-spacer>
+          </h4>
+          <h4 class="text-grey-darken-4">
+            Do you want apply the policy on this student?
+          </h4>
+          <!-- <v-alert variant="tonal" type="info" class="mt-2" density="compact">
+            This will show every 9:16 above.
+          </v-alert> -->
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            variant="elevated"
+            flat
+            density="compact"
+            color="primary"
+            @click="enterWithPolicy"
+            >Yes</v-btn
+          >
+          <v-btn variant="elevated" @click="enter" flat density="compact">No</v-btn>
+        </v-card-actions>
+        <v-btn
+          icon="mdi-close"
+          variant="text"
+          class="ma-1"
+          size="small"
+          @click="showPolicyConfirmation = false"
+          style="position: absolute; top: 0; right: 0"
+        ></v-btn>
       </v-card>
     </v-dialog>
   </v-card>
@@ -95,24 +120,27 @@ import { useAttendanceStore } from "@/stores/attendance";
 import { Student, useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-const {getStatusById} = storeToRefs(useStudentStore())
 const props = defineProps<{ student: Student; rail: boolean }>();
 const $attendance = useAttendanceStore();
 const isLoading = ref(false);
-const showPolicyConfirmation = ref(false)
+const showPolicyConfirmation = ref(false);
 const enter = () => {
-  const now = new Date()
-  
-  if(now.getHours() > 9 && now.getMinutes() > 15){
-    showPolicyConfirmation.value = true
-    
+  const currentTime = new Date();
+  const now = new Date();
+  now.setHours(9);
+  now.setMinutes(15);
+
+  if (currentTime > now && !showPolicyConfirmation.value) {
+    showPolicyConfirmation.value = true;
+
     return;
   }
 
-  // isLoading.value = true;
-  // $attendance.enter(props.student.id).then(() => {
-  //   isLoading.value = false;
-  // });
+  isLoading.value = true;
+  $attendance.enter(props.student.id).then(() => {
+    isLoading.value = false;
+    showPolicyConfirmation.value = false;
+  });
 };
 const leave = (student_id: number, attendance_id: number) => {
   isLoading.value = true;
@@ -124,6 +152,13 @@ const absent = () => {
   isLoading.value = true;
   $attendance.absent(props.student.id).then(() => {
     isLoading.value = false;
+  });
+};
+const enterWithPolicy = () => {
+  isLoading.value = true;
+  $attendance.enterWithPolicy(props.student.id).then(() => {
+    isLoading.value = false;
+    showPolicyConfirmation.value = false;
   });
 };
 </script>

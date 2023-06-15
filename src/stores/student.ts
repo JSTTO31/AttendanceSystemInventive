@@ -101,7 +101,8 @@ export const useStudentStore = defineStore('student', {
 
         return response;
       } catch (error) {
-        
+        console.log(error);
+
       }
     }
   }
