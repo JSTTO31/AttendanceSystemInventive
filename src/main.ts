@@ -29,3 +29,9 @@ registerPlugins(app)
 
 app.mount('#app')
 
+
+
+
+console.log(new Date().getDate());
+
+
