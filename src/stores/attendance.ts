@@ -12,6 +12,8 @@ export interface Attendance{
   created_at: string;
   updated_at: string
   student: Student
+  policy: boolean
+  late_time: string
 }
 
 interface AttendanceState{
@@ -77,21 +79,22 @@ export const useAttendanceStore = defineStore('attendance', {
     async enter(student_id: number){
       try {
         const response = await api.post(`student/${student_id}/attendances`)
-        this.attendances.unshift(response.data)
+        const {attendance, remaining} = response.data
+        this.attendances.unshift(attendance)
         const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
         const {students: studentsFromAppStore} = storeToRefs(useAppStore())
-        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: attendance} : item)
+        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: attendance} : item)
 
         if(student.value.id == student_id){
-          student.value.attendance = response.data
+          student.value.attendance = attendance
         }
 
         if(!student.value.attendances){
           student.value.attendances = []
         }
 
-        student.value.attendances.unshift(response.data)
+        student.value.attendances.unshift(attendance)
 
         return response
       } catch (error) {

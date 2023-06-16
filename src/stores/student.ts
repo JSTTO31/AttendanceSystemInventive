@@ -20,7 +20,7 @@ export interface Student{
   attendance: Attendance
   remaining: string;
   attendances: Attendance[]
-  work_time_total: number
+  work_time_total: number;
 }
 
 interface StudentState{
@@ -48,6 +48,9 @@ export const useStudentStore = defineStore('student', {
         }
       }
       return ''
+    },
+    workTimeTotal: state => () => {
+      return !state.student.attendances ? 0 :state.student.attendances.reduce((sum, item) => sum += parseInt(item.work_time || '0') - parseInt(item.late_time || '0'), 0)
     }
    },
   actions: {

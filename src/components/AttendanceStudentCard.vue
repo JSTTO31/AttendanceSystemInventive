@@ -24,13 +24,13 @@
         <v-btn
           prepend-icon="mdi-login"
           color="primary"
-          variant="outlined"
+          variant="text"
           @click.stop="enter"
           >Enter</v-btn
         >
         <v-btn
           prepend-icon="mdi-close"
-          variant="outlined"
+          variant="text"
           color="error"
           @click.stop="absent"
           >Absent</v-btn
@@ -76,91 +76,16 @@
     >
       <v-progress-circular indeterminate color="primary" size="45"></v-progress-circular>
     </v-overlay>
-    <v-dialog v-model="showPolicyConfirmation" persistent width="350">
-      <v-card>
-        <v-card-text>
-          <h4 class="mb-3 text-warning d-flex align-center">
-            <v-icon class="mr-1">mdi-information-outline</v-icon>Policy Alert
-            <v-spacer></v-spacer>
-          </h4>
-          <h4 class="text-grey-darken-4">
-            Do you want apply the policy on this student?
-          </h4>
-          <!-- <v-alert variant="tonal" type="info" class="mt-2" density="compact">
-            This will show every 9:16 above.
-          </v-alert> -->
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            variant="elevated"
-            flat
-            density="compact"
-            color="primary"
-            @click="enterWithPolicy"
-            >Yes</v-btn
-          >
-          <v-btn variant="elevated" @click="enter" flat density="compact">No</v-btn>
-        </v-card-actions>
-        <v-btn
-          icon="mdi-close"
-          variant="text"
-          class="ma-1"
-          size="small"
-          @click="showPolicyConfirmation = false"
-          style="position: absolute; top: 0; right: 0"
-        ></v-btn>
-      </v-card>
-    </v-dialog>
+    <ShowPolicyDialogVue @allow="enterWithPolicy" @deny="enter" :is-loading="isLoading" v-model:show-policy-confirmation="showPolicyConfirmation" :student="student"></ShowPolicyDialogVue>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { useAttendanceStore } from "@/stores/attendance";
-import { Student, useStudentStore } from "@/stores/student";
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import ShowPolicyDialogVue from './ShowPolicyDialog.vue';
+import useAttendance from '@/composables/useAttedance'
+import { Student } from "@/stores/student";
 const props = defineProps<{ student: Student; rail: boolean }>();
-const $attendance = useAttendanceStore();
-const isLoading = ref(false);
-const showPolicyConfirmation = ref(false);
-const enter = () => {
-  const currentTime = new Date();
-  const now = new Date();
-  now.setHours(9);
-  now.setMinutes(15);
-
-  if (currentTime > now && !showPolicyConfirmation.value) {
-    showPolicyConfirmation.value = true;
-
-    return;
-  }
-
-  isLoading.value = true;
-  $attendance.enter(props.student.id).then(() => {
-    isLoading.value = false;
-    showPolicyConfirmation.value = false;
-  });
-};
-const leave = (student_id: number, attendance_id: number) => {
-  isLoading.value = true;
-  $attendance.leave(student_id, attendance_id).then(() => {
-    isLoading.value = false;
-  });
-};
-const absent = () => {
-  isLoading.value = true;
-  $attendance.absent(props.student.id).then(() => {
-    isLoading.value = false;
-  });
-};
-const enterWithPolicy = () => {
-  isLoading.value = true;
-  $attendance.enterWithPolicy(props.student.id).then(() => {
-    isLoading.value = false;
-    showPolicyConfirmation.value = false;
-  });
-};
+const {enter, absent, leave, enterWithPolicy, isLoading, showPolicyConfirmation} = useAttendance(props.student)
 </script>
 
 <style scoped></style>

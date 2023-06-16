@@ -14,7 +14,7 @@
               <h4 class="font-weight-regular">OJT Student</h4>
             </div>
             <v-spacer></v-spacer>
-            <div
+            <!-- <div
               class="d-flex align-self-start"
               v-if="
                 (student.attendance &&
@@ -39,7 +39,7 @@
             >
               <v-btn
                 class="ml-2"
-                @click="leave"
+                @click="leave(student.id, student.attendance.id)"
                 color="error"
                 variant="elevated"
                 prepend-icon="mdi-logout"
@@ -47,24 +47,38 @@
               >
             </div>
             <div class="d-flex align-self-start" v-else>
-              <!-- <v-btn class="rounded-lg" variant="text" icon="mdi-dots-horizontal"></v-btn> -->
-              <v-btn class="ml-2" @click="enter" color="primary" variant="outlined"
-                >Present</v-btn
+              <v-btn  class="text-capitalize ml-2" @click="enter" color="primary" prepend-icon="mdi-login" variant="text"
+                >Enter</v-btn
               >
-              <v-btn class="ml-2" @click="absent" color="error" variant="outlined"
+              <v-btn class="text-capitalize ml-2" @click="absent" color="error" prepend-icon="mdi-close" variant="text"
                 >Absent</v-btn
               >
-            </div>
+            </div> -->
           </div>
+          <v-menu location="bottom left">
+            <template #activator="{props}">
+              <v-btn class="mx-2" icon="mdi-dots-horizontal" v-bind="props"></v-btn>
+            </template>
+            <v-card width="325" class="rounded-lg pa-2 px-4 mr-5">
+              <v-list>
+                <h4>General options</h4>
+                <v-list-item @click="enter" prepend-icon="mdi-login">Enter</v-list-item>
+                <v-list-item @click="absent" prepend-icon="mdi-close">Absent</v-list-item>
+                <v-list-item @click="leave(student.id, student.attendance.id)" prepend-icon="mdi-logout">Leave</v-list-item>
+                <h4>Other</h4>
+                <v-list-item @click="" prepend-icon="mdi-book-open-outline">Manual Attendance</v-list-item>
+                <v-list-item @click="" prepend-icon="mdi-trash-can-outline">Delete</v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-card>
         <VProgressLinear
           height="35"
           color="primary"
+
           :model-value="remainingPercent"
-          class="text-subtitle-1 my-5 text-capitalize text-grey-darken-2"
-          >Time Remaining {{ student.work_time_total?.toFixed(0) || 0 }}/{{
-            student.remaining
-          }}h</VProgressLinear
+          class="bg-grey-lighten-3  text-subtitle-1 my-5 text-capitalize text-grey-darken-2"
+          >Time Remaining {{ workTimeTotal() }}/550h</VProgressLinear
         >
         <v-row>
           <v-col>
@@ -90,7 +104,11 @@
               <v-icon size="60">mdi-update</v-icon>
               <div class="px-5">
                 <h4>Work time</h4>
-                <h3>{{ workTime }}</h3>
+                <h3 class="d-flex">{{ workTime }}
+                  <span class="text-red text-subtitle-2 d-flex align-center pl-2" v-if="student.attendance && student.attendance.policy && student.attendance.time_out">
+                    -{{ parseInt(student.attendance.late_time).toFixed(2) || 0 }}h
+                  </span>
+                </h3>
               </div>
             </v-card>
           </v-col>
@@ -113,7 +131,6 @@
           class="text-capitalize"
           >Information</v-tab
         >
-        <!-- <v-tab color="primary" :to="{name: 'ShowStudent.course'}" class="text-capitalize">Courses</v-tab> -->
       </v-tabs>
     </nav>
     <div class="py-5">
@@ -124,70 +141,30 @@
         </Suspense>
       </RouterView>
     </div>
-    <LoadingOverlay :show="isLoading"></LoadingOverlay>
+    <ShowPolicyDialog @allow="enterWithPolicy" @deny="enter" v-model:show-policy-confirmation="showPolicyConfirmation" :is-loading="isLoading"></ShowPolicyDialog>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import LoadingOverlay from "../../components/LoadingOverlay.vue";
-import { ref } from "vue";
+import ShowPolicyDialog from '@/components/ShowPolicyDialog.vue';
+import useStudent from '@/composables/useStudent'
+import useAttendance from "@/composables/useAttedance";
 import { storeToRefs } from "pinia";
 import { useStudentStore } from "../../stores/student";
 import { computed } from "vue";
 import { useAttendanceStore } from "@/stores/attendance";
 import { useRoute } from "vue-router";
-// const selectedTab = computed(() => useRoute().)
 const $attendance = useAttendanceStore();
-const { student } = storeToRefs(useStudentStore());
-const timeIn = computed(() =>
-  student.value.attendance && student.value.attendance.time_in
-    ? new Date(student.value.attendance.time_in).toLocaleTimeString("en-us", {
-        minute: "2-digit",
-        hour: "2-digit",
-      })
-    : "--"
-);
-const timeOut = computed(() =>
-  student.value.attendance && student.value.attendance.time_out
-    ? new Date(student.value.attendance.time_out).toLocaleTimeString("en-us", {
-        minute: "2-digit",
-        hour: "2-digit",
-      })
-    : "--"
-);
-const workTime = computed(() =>
-  student.value.attendance &&
-  student.value.attendance.time_in &&
-  student.value.attendance.time_out
-    ? student.value.attendance.work_time + "h"
-    : "--"
-);
-const isLoading = ref(false);
+const { student, workTimeTotal } = storeToRefs(useStudentStore());
+const {timeIn, timeOut, workTime} = useStudent(student)
 const route = useRoute();
-// @ts-ignore
 const remainingPercent = computed(
-  () => ((student.value.work_time_total?.toFixed(0) || 0) / 550) * 100
+  // @ts-ignore
+  () => workTimeTotal.value() / 550 * 100
 );
 $attendance.getAllStudentAttendance(parseInt(route.params.student_id.toString()));
+const {enter, absent, leave, enterWithPolicy, isLoading, showPolicyConfirmation} = useAttendance(student.value)
 
-const enter = () => {
-  isLoading.value = true;
-  $attendance.enter(student.value.id).then(() => {
-    isLoading.value = false;
-  });
-};
-const leave = () => {
-  isLoading.value = true;
-  $attendance.leave(student.value.id, student.value.attendance.id).then(() => {
-    isLoading.value = false;
-  });
-};
-const absent = () => {
-  isLoading.value = true;
-  $attendance.absent(student.value.id).then(() => {
-    isLoading.value = false;
-  });
-};
 </script>
 
 <style scoped></style>
