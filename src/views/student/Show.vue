@@ -43,7 +43,7 @@
                   @click="leave(student.id, student.attendance.id)"
                   prepend-icon="mdi-logout"
                   :disabled="
-                    (student.attendance &&
+                    !student.attendance || (student.attendance &&
                       student.attendance.time_in &&
                       student.attendance.time_out) ||
                     (student.attendance && student.attendance.is_absent)
@@ -51,7 +51,7 @@
                   >Leave</v-list-item
                 >
                 <h4>Other</h4>
-                <v-list-item prepend-icon="mdi-book-open-outline"
+                <v-list-item prepend-icon="mdi-book-open-outline" @click="showManualAttendanceDialog = true"
                   >Manual Attendance</v-list-item
                 >
                 <v-list-item prepend-icon="mdi-trash-can-outline"

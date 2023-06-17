@@ -1,7 +1,7 @@
 <template>
   <v-container class="px-0" fluid>
     <v-row>
-      <v-col>
+      <v-col cols="8">
         <v-card class="h-100 border pa-4" flat>
           <v-card-title> Weekly work time </v-card-title>
           <v-card-text>
