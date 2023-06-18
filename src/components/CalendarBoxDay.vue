@@ -73,13 +73,13 @@ import { computed } from "vue";
 const { student } = storeToRefs(useStudentStore());
 const props = defineProps<{ day: number; status: string }>();
 const attendance = computed(() =>
-  student.value.attendances.find((item) => new Date(item.time_in).getDate() == props.day)
+  student.value.attendances.find((item) => new Date(item.created_at).getDate() == props.day)
 );
 const attributes: any = computed(() => {
   if (attendance.value) {
     if (attendance.value.is_absent) {
       return { variant: "elevated", color: "error" };
-    } else if (attendance.value.policy) {
+    } else if (attendance.value.policy && attendance.value.time_out) {
       return { variant: "elevated", color: "warning" };
     } else if (!attendance.value.time_in || !attendance.value.time_out) {
       return { variant: "outlined", color: "primary" };

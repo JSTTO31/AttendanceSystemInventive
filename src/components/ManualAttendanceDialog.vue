@@ -15,12 +15,13 @@
             <div>
               <label for="from">Time in:</label>
               <VueDatePicker
-                :alt-position="()=>({right: -20, top: -50})"
-                v-model="attendance.timeIn"
+                :clearable="false"
+                :alt-position="() : any =>({right: -20, top: -50})"
+                v-model="attendance.time_in"
                 id="from"
                 auto-apply
                 partial-flow
-                :flow="['day', 'month', 'year', 'time']"
+                :flow="['calendar', 'month', 'year', 'time']"
               ></VueDatePicker>
             </div>
           </v-col>
@@ -28,12 +29,13 @@
             <div>
               <label for="to">Time out:</label>
               <VueDatePicker
-                :alt-position="()=>({right: -20, top: -50})"
-                v-model="attendance.timeOut"
+                :clearable="false"
+                :alt-position="() : any =>({right: -20, top: -50})"
+                v-model="attendance.time_out"
                 id="to"
                 auto-apply
                 partial-flow
-                :flow="['day', 'month', 'year', 'time']"
+                :flow="['calendar', 'month', 'year', 'time']"
               ></VueDatePicker>
             </div>
           </v-col>
@@ -52,9 +54,9 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="px-4">
         <v-spacer></v-spacer>
-        <v-btn color="primary">Save</v-btn>
+        <v-btn color="primary" variant="elevated" @click="$attendance.manual(attendance)">Save</v-btn>
         <v-btn @click="emits('update:showDialog', false)">No</v-btn>
       </v-card-actions>
       <v-btn
@@ -71,19 +73,22 @@
 
 <script setup lang="ts">
 //@ts-ignore
+import { useAttendanceStore } from "@/stores/attendance";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { computed } from "vue";
 import { reactive, ref } from "vue";
+const $attendance = useAttendanceStore()
 const props = defineProps(["showDialog"]);
 const emits = defineEmits(["update:showDialog"]);
 const timeStart = new Date()
 timeStart.setHours(9)
+timeStart.setMinutes(16)
 const timeEnd = new Date()
 timeEnd.setHours(18)
 const attendance = reactive({
-  timeIn: timeStart,
-  timeOut: timeEnd,
+  time_in: timeStart,
+  time_out: timeEnd,
   option: 'present',
 })
 
@@ -91,7 +96,7 @@ const enablePolicy = computed(() => {
   const timeLimit = new Date()
   timeLimit.setHours(9)
   timeLimit.setMinutes(15)
-  if(timeLimit < attendance.timeIn){
+  if(timeLimit < attendance.time_in){
     return true
   }
   return false
@@ -114,6 +119,7 @@ let options = [
     color: 'warning'
   },
 ]
+
 </script>
 
 <style scoped></style>

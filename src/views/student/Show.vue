@@ -25,8 +25,8 @@
                   @click="enter"
                   prepend-icon="mdi-login"
                   :disabled="
-                    (student.attendance && student.attendance.time_in) ||
-                    (student.attendance && student.attendance.is_absent)
+                    (student.attendance && !!student.attendance.time_in) ||
+                    (student.attendance && !!student.attendance.is_absent)
                   "
                   >Enter</v-list-item
                 >
@@ -34,8 +34,8 @@
                   @click="absent"
                   prepend-icon="mdi-close"
                   :disabled="
-                    (student.attendance && student.attendance.time_in) ||
-                    (student.attendance && student.attendance.is_absent)
+                    (student.attendance && !!student.attendance.time_in) ||
+                    (student.attendance && !!student.attendance.is_absent)
                   "
                   >Absent</v-list-item
                 >
@@ -44,9 +44,9 @@
                   prepend-icon="mdi-logout"
                   :disabled="
                     !student.attendance || (student.attendance &&
-                      student.attendance.time_in &&
-                      student.attendance.time_out) ||
-                    (student.attendance && student.attendance.is_absent)
+                      !!student.attendance.time_in &&
+                      !!student.attendance.time_out) ||
+                    (student.attendance && !!student.attendance.is_absent)
                   "
                   >Leave</v-list-item
                 >
@@ -164,7 +164,7 @@ const $attendance = useAttendanceStore();
 const { student, workTimeTotal } = storeToRefs(useStudentStore());
 const { timeIn, timeOut, workTime } = useStudent(student);
 const route = useRoute();
-const showManualAttendanceDialog = ref(true);
+const showManualAttendanceDialog = ref(false);
 const remainingPercent = computed(
   // @ts-ignore
   () => (workTimeTotal.value() / 550) * 100

@@ -5,6 +5,7 @@ import { Student, useStudentStore } from "./student";
 
 export interface Attendance{
   id: number;
+  student_id: number
   time_in: string;
   time_out: string;
   is_absent: boolean
@@ -85,7 +86,7 @@ export const useAttendanceStore = defineStore('attendance', {
         const {students: studentsFromAppStore} = storeToRefs(useAppStore())
         studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: attendance} : item)
         studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: attendance} : item)
-
+        console.log('triggered')
         if(student.value.id == student_id){
           student.value.attendance = attendance
         }
