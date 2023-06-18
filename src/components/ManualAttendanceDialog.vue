@@ -15,13 +15,11 @@
             <div>
               <label for="from">Time in:</label>
               <VueDatePicker
+                @closed="followDate('time_in')"
                 :clearable="false"
-                :alt-position="() : any =>({right: -20, top: -50})"
                 v-model="attendance.time_in"
                 id="from"
                 auto-apply
-                partial-flow
-                :flow="['calendar', 'month', 'year', 'time']"
               ></VueDatePicker>
             </div>
           </v-col>
@@ -29,26 +27,38 @@
             <div>
               <label for="to">Time out:</label>
               <VueDatePicker
+                @closed="followDate('time_out')"
                 :clearable="false"
-                :alt-position="() : any =>({right: -20, top: -50})"
                 v-model="attendance.time_out"
                 id="to"
                 auto-apply
-                partial-flow
-                :flow="['calendar', 'month', 'year', 'time']"
               ></VueDatePicker>
             </div>
           </v-col>
         </v-row>
         <v-row>
           <v-col class="py-0">
-            <h4 class="mb-1">Attendance Options </h4>
-            <v-card :key="option.value" :disabled="option.value == 'policy' && !enablePolicy" v-for="option in options" @click="attendance.option = option.value" variant="outlined"  class="mb-2 d-flex align-center rounded-lg border text-black" :color="option.color" flat>
+            <h4 class="mb-1">Attendance Options</h4>
+            <v-card
+              :key="option.value"
+              :disabled="option.value == 'policy' && !enablePolicy"
+              v-for="option in options"
+              @click="attendance.option = option.value"
+              variant="outlined"
+              class="mb-2 d-flex align-center rounded-lg border text-black"
+              :color="option.color"
+              flat
+            >
               <v-col cols="1">
-                <v-radio v-model="attendance.option" hide-details :value="option.value" density="compact"></v-radio>
+                <v-radio
+                  v-model="attendance.option"
+                  hide-details
+                  :value="option.value"
+                  density="compact"
+                ></v-radio>
               </v-col>
               <v-col class="text-black px-5">
-                {{option.label}}
+                {{ option.label }}
               </v-col>
             </v-card>
           </v-col>
@@ -56,7 +66,13 @@
       </v-card-text>
       <v-card-actions class="px-4">
         <v-spacer></v-spacer>
-        <v-btn color="primary" variant="elevated" @click="$attendance.manual(attendance)">Save</v-btn>
+        <v-btn
+          color="primary"
+          variant="elevated"
+          @click.stop="submit"
+          :loading="isLoading"
+          >Save</v-btn
+        >
         <v-btn @click="emits('update:showDialog', false)">No</v-btn>
       </v-card-actions>
       <v-btn
@@ -73,53 +89,27 @@
 
 <script setup lang="ts">
 //@ts-ignore
+import useManual from "@/composables/useManual";
 import { useAttendanceStore } from "@/stores/attendance";
+import { useStudentStore } from "@/stores/student";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import { computed } from "vue";
-import { reactive, ref } from "vue";
-const $attendance = useAttendanceStore()
-const props = defineProps(["showDialog"]);
+import { storeToRefs } from "pinia";
+const { student } = storeToRefs(useStudentStore());
+const $attendance = useAttendanceStore();
+const props = defineProps(["showDialog", "start_at"]);
 const emits = defineEmits(["update:showDialog"]);
-const timeStart = new Date()
-timeStart.setHours(9)
-timeStart.setMinutes(16)
-const timeEnd = new Date()
-timeEnd.setHours(18)
-const attendance = reactive({
-  time_in: timeStart,
-  time_out: timeEnd,
-  option: 'present',
-})
+const { attendance, enablePolicy, isLoading, options, followDate } = useManual(
+  props.start_at
+);
 
-const enablePolicy = computed(() => {
-  const timeLimit = new Date()
-  timeLimit.setHours(9)
-  timeLimit.setMinutes(15)
-  if(timeLimit < attendance.time_in){
-    return true
-  }
-  return false
-})
-
-let options = [
-  {
-    value: 'present',
-    label: 'Present',
-    color: 'primary'
-  },
-  {
-    value: 'absent',
-    label: 'Absent',
-    color: 'error'
-  },
-  {
-    value: 'policy',
-    label: 'Present with policy',
-    color: 'warning'
-  },
-]
-
+const submit = () => {
+  isLoading.value = true;
+  $attendance.manual(student.value.id, attendance.value).then(() => {
+    isLoading.value = false;
+    emits("update:showDialog", false);
+  });
+};
 </script>
 
 <style scoped></style>

@@ -149,6 +149,30 @@ export const useAttendanceStore = defineStore('attendance', {
       } catch (error) {
         console.log(error)
       }
+    },
+    async manual(student_id: number, attendance: any){
+      try {
+        const response = await api.post(`student/${student_id}/attendances/manual`, attendance)
+        this.attendances.unshift(response.data)
+        const {students: studentsFromStore, student} = storeToRefs(useStudentStore())
+        const {students: studentsFromAppStore} = storeToRefs(useAppStore())
+        studentsFromStore.value = studentsFromStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+        studentsFromAppStore.value = studentsFromAppStore.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
+
+        if(student.value.id == student_id){
+          student.value.attendance = response.data
+        }
+
+        if(!student.value.attendances){
+          student.value.attendances = []
+        }
+
+        student.value.attendances.unshift(response.data)
+
+        return response
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 })

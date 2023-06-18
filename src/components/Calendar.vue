@@ -27,20 +27,28 @@
         v-for="day in daysInMonth"
         :key="day"
         :day="day"
+        @click="setStartAt(day)"
       ></CalendarBoxDayVue>
       <!-- <v-card variant="outlined" class="mr-2 my-2 d-flex align-center justify-center" height="51" color="grey" width="51" v-for="z in 34-daysInMonth" :key="z" disabled></v-card> -->
+      <ManualAttendanceDialog
+        :start_at="start_at"
+        :key="start_at"
+        v-model:show-dialog="showManualDialog"
+      ></ManualAttendanceDialog>
     </v-card>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import AttendanceListItem from "./AttendanceListItem.vue";
 import { storeToRefs } from "pinia";
 import CalendarBoxDayVue from "./CalendarBoxDay.vue";
 import { useStudentStore } from "@/stores/student";
 import { ref } from "vue";
-import { computed } from "@vue/reactivity";
+import ManualAttendanceDialog from "./ManualAttendanceDialog.vue";
+import { watch } from "vue";
 const { student } = storeToRefs(useStudentStore());
+const start_at = ref();
+const showManualDialog = ref(false);
 const monthsName = [
   "January",
   "February",
@@ -60,14 +68,17 @@ const now = new Date();
 const daysInMonth = new Date(now.getMonth() + 1, now.getFullYear(), 0).getDate();
 const getMonth = now.getMonth();
 const getFullYear = now.getFullYear();
-const { students } = storeToRefs(useStudentStore());
-const page = ref(1);
-const perPage = 10;
-let page_total = computed(() =>
-  Math.ceil((student.value.attendances?.length || 0) / perPage)
+const setStartAt = (day: number) => {
+  const newDate = new Date();
+  newDate.setDate(day);
+  start_at.value = newDate;
+};
+watch(
+  () => start_at.value,
+  () => {
+    showManualDialog.value = true;
+  }
 );
-// const
-// const paginatedAttendance = computed
 </script>
 
 <style scoped></style>

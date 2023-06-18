@@ -2,7 +2,7 @@
   <v-menu open-on-hover>
     <template #activator="{ props }">
       <v-card
-        v-bind="props"
+        v-bind="{ ...props, ...$attrs }"
         flat
         :color="attributes.color"
         :variant="attributes.variant"
@@ -64,16 +64,22 @@
     </v-card>
   </v-menu>
 </template>
-
+<script lang="ts">
+export default {
+  inheritAttrs: true,
+};
+</script>
 <script setup lang="ts">
 import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
 const { student } = storeToRefs(useStudentStore());
-const props = defineProps<{ day: number; status: string }>();
+const props = defineProps<{ day: number }>();
 const attendance = computed(() =>
-  student.value.attendances.find((item) => new Date(item.created_at).getDate() == props.day)
+  student.value.attendances.find(
+    (item) => new Date(item.created_at).getDate() == props.day
+  )
 );
 const attributes: any = computed(() => {
   if (attendance.value) {
