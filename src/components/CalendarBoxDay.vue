@@ -44,7 +44,7 @@
       <div class="d-flex text-subtitle-2 align-center justify-sm-space-between">
         <span>
           <v-icon size="23">mdi-clock-outline</v-icon>
-          {{ new Date().toDateString() }}
+          {{ date }}
         </span>
         <v-chip
           :color="
@@ -80,6 +80,9 @@ const attendance = computed(() =>
   student.value.attendances.find(
     (item) => new Date(item.created_at).getDate() == props.day
   )
+);
+const date = computed(() =>
+  attendance.value ? new Date(attendance.value.created_at).toDateString() : "-- -- --"
 );
 const attributes: any = computed(() => {
   if (attendance.value) {

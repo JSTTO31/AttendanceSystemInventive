@@ -2,7 +2,19 @@
   <v-container class="px-0" fluid>
     <v-row>
       <v-col cols="8">
-        <StudentLineChart v-if="student.attendances"></StudentLineChart>
+        <StudentLineChart
+          v-if="student.attendances && student.attendances.length > 0"
+        ></StudentLineChart>
+        <v-card
+          v-else
+          class="pa-5 h-100 d-flex align-center justify-center rounded-lg border"
+          flat
+        >
+          <v-avatar size="80">
+            <v-img src="/src/assets/data-quality.png"></v-img>
+          </v-avatar>
+          <h1 class="ml-2">No chart</h1>
+        </v-card>
       </v-col>
       <v-col cols="4">
         <Calendar></Calendar>
@@ -65,7 +77,12 @@ let page_total = computed(() =>
   Math.ceil((student.value.attendances?.length || 0) / perPage)
 );
 //@ts-ignore
-const attendancesReverse = computed(() => student.value.attendances.slice().sort((a,b) => new Date(b.created_at) - new Date(a.created_at)))
+const attendancesReverse = computed(() =>
+  student.value.attendances
+    .slice()
+    //@ts-ignore
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+);
 // const weeks = useGroupByWeek(student.value.attendances);
 </script>
 
