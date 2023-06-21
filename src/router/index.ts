@@ -73,6 +73,11 @@ const routes = [
           },
         ]
       },
+      {
+        path: '/course',
+        component: () => import('@/views/course/Index.vue'),
+        name: 'IndexCourse',
+      }
     ],
     meta: {
       requiresAuth: true
@@ -82,7 +87,8 @@ const routes = [
     path: '/login',
     component: () => import('@/views/Login.vue'),
     meta: {guest: true}
-  }
+  },
+
 ]
 
 const router = createRouter({

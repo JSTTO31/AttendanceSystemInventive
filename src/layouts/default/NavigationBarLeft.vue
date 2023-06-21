@@ -37,7 +37,7 @@
       <v-list-item
         class="my-2 rounded-lg"
         color="primary"
-        @click.prevent=""
+        :to="{name: 'IndexCourse'}"
         title="View courses"
         prepend-icon="mdi-book-open"
       >

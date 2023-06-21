@@ -2,12 +2,7 @@
   <v-container class="px-0" fluid>
     <v-row>
       <v-col cols="8">
-        <v-card class="h-100 border pa-4" flat>
-          <v-card-title> Weekly work time </v-card-title>
-          <v-card-text>
-            <LineChart style="height: 350px" class="pa-5"></LineChart>
-          </v-card-text>
-        </v-card>
+        <StudentLineChart v-if="student.attendances"></StudentLineChart>
       </v-col>
       <v-col cols="4">
         <Calendar></Calendar>
@@ -28,7 +23,7 @@
             </thead>
             <tbody>
               <AttendanceListItem
-                v-for="attendance in student.attendances.slice(page - 1 * perPage)"
+                v-for="attendance in attendancesReverse.slice(page - 1 * perPage)"
                 :key="attendance.id"
                 :attendance="attendance"
               ></AttendanceListItem>
@@ -50,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import LineChart from "@/components/LineChart.vue";
+import StudentLineChart from "@/components/StudentLineChart.vue";
 import AttendanceListItem from "@/components/AttendanceListItem.vue";
 import Calendar from "@/components/Calendar.vue";
 import { useAttendanceStore } from "@/stores/attendance";
@@ -59,7 +54,6 @@ import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import useGroupByWeek from "@/composables/useGroupByWeek";
 const { student } = storeToRefs(useStudentStore());
 const $attendance = useAttendanceStore();
 // const props = defineProps(['student_id'])
@@ -70,6 +64,8 @@ const perPage = 10;
 let page_total = computed(() =>
   Math.ceil((student.value.attendances?.length || 0) / perPage)
 );
+//@ts-ignore
+const attendancesReverse = computed(() => student.value.attendances.slice().sort((a,b) => new Date(b.created_at) - new Date(a.created_at)))
 // const weeks = useGroupByWeek(student.value.attendances);
 </script>
 
