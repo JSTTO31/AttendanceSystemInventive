@@ -13,15 +13,15 @@ import { reactive } from "vue"
 
 export default () => {
   const student = reactive({
-    first_name: 'Joshua',
-    last_name: 'Sotto',
-    gender: 'male',
-    email: 'joshua@example.example',
-    phone_number: '092839829',
-    school_name: 'Arellano University - Jose Rizal Campus',
-    school_year: '2022-2023',
-    address: 'Sitio Sto. nino Concepcion Malabon City',
-    course: 'BSCS'
+    first_name: '',
+    last_name: '',
+    gender: '',
+    email: '',
+    phone_number: '',
+    school_name: '',
+    school_year: '',
+    address: '',
+    course: ''
   })
 
   const rules = {

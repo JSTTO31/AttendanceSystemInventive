@@ -55,7 +55,6 @@ const data = () => {
         //@ts-ignore
         data: container.map((item) =>
           //@ts-ignore
-
           item.reduce((sum, item) => (sum += item.work_time), 0)
         ),
       },

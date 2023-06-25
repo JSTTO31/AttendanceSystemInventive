@@ -3,22 +3,22 @@
     v-if="!url.length"
     @click="showDialog"
     id="image-container"
-    height="150"
-    width="150"
+    height="160"
+    width="100%"
     class="d-flex align-center justify-center bg-transparent"
     flat
   >
-    <v-icon color="amber-darken-4" size="45" dense>mdi-plus</v-icon>
+    <v-icon color="primary" size="25"  dense>mdi-plus</v-icon>
   </v-card>
   <v-hover v-else v-slot="{ props, isHovering }">
     <v-card
       v-bind="props"
       style="width: 150px; height: 150px; position: relative"
-      class="border bg-transparent align-center justify-center"
+      class="border bg-transparent d-flex align-center justify-center"
       flat
       @click="showDialog"
     >
-      <v-img :src="url"></v-img>
+      <img :src="url" />
       <v-btn
         v-if="!persistent || (beforeUrl.length > 0 && beforeUrl != url)"
         id="remove"
@@ -82,8 +82,10 @@ const removeImage = () => {
 </script>
 
 <style scoped>
+
 #image-container {
-  border: 2px dashed #ff6f00;
+  border: 2px dashed rgb(22, 119, 247);
+
 }
 #remove {
   position: absolute;

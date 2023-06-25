@@ -1,6 +1,7 @@
 // Composables
 import { useAppStore } from '@/stores/app'
 import { useAttendanceStore } from '@/stores/attendance'
+import { useCategoryStore } from '@/stores/category'
 import { useStudentStore } from '@/stores/student'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
@@ -75,9 +76,51 @@ const routes = [
       },
       {
         path: '/course',
-        component: () => import('@/views/course/Index.vue'),
-        name: 'IndexCourse',
-      }
+        component: () => import('@/views/Course.vue'),
+        name: 'Course',
+        redirect: {name: 'IndexCourse'},
+        //@ts-ignore
+        beforeEnter: (to, from, next) => {
+          const $category = useCategoryStore()
+          
+          return $category.getAll().then(() => {
+            next()
+          })
+        },
+        children: [
+          {
+            path: '',
+            component: () => import('@/views/course/Index.vue'),
+            name: 'IndexCourse',
+          },
+          {
+            path: 'category/:category_id',
+            component: () => import('@/views/course/Category.vue'),
+            name: 'CategoryCourse',
+            //@ts-ignore
+            beforeEnter: (to, from, next) => {
+              const {category, categories} = storeToRefs(useCategoryStore())
+              const categoryExists = categories.value.find(item => item.id == to.params.category_id)
+              if(!categoryExists){
+                return next({name: 'IndexCourse'})
+              }
+
+              category.value = categoryExists
+              next()
+            }
+          }
+        ]
+      },
+      {
+        path: '/category',
+        component: () => import('@/views/category/Index.vue'),
+        name: 'IndexCategory',
+      },
+      {
+        path: '/sub_category',
+        component: () => import('@/views/sub_category/Index.vue'),
+        name: 'IndexSubCategory',
+      },
     ],
     meta: {
       requiresAuth: true
