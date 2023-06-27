@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-h4 font-weight-bold text-grey-darken-4">Courses</h1>
+  <h1 class="text-h4 font-weight-bold ">Courses</h1>
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
   <v-row class="mt-5">
     <v-col v-for="category in categories" cols="4" :key="category.id"> 

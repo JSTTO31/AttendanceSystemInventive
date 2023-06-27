@@ -10,10 +10,10 @@
           class="pa-5 h-100 d-flex align-center justify-center rounded-lg border"
           flat
         >
-          <v-avatar size="80">
+          <v-avatar class="mr-4" size="60">
             <v-img src="/src/assets/data-quality.png"></v-img>
           </v-avatar>
-          <h1 class="ml-2">No chart</h1>
+          <h2 class="ml-2">No chart</h2>
         </v-card>
       </v-col>
       <v-col cols="4">

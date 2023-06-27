@@ -1,8 +1,8 @@
 <template>
   <v-container class="pa-10">
-    <h1 class="text-h4 font-weight-bold text-grey-darken-4">Categories</h1>
+    <h1 class="text-h4 font-weight-bold">Categories</h1>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-    <v-table hover>
+    <v-table hover class="mt-5">
       <thead>
         <tr>
           <th class="text-center">

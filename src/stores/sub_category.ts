@@ -1,11 +1,13 @@
 import { api } from '@/utils';
 import {defineStore} from 'pinia'
+import { Course } from './course';
 
 export interface SubCategory{
   id: number;
   name: string;
   category_id: number;
   category_name: string;
+  courses: Course[]
   created_at: string;
   updated_at: string;
 }
@@ -44,11 +46,10 @@ export const useSubCategoryStore = defineStore('sub_category', {
       }
     },
     async update(category_id: number, sub_category_id: number, name: string){
-      
       try {
         const response = await api.put(`sub_categories/${sub_category_id}`, {category_id, name})
         console.log(response.data.category_name);
-        
+
         //@ts-ignore
         this.sub_categories = this.sub_categories.map(item => item.id == sub_category_id ? {...item, name, category_name: response.data.category_name} : item)
         return response;

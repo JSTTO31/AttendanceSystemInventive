@@ -7,6 +7,7 @@
     width="100%"
     class="d-flex align-center justify-center bg-transparent"
     flat
+    :style="{borderColor: current.colors.primary}"
   >
     <v-icon color="primary" size="25"  dense>mdi-plus</v-icon>
   </v-card>
@@ -39,6 +40,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useTheme } from "vuetify/lib/framework.mjs";
+const {current} = useTheme()
 const props = defineProps({
   image: {},
   url: { default: "", type: String },
@@ -84,7 +87,7 @@ const removeImage = () => {
 <style scoped>
 
 #image-container {
-  border: 2px dashed rgb(22, 119, 247);
+  border: 2px dashed;
 
 }
 #remove {

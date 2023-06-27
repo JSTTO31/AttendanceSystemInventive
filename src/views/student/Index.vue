@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-10">
-    <h1 class="text-h4 font-weight-bold text-grey-darken-4">Students</h1>
+    <h1 class="text-h4 font-weight-bold">Students</h1>
     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
     <div class="mt-4">
       <div class="w-100 d-flex align-center justify-space-between">
@@ -38,7 +38,7 @@
           >
         </v-tabs>
       </div>
-      <v-card flat class="mt-2 bg-blue py-2 mb-1">
+      <v-card flat class="mt-2 bg-primary py-2 mb-1">
         <v-row>
           <v-col class="d-flex align-center" cols="4"> </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">

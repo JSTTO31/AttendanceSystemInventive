@@ -82,7 +82,12 @@ const routes = [
         //@ts-ignore
         beforeEnter: (to, from, next) => {
           const $category = useCategoryStore()
-          
+          const {categories} = storeToRefs(useCategoryStore())
+
+          if(categories.value.length > 0){
+            return next()
+          }
+
           return $category.getAll().then(() => {
             next()
           })

@@ -12,8 +12,8 @@
             <div>
               <h5 class="mb-2">Course Image</h5>
               <div class="">
-                <ImageCard v-model:image="$v.image.$model"></ImageCard>
-                <v-list class="mt-2">
+                <ImageCard v-model:image="$v.image.$model" :url="edit.url"></ImageCard>
+                <v-list>
                   <v-list-item class="text-error text-caption">
                     {{showError($v.image)}}
                   </v-list-item>
@@ -52,7 +52,7 @@
           </v-col>
         </v-row>
         <div class="d-flex mt-5">
-          <v-btn class="mr-1" color="primary" @click="submit" :loading="isLoading">Add</v-btn>
+          <v-btn class="mr-1" color="primary" @click="submit" :loading="isLoading">Save</v-btn>
           <v-btn class="mr-1" variant="text" @click="emits('update:showDialog', false)">Cancel</v-btn>
         </div>
       </v-card-text>
@@ -61,18 +61,18 @@
 </template>
 
 <script setup lang="ts">
+import useCourseEdit from '../composables/useCourseEdit'
 import {useCourseStore} from '../stores/course'
 import ImageCard from './ImageCard.vue'
 import { showError } from '@/utils';
-import useCourseAdd from '../composables/useCourseAdd'
 import { useCategoryStore } from '@/stores/category';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { ref } from 'vue';
-const props = defineProps(['showDialog'])
+const props = defineProps(['showDialog', 'course'])
+const {edit, $v} = useCourseEdit(props.course)
 const emits = defineEmits(['update:showDialog'])
 const {category} = storeToRefs(useCategoryStore())
-const {$v, course} = useCourseAdd()
 const isLoading = ref(false)
 const submit = () => {
   if($v.value.$invalid){
@@ -81,14 +81,36 @@ const submit = () => {
   }
   isLoading.value = true
   const $course = useCourseStore()
-  $course.store(course.sub_category_id, course).then(() => {
+  
+  //@ts-ignore
+  if(edit.image && edit.image.type && edit.image.type.includes('image'))
+  {
+    $course.changeImage(props.course.sub_category_id, props.course.id, edit.image).then(() => {
+      if($v.value.name.$dirty || $v.value.sub_category_id.$dirty || $v.value.description.$diry || $v.value.     number_of_session.$dirty){
+        $course.update(props.course.sub_category_id, props.course.id, edit).then(() => {
+          isLoading.value = false;
+          emits('update:showDialog', false)
+        });
+        return
+      }
+
+       isLoading.value = false;
+       emits('update:showDialog', false)
+    })
+    return
+  }
+
+  $course.update(props.course.sub_category_id, props.course.id, edit).then(() => {
     isLoading.value = false;
     emits('update:showDialog', false)
   });
+ 
 }
 onMounted(() => {
   $v.value.sub_category_id.$model = category.value.sub_categories[0].id || -1
 })
+
+
 </script>
 
 <style scoped>

@@ -1,0 +1,64 @@
+<template>
+  <v-hover v-slot="{props, isHovering}">
+    <v-card class="my-2 rounded-0" :elevation="isHovering ? 0 : 5" v-bind="props">
+      <v-img :src="course.image"></v-img>
+      <v-card-text>
+        <v-chip class="mb-2 pa-0" variant="text">{{ course.sub_category.name }}</v-chip>
+        <h2 class="text-capitalize" prepend-icon>{{ course.name }}</h2>
+        <p class="my-2">{{ course.description }}</p>
+        <div class="d-flex align-center mt-2">
+          <v-chip v-if="false">+{{ course.sub_category_id }}</v-chip>
+          <span class="text-grey-darken-2">No attendees</span>
+          <v-spacer></v-spacer>
+          <h4>
+            <v-icon>mdi-calendar</v-icon>
+            Day <span v-if="course.number_of_session > 1">1 -</span> {{ course.number_of_session }}
+          </h4>
+        </div>
+      </v-card-text>
+      <span id="menu-button">
+        <v-menu location="bottom right">
+          <template #activator="{props}">
+            <v-btn icon="mdi-dots-vertical" variant="text" size="small" class="ma-1" color="white" v-bind="props"></v-btn>
+          </template>
+          <v-card width="200">
+            <v-list>
+              <v-list-item @click="showAddAttendeesDialog = true" prepend-icon="mdi-plus">Add attendees</v-list-item>
+              <v-list-item @click="showEditDialog = true" prepend-icon="mdi-pencil">Edit</v-list-item>
+              <v-list-item @click="showDeleteDialog = true" prepend-icon="mdi-trash-can">Delete</v-list-item>
+            </v-list>
+          </v-card>
+        </v-menu>
+      </span>
+      <div class="px-5 pb-5">
+      </div>
+      <!-- <v-overlay contained :model-value="isHovering" persistent class="d-flex align-center justify-center">
+        <v-btn block prepend-icon="mdi-plus" color="primary" class="rounded-0">Add Attendee</v-btn>
+      </v-overlay> -->
+      <AddAttendeesVue v-model:show-dialog="showAddAttendeesDialog"></AddAttendeesVue>
+      <DeleteCourseDialog v-model:show-dialog="showDeleteDialog" :course="course"></DeleteCourseDialog>
+      <EditCategoryDialog v-model:show-dialog="showEditDialog" :course="course"></EditCategoryDialog>
+    </v-card>
+  </v-hover>
+</template>
+
+<script setup lang="ts">
+import AddAttendeesVue from './AddAttendees.vue';
+import EditCategoryDialog from './EditCourseDialog.vue'
+import { ref } from 'vue';
+import DeleteCourseDialog from '../components/DeleteCourseDialog.vue'
+import { Course } from '@/stores/course';
+import { reactive } from 'vue';
+const showDeleteDialog = ref(false)
+const showEditDialog = ref(false)
+const showAddAttendeesDialog = ref(false)
+const props = defineProps<{course: Course}>()
+</script>
+
+<style scoped>
+#menu-button{
+  position: absolute;
+  top: 0;
+  right: 0
+}
+</style>

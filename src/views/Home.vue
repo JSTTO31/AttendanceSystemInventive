@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-10">
-    <h1 class="text-h4 font-weight-bold text-grey-darken-4">Welcome Joshua Sotto!</h1>
+    <h1 class="text-h4 font-weight-bold">Welcome Joshua Sotto!</h1>
     <p>Effortlessly manage attendance with our intuitive dashboard.</p>
     <v-container fluid class="px-0">
       <v-row>
@@ -44,13 +44,15 @@ import {computed} from 'vue'
 import ChartBar from '@/components/ChartBar.vue';
 import { useAppStore } from '@/stores/app';
 import { storeToRefs } from 'pinia';
+import { useTheme } from 'vuetify/lib/framework.mjs';
+const {current} = useTheme()
 const {students, number_of_students, remaining} = storeToRefs(useAppStore())
 const chartData : any = computed(() => ({
     labels: students.value.map(item => item.first_name),
     datasets: [
       {
         data: students.value.map(item => item.work_time_total?.toFixed(0) || 0),
-        backgroundColor: ['#2196F3', '#2196F3', '#2196F3'],
+        backgroundColor: [current.value.colors.primary, current.value.colors.primary, current.value.colors.primary],
         borderRadius: 5,
         barThickness: 55,
       }

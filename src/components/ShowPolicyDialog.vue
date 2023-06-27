@@ -1,12 +1,12 @@
 <template>
  <v-dialog :model-value="showPolicyConfirmation" @click:outside="emits('update:showPolicyConfirmation', false)" width="450" >
-      <v-card :loading="isLoading" color="primary" :disabled="isLoading" variant="text" class="bg-white">
+      <v-card :loading="isLoading" :disabled="isLoading">
         <v-card-text>
           <h4 class="mb-3 text-warning d-flex align-center">
             <v-icon class="mr-1">mdi-information-outline</v-icon>Policy Alert
             <v-spacer></v-spacer>
           </h4>
-          <h4 class="text-grey-darken-4 font-weight-regular">
+          <h4 class="font-weight-regular">
             Its seems the student comes late. Do you want apply the policy on this student?
           </h4>
           <!-- <v-alert variant="tonal" type="info" class="mt-2" density="compact">

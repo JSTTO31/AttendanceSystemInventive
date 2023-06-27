@@ -12,8 +12,12 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+
+let currentTheme = localStorage.getItem('currentTheme') || 'light'
+
 export default createVuetify({
   theme: {
+    defaultTheme: currentTheme,
     themes: {
       light: {
         colors: {

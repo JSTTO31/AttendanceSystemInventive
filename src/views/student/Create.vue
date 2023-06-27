@@ -1,8 +1,8 @@
 <template>
   <v-container class="pa-10" style="padding-right: 250px !important">
-    <h1 class="text-h4 font-weight-bold text-grey-darken-4">Create Student</h1>
+    <h1 class="text-h4 font-weight-bold">Create Student</h1>
     <p>Designed a student form to gather key details.</p>
-    <v-card flat :disabled="isLoading">
+    <v-card flat color="transparent" :disabled="isLoading">
       <v-form class="mt-5">
       <v-row>
         <v-col>

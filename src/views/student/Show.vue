@@ -7,7 +7,7 @@
         </v-avatar>
       </v-col>
       <v-col class="px-5 pt-5">
-        <v-card class="d-flex stretch mb-4" flat>
+        <v-card class="d-flex stretch mb-4 bg-transparent" flat>
           <div class="mt-3 align-end w-100 d-flex">
             <div>
               <h1 class="">{{ student.first_name + " " + student.last_name }}</h1>
