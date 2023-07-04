@@ -1,17 +1,15 @@
 <template>
   <v-container class="h-100" v-if="student">
     <v-row>
-      <v-col cols="3">
-        <v-avatar size="240" color="grey-lighten-4 rounded-xl">
-          <v-img :src="student.image"></v-img>
-        </v-avatar>
+      <v-col cols="3" class="d-flex align-end">
+          <ImageCard height="250" :url="student.image" class="rounded-xl bg-grey-lighten-3 w-100" v-model:image="image" :key="student.id"></ImageCard>
       </v-col>
       <v-col class="px-5 pt-5">
         <v-card class="d-flex stretch mb-4 bg-transparent" flat>
           <div class="mt-3 align-end w-100 d-flex">
             <div>
               <h1 class="">{{ student.first_name + " " + student.last_name }}</h1>
-              <h4 class="font-weight-regular">OJT Student</h4>
+              <h4 class="font-weight-regular text-capitalize">{{student.position}}</h4>
             </div>
           </div>
           <v-menu location="bottom left" :close-on-content-click="false">
@@ -26,7 +24,8 @@
                   prepend-icon="mdi-login"
                   :disabled="
                     (student.attendance && !!student.attendance.time_in) ||
-                    (student.attendance && !!student.attendance.is_absent)
+                    (student.attendance && !!student.attendance.is_absent) ||
+                    (student.attendance && !!student.attendance.is_event)
                   "
                   >Enter</v-list-item
                 >
@@ -35,7 +34,8 @@
                   prepend-icon="mdi-close"
                   :disabled="
                     (student.attendance && !!student.attendance.time_in) ||
-                    (student.attendance && !!student.attendance.is_absent)
+                    (student.attendance && !!student.attendance.is_absent) ||
+                    (student.attendance && !!student.attendance.is_event)
                   "
                   >Absent</v-list-item
                 >
@@ -47,7 +47,9 @@
                     (student.attendance &&
                       !!student.attendance.time_in &&
                       !!student.attendance.time_out) ||
-                    (student.attendance && !!student.attendance.is_absent)
+                    (student.attendance && !!student.attendance.is_absent) ||
+                    (student.attendance && !!student.attendance.is_event)
+
                   "
                   >Leave</v-list-item
                 >
@@ -65,15 +67,20 @@
           </v-menu>
         </v-card>
         <VProgressLinear
-          height="35"
-          color="primary"
+          height="37"
+          :color="remainingPercent >= 100 ? 'secondary' : 'primary'"
           :model-value="remainingPercent"
-          class="bg-grey-lighten-3 text-subtitle-1 my-5 text-capitalize text-grey-darken-2"
-          >Time Remaining {{ workTimeTotal() }}/550h</VProgressLinear
+          class="bg-blue-grey-lighten-1 text-subtitle-1 my-5 text-capitalize font-weight-medium"
+          >
+            <span v-if="remainingPercent <= 100">Time Remaining {{ workTimeTotal() }}/550h</span>
+            <span v-else>
+              Completed
+            </span>
+          </VProgressLinear
         >
         <v-row>
           <v-col>
-            <v-card flat class="pa-5 align-center d-flex rounded-lg">
+            <v-card flat class="pa-5 bg-transparent align-center d-flex rounded-lg">
               <v-icon size="60">mdi-clock-in</v-icon>
               <div class="px-5">
                 <h4>Time in</h4>
@@ -82,7 +89,7 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card flat class="pa-5 align-center d-flex rounded-lg">
+            <v-card flat class="pa-5 bg-transparent align-center d-flex rounded-lg">
               <v-icon size="60">mdi-clock-out</v-icon>
               <div class="px-5">
                 <h4>Time out</h4>
@@ -91,7 +98,7 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card flat class="pa-5 align-center d-flex rounded-lg">
+            <v-card flat class="pa-5 bg-transparent align-center d-flex rounded-lg">
               <v-icon size="60">mdi-update</v-icon>
               <div class="px-5">
                 <h4>Work time</h4>
@@ -130,14 +137,18 @@
           class="text-capitalize"
           >Information</v-tab
         >
+        <v-tab
+          color="primary"
+          value="Courses"
+          @click="$router.push({ name: 'ShowStudent.courses' })"
+          class="text-capitalize"
+          >Courses</v-tab
+        >
       </v-tabs>
     </nav>
     <div class="py-5">
-      <RouterView v-slot="{ Component }">
-        <Suspense>
-          <component :is="Component"></component>
-          <template #fallback> loading... </template>
-        </Suspense>
+      <RouterView v-if="student" v-slot="{ Component }">
+        <component :is="Component"></component>
       </RouterView>
     </div>
     <ShowPolicyDialog
@@ -150,30 +161,43 @@
       :start_at="null"
       v-model:show-dialog="showManualAttendanceDialog"
     ></ManualAttendanceDialog>
+    <v-dialog v-model="showApplyImageDialog" width="300" persistent  scrim="transparent">
+      <v-card class="pa-5 rounded-lg">
+        <v-card-text class="text-center">
+          Do you want to apply it?
+          <v-card-actions class="d-flex justify-center mt-1">
+            <v-btn size="small" color="primary" @click="applyImage">Apply</v-btn>
+            <v-btn size="small" class="" @click="cancelImage">Cancel</v-btn>
+          </v-card-actions>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import ImageCard from "@/components/ImageCard.vue";
 import ManualAttendanceDialog from "@/components/ManualAttendanceDialog.vue";
 import ShowPolicyDialog from "@/components/ShowPolicyDialog.vue";
 import useStudent from "@/composables/useStudent";
+import useChangeProfile from "@/composables/useChangeProfile";
 import useAttendance from "@/composables/useAttedance";
 import { storeToRefs } from "pinia";
 import { useStudentStore } from "../../stores/student";
 import { computed } from "vue";
-import { useAttendanceStore } from "@/stores/attendance";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
-const $attendance = useAttendanceStore();
+import { useAttendanceStore } from "@/stores/attendance";
+const $student = useStudentStore()
+const showManualAttendanceDialog = ref(false)
+const $attendance = useAttendanceStore()
 const { student, workTimeTotal } = storeToRefs(useStudentStore());
 const { timeIn, timeOut, workTime } = useStudent(student);
-const route = useRoute();
-const showManualAttendanceDialog = ref(false);
+const {applyImage, cancelImage, image, showApplyImageDialog} = useChangeProfile()
 const remainingPercent = computed(
   // @ts-ignore
-  () => (workTimeTotal.value() / 550) * 100
+  () => ((workTimeTotal.value() / student.value.remaining) * 100 )
 );
-$attendance.getAllStudentAttendance(parseInt(route.params.student_id.toString()));
 const {
   enter,
   absent,
@@ -182,6 +206,14 @@ const {
   isLoading,
   showPolicyConfirmation,
 } = useAttendance(student.value);
+
+
+onBeforeRouteUpdate((to, from, next) => {
+  if(to.params.student_id != from.params.student_id){
+    $student.get(to.params.student_id)
+  }
+  next()
+})
 </script>
 
 <style scoped></style>

@@ -2,6 +2,7 @@ import { api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
 import { SubCategory, useSubCategoryStore } from "./sub_category";
 import { useCategoryStore } from "./category";
+import { useStudentStore } from "./student";
 
 
 export interface Course{
@@ -29,6 +30,15 @@ export const useCourseStore = defineStore('course', {
     course: {} as Course
   }),
   actions: {
+    async getAll(student_id: number){
+      try {
+        const response = await api.get(`/student/${student_id}/courses`)
+        this.courses = response.data
+        return response;
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async store(sub_category_id: number, course: any){
       const formData = new FormData()
       formData.append('image', course.image)
@@ -106,6 +116,28 @@ export const useCourseStore = defineStore('course', {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    async add_attendee(course_id: number, student_id: number, date: any){
+      try {
+        const response = await api.post(`/course/${course_id}/add_attendee`, {
+          student_id, date
+        })
+        const {students} = storeToRefs(useStudentStore())
+        students.value = students.value.map(item => item.id == student_id ? {...item, attendances: [...item.attendances, ...response.data]} : item)
+
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async remove_attendee(course_id: number, student_id: number){
+      try {
+        const response = await api.delete(`course/${course_id}/student/${student_id}/remove_attendee`)
+        this.courses = this.courses.filter(item => item.id != course_id)
+        return response;
+      } catch (error) {
+        console.log(error)
+      }
+    },
   }
 })

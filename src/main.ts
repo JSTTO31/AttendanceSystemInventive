@@ -1,10 +1,3 @@
-/**
- * main.ts
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
-
-// Components
 import App from './App.vue'
 
 // Composables
@@ -18,20 +11,17 @@ import { useAppStore } from './stores/app'
 const app = createApp({...App, mounted(){
   const userData = localStorage.getItem('userData')
   if(userData){
+    const $app = useAppStore()
     const $user = useUserStore()
     $user.setUser()
+    $app.getCurrentOJT()
   }
-  const $app = useAppStore()
-  $app.getCurrentOJT()
+  
 }})
 
 registerPlugins(app)
 
 app.mount('#app')
 
-
-
-
-console.log(new Date().getDate());
 
 

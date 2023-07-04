@@ -88,7 +88,6 @@ import CategoryDialog from '../../components/CategoryDialog.vue'
 import { useTheme } from 'vuetify/lib/framework.mjs';
 const showCategoryDialog = ref(false)
 const showSubCategoryDialog = ref(false)
-const { current } = useTheme()
 const theme = useTheme()
 const currentMode = ref(theme.global.current.value.dark ? true : false)
 const toggleTheme = () => {

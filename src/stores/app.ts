@@ -7,7 +7,7 @@ export const useAppStore = defineStore('app', {
     isLoading: false,
     students: [] as Student[],
     number_of_students: 0,
-    remaining: 0
+    remaining: 0,
   }),
   actions: {
     async getCurrentOJT(){

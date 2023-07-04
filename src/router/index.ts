@@ -1,31 +1,32 @@
 // Composables
 import { useAppStore } from '@/stores/app'
-import { useAttendanceStore } from '@/stores/attendance'
 import { useCategoryStore } from '@/stores/category'
 import { useStudentStore } from '@/stores/student'
-import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
-
+//@ts-ignore
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css';
+import { useUserStore } from '@/stores/user'
 const routes = [
   {
     path: '/',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
+      // Home
       {
         path: '',
         name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
       },
+      // Create
       {
         path: '/student/create',
         name: 'CreateStudent',
-        component: () => import('@/views/student/Create.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/student/Create.vue'),
 
       },
+      // Student Index
       {
         path: '/student',
         name: 'IndexStudent',
@@ -39,6 +40,7 @@ const routes = [
            })
         }
       },
+      // Student show
       {
         path: '/student/:student_id',
         name: 'ShowStudent',
@@ -47,15 +49,8 @@ const routes = [
          component: () => import('@/views/student/Show.vue'),
         //@ts-ignore
         beforeEnter: (to, from, next) => {
-          const {students, student} = storeToRefs(useStudentStore())
-          const studentExists = students.value.find(item => item.id == to.params.student_id)
-          if(studentExists){
-            student.value = studentExists
-            return next()
-          }
-
           const $student = useStudentStore()
-
+          //@ts-ignore
           $student.get(to.params.student_id).then(() => {
             return next();
           })
@@ -72,8 +67,14 @@ const routes = [
             name: 'ShowStudent.information',
             component: () => import('@/views/student/show/Information.vue'),
           },
+          {
+            path: 'courses',
+            name: 'ShowStudent.courses',
+            component: () => import(/* webpackChunkName: "home" */  '@/views/student/show/Course.vue'),
+          },
         ]
       },
+      // Course
       {
         path: '/course',
         component: () => import('@/views/Course.vue'),
@@ -112,15 +113,29 @@ const routes = [
 
               category.value = categoryExists
               next()
-            }
+            },
+            children: [
+              {
+                path: 'sub-category/:sub_category_id/course/:course_id/add-attendees',
+                component: () => import('@/views/course/AddAttendees.vue'),
+                //@ts-ignore
+                props: (route) => {
+                  const {category} = storeToRefs(useCategoryStore())
+                  return {course: category.value.sub_categories.find(item => item.id == route.params.sub_category_id)?.courses.find(item => item.id == route.params.course_id)}
+                },
+                name: 'AddAttendeesCourse'
+              }
+            ]
           }
         ]
       },
+      // Category
       {
         path: '/category',
         component: () => import('@/views/category/Index.vue'),
         name: 'IndexCategory',
       },
+      // Sub Category
       {
         path: '/sub_category',
         component: () => import('@/views/sub_category/Index.vue'),
@@ -131,6 +146,7 @@ const routes = [
       requiresAuth: true
     }
   },
+  // Login
   {
     path: '/login',
     component: () => import('@/views/Login.vue'),
@@ -148,25 +164,31 @@ const router = createRouter({
 })
 
 router.afterEach(() => {
-  const {isLoading} = storeToRefs(useAppStore())
-  isLoading.value = false
-
+  nprogress.done()
 })
 
 
 router.beforeEach((to, from, next) => {
   const {isLoading} = storeToRefs(useAppStore())
-  isLoading.value = true
-  // const {isLoging} = storeToRefs(useUserStore())
+  nprogress.configure({
+    speed: 400,
+    trickleSpeed: 500,
+    template: '<div class="bar bg-secondary" style="height: 4px" role="bar"><div class="peg bg-secondary"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
+    showSpinner: false
+  })
+  nprogress.start();
+  const {isLoging} = storeToRefs(useUserStore())
 
-  // if(to.meta.requiresAuth && !isLoging.value){
-  //   next({name: 'Login'})
-  // }
+  if(to.meta.requiresAuth && !isLoging.value){
+    console.log('trigger')
+    next('/login')
+    return
+  }
 
-  // if(to.meta.guest && isLoging.value){
-  //   next('/')
-
-  // }
+  if(to.meta.guest && isLoging.value){
+    next('/')
+    return
+  }
 
    next()
 })

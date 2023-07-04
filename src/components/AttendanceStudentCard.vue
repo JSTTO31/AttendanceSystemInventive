@@ -6,15 +6,12 @@
     @click="$router.push({ name: 'ShowStudent', params: { student_id: student.id } })"
     flat
   >
-    <v-tooltip v-if="rail" activator="parent" location="start">{{
-      student.first_name + " " + student.last_name
-    }}</v-tooltip>
-    <v-avatar :size="rail ? 40 : 125" class="bg-grey-lighten-4">
+    <v-avatar :size="rail ? 40 : 145" class="bg-grey-lighten-4">
       <v-img :src="student.image"></v-img>
     </v-avatar>
     <v-card-text class="text-center" v-if="!rail">
       <h2>{{ `${student.first_name} ${student.last_name}` }}</h2>
-      <h5 class="font-weight-regular">{{ student.email }}</h5>
+      <h4 class="font-weight-regular text-capitalize mt-2">{{ student.position }}</h4>
     </v-card-text>
     <div v-if="!rail">
       <v-card-actions
@@ -64,7 +61,15 @@
           >Leave</v-btn
         >
       </v-card-actions>
-      <v-card-actions v-else class="w-100 px-10"> </v-card-actions>
+      <v-card-actions v-else class="w-100 px-10">
+        <v-chip
+          size="large"
+          color="success"
+          class="w-100 text-capitalize"
+          prepend-icon="mdi-calendar"
+          >In Event</v-chip
+        >
+      </v-card-actions>
     </div>
     <v-overlay
       :model-value="isLoading"

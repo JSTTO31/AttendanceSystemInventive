@@ -11,11 +11,15 @@
 import { storeToRefs } from "pinia";
 import LineChart from "./LineChart.vue";
 import { useStudentStore } from "@/stores/student";
+import { useTheme } from "vuetify/lib/framework.mjs";
+const props = defineProps(['month'])
+const {current} = useTheme()
 const { student } = storeToRefs(useStudentStore());
 const data = () => {
   //@ts-ignore
   let attendances = student.value.attendances
     .slice()
+    .filter(item => new Date(item.created_at).getMonth() == props.month)
     //@ts-ignore
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
   let container: any = [];
@@ -48,23 +52,19 @@ const data = () => {
     labels: container.map((item, index) => "Week " + (index + 1)),
     datasets: [
       {
-        backgroundColor: "#2196F3",
+        backgroundColor: current.value.colors.primary,
         borderJoinStyle: "round",
-        borderColor: "#2196F3",
+        borderColor: current.value.colors.primary,
         tension: 0.1,
         //@ts-ignore
         data: container.map((item) =>
           //@ts-ignore
-          item.reduce((sum, item) => (sum += item.work_time), 0)
+          item.reduce((sum, item) => (sum += item?.work_time || 0), 0)
         ),
       },
     ],
   };
 };
-
-data();
-
-// console.log(data);
 </script>
 
 <style scoped></style>

@@ -1,3 +1,4 @@
+import { api } from "@/utils";
 import axios from "axios";
 import { defineStore } from "pinia";
 
@@ -42,6 +43,7 @@ export const useUserStore = defineStore('user', {
       return api.get("/sanctum/csrf-cookie").then(() => {
         return api.post("/api/login", { ...credentials }).then((response) => {
           localStorage.setItem('userData', JSON.stringify(response.data))
+          window.location.reload()
         });
       });
     },
@@ -51,7 +53,7 @@ export const useUserStore = defineStore('user', {
         const {user, token} = JSON.parse(userData)
         this.user = user;
         this.token = token
-        auth.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       }
     }
   }

@@ -38,7 +38,7 @@
           >
         </v-tabs>
       </div>
-      <v-card flat class="mt-2 bg-primary py-2 mb-1">
+      <v-card flat class="mt-2 bg-primary rounded-b-0 py-2">
         <v-row>
           <v-col class="d-flex align-center" cols="4"> </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
@@ -77,7 +77,7 @@
         class="d-flex align-center mt-5"
         v-if="Math.ceil(pageOptions.total / pageOptions.per_page) > 1"
       >
-        <div>Page {{ page }} / {{ pageOptions.total / pageOptions.per_page }}</div>
+        <div>Page {{ page }} / {{ Math.ceil(pageOptions.total / pageOptions.per_page) }}</div>
         <v-spacer></v-spacer>
         <v-pagination
           v-model="page"

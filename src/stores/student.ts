@@ -1,7 +1,8 @@
 import { Page, api } from "@/utils";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { auth } from "./user";
-import { Attendance } from "./attendance";
+import { Attendance, month_attendances, useAttendanceStore } from "./attendance";
+import { useAppStore } from "./app";
 
 export interface Student{
   id: number;
@@ -21,6 +22,8 @@ export interface Student{
   remaining: string;
   attendances: Attendance[]
   work_time_total: number;
+  late_time_total: number;
+  position: string;
 }
 
 interface StudentState{
@@ -50,28 +53,45 @@ export const useStudentStore = defineStore('student', {
       return ''
     },
     workTimeTotal: state => () => {
-      return !state.student.attendances ? 0 :state.student.attendances.reduce((sum, item) => sum += parseInt(item.work_time || '0') - parseInt(item.late_time || '0'), 0)
+      return (state.student.work_time_total - state.student.late_time_total)?.toFixed(2) || 0
     }
    },
   actions: {
     async getAll(query = '') {
-        try {
-          const response = await api.get('/students' + query)
-          const {students, pageOptions} = response.data;
-          this.students = students;
-          this.pageOptions = pageOptions
-          return response;
-        } catch (error) {
-          console.log(error)
-        }
-    },
-    async get(student_id: any){
       try {
-        const response = await api.get('students/' + student_id)
-        this.student = response.data
+        const response = await api.get('/students' + query)
+        const {students, pageOptions} = response.data;
+        this.students = students;
+        this.pageOptions = pageOptions
+        return response;
       } catch (error) {
         console.log(error)
       }
+    },
+    get(student_id: any){
+      const $attendance = useAttendanceStore()
+      const {students} = storeToRefs(useAppStore())
+      const isExists = students.value.find(item => item.id == student_id) 
+      if(isExists){
+        this.student = isExists
+        
+        if(this.student.attendances && this.student.attendances.length > 0){
+          $attendance.getAllStudentAttendance(student_id);
+          return new Promise((resolve) => {
+            resolve(this.student)
+          })
+        }
+        $attendance.getAllStudentAttendance(student_id);
+        
+        return new Promise((resolve) => {
+          resolve(this.student)
+        })
+      }
+
+      return api.get('students/' + student_id).then((response) => {
+        this.student = response.data
+        $attendance.getAllStudentAttendance(student_id);
+      })
     },
     async store(information: any) {
         try {
@@ -84,6 +104,7 @@ export const useStudentStore = defineStore('student', {
     async edit(information: any){
       try {
         const response = await api.put('students/' + this.student.id, { ...information })
+        this.student = {...this.student, ...information}
         return response;
       } catch (error) {
         console.log(error);
@@ -105,7 +126,7 @@ export const useStudentStore = defineStore('student', {
         return response;
       } catch (error) {
         console.log(error);
-
+        return error
       }
     }
   }

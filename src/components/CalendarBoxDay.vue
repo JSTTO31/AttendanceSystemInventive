@@ -1,12 +1,12 @@
 <template>
-  <v-menu open-on-hover>
+  <v-menu open-on-hover open-delay="500">
     <template #activator="{ props }">
       <v-card
         v-bind="{ ...props, ...$attrs }"
         flat
         :color="attributes.color"
         :variant="attributes.variant"
-        class="mr-2 my-2 d-flex align-center justify-center"
+        class="mr-2  d-flex align-center justify-center"
         height="40"
         style="user-select: none"
         width="40"
@@ -54,7 +54,7 @@
               ? 'primary'
               : status == 'late'
               ? 'warning'
-              : 'grey'
+              : status == 'event' ? 'green' : 'grey'
           "
           class="text-capitalize"
           size="small"
@@ -74,11 +74,11 @@ import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
-const { student } = storeToRefs(useStudentStore());
-const props = defineProps<{ day: number }>();
+const { student, } = storeToRefs(useStudentStore());
+const props = defineProps<{ day: number, month: number }>();
 const attendance = computed(() =>
   student.value.attendances.find(
-    (item) => new Date(item.created_at).getDate() == props.day
+    (item) => new Date(item.created_at).getDate() == props.day && new Date(item.created_at).getMonth() == props.month
   )
 );
 const date = computed(() =>
@@ -90,9 +90,12 @@ const attributes: any = computed(() => {
       return { variant: "elevated", color: "error" };
     } else if (attendance.value.policy && attendance.value.time_out) {
       return { variant: "elevated", color: "warning" };
-    } else if (!attendance.value.time_in || !attendance.value.time_out) {
+    }else if(attendance.value.is_event){
+      return { variant: "elevated", color: "green" };
+    } 
+    else if (!attendance.value.time_in || !attendance.value.time_out && !attendance.value.is_event) {
       return { variant: "outlined", color: "primary" };
-    } else {
+    }  else {
       return { variant: "elevated", color: "primary" };
     }
   }
@@ -121,7 +124,7 @@ const status = computed(() =>
     ? "late"
     : attendance.value?.time_in && attendance.value.time_out
     ? "present"
-    : "pending"
+    : attendance.value?.is_event ? 'event' : "pending"
 );
 </script>
 

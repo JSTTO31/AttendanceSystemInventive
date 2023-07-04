@@ -11,22 +11,25 @@
   </div>
   <div class="mt-5">
     <v-row>
-      <v-col cols="3" v-for="course in courses">
-        <CourseCard :course="course" :key="course.id"></CourseCard>
-      </v-col>
+        <v-col cols="3" :key="course.id" v-for="course in courses">
+          <CourseCard :course="course" :key="course.id"></CourseCard>
+        </v-col>
     </v-row>
   </div>
   <div class="h-75 d-flex flex-column align-center justify-center" v-if="courses.length < 1">
     <h3 class="mb-2">No course record</h3>
     <v-btn prepend-icon="mdi-plus" flat @click="showAddCourseDialog = true">Add course</v-btn>
   </div>
+  <v-dialog width="650" persistent :model-value="$route.name == 'AddAttendeesCourse'">
+    <router-view></router-view>
+  </v-dialog>
   <AddCourseDialog v-model:show-dialog="showAddCourseDialog"></AddCourseDialog>
 </template>
 
 <script setup lang="ts">
+import AddCourseDialog from '@/components/AddCourseDialog.vue';
 import CourseCard from '../../components/CourseCard.vue'
 import { ref } from 'vue';
-import AddCourseDialog from '../../components/AddCourseDialog.vue'
 import { useCategoryStore } from '@/stores/category';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';

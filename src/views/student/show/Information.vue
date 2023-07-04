@@ -1,135 +1,213 @@
 <template>
- <v-card class="pa-5" style="padding-right: 250px !important" :disabled="isLoading">
-    <div class="d-flex align-center justify-space-between">
-      <h2 class="mb-5">Student information</h2>
-      <v-spacer></v-spacer>
-      <v-btn v-if="!editMode" @click="editMode = true" prepend-icon="mdi-pencil" color="success" flat>Edit</v-btn>
-      <div v-else>
-        <v-btn class="ml-2" @click="submit" color="primary" flat>Save</v-btn>
-        <v-btn class="ml-2" @click="cancel" flat>Cancel</v-btn>
-      </div>
+ <v-card class="bg-transparent" flat :disabled="isLoading">
+    <v-row>
+      <v-col>
+        <v-card class="pa-5 rounded-lg border" flat>
+          <h3 class="mb-5">Basic Information</h3>
+          <v-row>
+            <v-col>
+              <label class="mb-2">First name</label>
+              <v-text-field
+                v-model="$v.first_name.$model"
+                :error-messages="showError($v.first_name)"
+                label="First name"
+                variant="outlined"
+                type="text"
+                single-line
+                color="primary"
+                prepend-inner-icon="mdi-account"
+                class="mt-3"
+              ></v-text-field>
+            </v-col>
+            <v-col>
+              <label class="mb-2">Last name</label>
+              <v-text-field
+                v-model="$v.last_name.$model"
+                :error-messages="showError($v.last_name)"
+                label="Last name"
+                variant="outlined"
+                type="text"
+                single-line
+                color="primary"
+                prepend-inner-icon="mdi-account"
+                class="mt-3"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <label class="mb-2">Email address</label>
+              <v-text-field
+                v-model="$v.email.$model"
+                :error-messages="showError($v.email)"
+                label="Email address"
+                variant="outlined"
+                color="primary"
+                single-line
+                class="mt-2"
+                prepend-inner-icon="mdi-mail"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <label class="mb-2">Gender</label>
+              <v-select
+                v-model="$v.gender.$model"
+                :error-messages="showError($v.gender)"
+                label="Gender"
+                prepend-inner-icon="mdi-gender-male-female"
+                class="text-capitalize mt-2"
+                variant="outlined"
+                :items="['male', 'female']"
+                color="primary"
+                single-line
+              ></v-select>
+            </v-col>
+            <v-col>
+              <label class="mb-2">Mobile</label>
+              <v-text-field
+                v-model="$v.phone_number.$model"
+                :error-messages="showError($v.phone_number)"
+                label="Phone number"
+                variant="outlined"
+                color="primary"
+                class="mt-2"
+                maxlength="11"
+                single-line
+              >
+                <template #prepend-inner>+63</template>
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <label class="mb-2">Address</label>
+              <v-text-field
+                v-model="$v.address.$model"
+                :error-messages="showError($v.address)"
+                label="Home address"
+                variant="outlined"
+                color="primary"
+                single-line
+                class="mt-2"
+                prepend-inner-icon="mdi-navigation"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card>
+        <v-card class="pa-5 rounded-lg mt-5 border" flat>
+          <h3 class="mb-5">School Information</h3>
+          <v-row>
+            <v-col>
+              <label class="mb-2">School name</label>
+              <v-text-field
+                v-model="$v.school_name.$model"
+                :error-messages="showError($v.school_name)"
+                label="School name"
+                variant="outlined"
+                prepend-inner-icon="mdi-town-hall"
+                single-line
+                class="mt-2"
+                color="primary"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <label class="mb-2">School Year</label>
+              <v-text-field
+                label="School Year"
+                variant="outlined"
+                color="primary"
+                class="mt-2"
+                single-line
+                v-model="$v.school_year.$model"
+                :error-messages="showError($v.school_year)"
+              >
+                <template #prepend-inner>SY</template>
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <label class="mb-2">Course</label>
+              <v-text-field
+                v-model="$v.course.$model"
+                :error-messages="showError($v.course)"
+                label="Course"
+                variant="outlined"
+                color="primary"
+                single-line
+                class="mt-2"
+                prepend-inner-icon="mdi-school"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card>
+        <v-card class="pa-5 rounded-lg mt-5 border" flat>
+          <h3 class="mb-5">Other</h3>
+          <v-row>
+            <v-col>
+              <label class="mb-2">Position</label>
+              <v-select
+                v-model="$v.position.$model"
+                :error-messages="showError($v.position)"
+                label="Position"
+                variant="outlined"
+                color="primary"
+                single-line
+                :items="['Graphic Designer', 'Video Editor', 'Web Developer']"
+                class="mt-2"
+                prepend-inner-icon="mdi-purse"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <label class="mb-2">Time to render</label>
+              <v-text-field
+                label="Time to render"
+                variant="outlined"
+                color="primary"
+                class="mt-2"
+                single-line
+                prepend-inner-icon="mdi-timelapse"
+                v-model="$v.remaining.$model"
+                :error-messages="showError($v.remaining)"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+    <div class="d-flex align-center pt-5">
+      <v-btn class="mr-2" @click="submit" :disabled="!$v.$anyDirty" color="primary" flat>Save changes</v-btn>
+      <v-btn class="mr-2" @click="reset" flat>Clear</v-btn>
     </div>
-    <v-row>
-      <v-col cols="3">Profile Image</v-col>
-      <v-col>
-        <ImageCard :disabled="!editMode" v-model:image="student.image" @update="$v.image.$touch()" :url="student.url"></ImageCard>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div>
-          <label for="" class="mb-5">First name</label>
-          <v-text-field :readonly="!editMode" class="mt-2"  v-model="$v.first_name.$model"
-            :error-messages="showError($v.first_name)" density="compact" single-line color="primary" variant="underlined" label="First name"></v-text-field>
-        </div>
-      </v-col>
-      <v-col>
-        <div>
-          <label for="" class="mb-5">Last name</label>
-          <v-text-field :readonly="!editMode" class="mt-2"  v-model="$v.last_name.$model"
-            :error-messages="showError($v.last_name)" density="compact" single-line color="primary" variant="underlined" label="Last name"></v-text-field>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div>
-          <label for="" class="mb-5">Email address</label>
-          <v-text-field :readonly="!editMode" class="mt-2"  v-model="$v.email.$model"
-            :error-messages="showError($v.email)" density="compact" single-line color="primary" variant="underlined" label="Email address"></v-text-field>
-        </div>
-      </v-col>
-    </v-row>
-     <v-row>
-      <v-col>
-        <div>
-          <label for="" class="mb-5">Gender</label>
-          <v-select :readonly="!editMode" class="mt-2"  v-model="$v.gender.$model"
-            :error-messages="showError($v.gender)" density="compact" single-line color="primary" variant="underlined" label="Gender"></v-select>
-        </div>
-      </v-col>
-      <v-col>
-        <div>
-          <label for="" class="mb-5">Course</label>
-          <v-select :readonly="!editMode" class="mt-2"  v-model="$v.course.$model"
-            :error-messages="showError($v.course)" density="compact" single-line color="primary" variant="underlined" label="Course"></v-select>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-        <v-col>
-          <v-text-field :readonly="!editMode"
-            v-model="$v.phone_number.$model"
-            :error-messages="showError($v.phone_number)"
-            label="Phone number"
-            variant="underlined"
-            color="primary"
-          >
-            <template #prepend-inner>+63</template>
-          </v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field :readonly="!editMode"
-            v-model="$v.school_name.$model"
-            :error-messages="showError($v.school_name)"
-            label="School name"
-            variant="underlined"
-            color="primary"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field :readonly="!editMode"
-            label="School Year"
-            variant="underlined"
-            color="primary"
-            v-model="$v.school_year.$model"
-            :error-messages="showError($v.school_year)"
-          >
-            <template #prepend-inner>SY</template>
-          </v-text-field>
-        </v-col>
-      </v-row>
-      <LoadingOverlay :show="isLoading"></LoadingOverlay>
+    <LoadingOverlay :show="isLoading"></LoadingOverlay>
  </v-card>
 </template>
 
 <script setup lang="ts">
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
-import ImageCard from '@/components/ImageCard.vue'
 import { showError } from '@/utils';
 import useStudentEdit from '@/composables/useStudentEdit';
 import { ref } from 'vue';
 import { useStudentStore } from '@/stores/student';
-const editMode = ref(false)
 const {student, $v, reset} = useStudentEdit()
 const isLoading = ref(false)
 const submit = () => {
   if($v.value.$invalid){
     $v.value.$touch()
     return;
-  }  
+  }
   isLoading.value = true
   const $student = useStudentStore()
-  const container : any = []
-  if($v.value.image.$dirty && $v.value.image){
-    container.push($student.changeProfile(student.image))
-  }
-
   $student.edit(student).then(() => {
     isLoading.value = false;
-    editMode.value = false
   })
 }
 
-const cancel = () => {
-  $v.value.$reset()
-  reset()
-  editMode.value = false
-}
 </script>
 
 <style scoped>

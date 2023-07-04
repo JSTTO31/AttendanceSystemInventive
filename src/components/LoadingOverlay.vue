@@ -1,7 +1,9 @@
 <template>
-  <div v-if="show" class="d-flex align-center justify-center" id="overlay">
-    <span class="loader"></span>
-  </div>
+  <transition>
+    <div v-if="show" class="d-flex align-center justify-center" id="overlay">
+      <span class="loader"></span>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -11,10 +13,12 @@ const props = defineProps(['show'])
 <style scoped>
 #overlay{
   position: fixed;
+  background: rgba(0, 0, 0, .5);
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 2000;
 }
 .loader {
   width: 48px;

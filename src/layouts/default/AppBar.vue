@@ -1,10 +1,10 @@
 <template>
-  <v-app-bar class="px-5" flat color="primary">
-    <h2>
-      <v-icon class="mr-1" size="35">mdi-calendar</v-icon>
+  <v-app-bar class="px-2 px-md-5" flat color="primary">
+    <h3 class="text-md-h5 font-weight-medium" @click="$router.push({name: 'Home'})">
+      <v-icon class="mr-1">mdi-calendar</v-icon>
       eAttendance
-    </h2>
-    <div v-if="$route.name != 'IndexStudent'" class="w-25 ml-5">
+    </h3>
+    <div v-if="$route.name != 'IndexStudent' && !mobile" class="w-25 ml-5">
       <v-text-field
         v-model="search"
         label="find students..."
@@ -16,7 +16,9 @@
       ></v-text-field>
     </div>
     <v-spacer></v-spacer>
-    <v-btn prepend-icon="mdi-plus" color="white" class="text-capitalize mr-5" @click="$router.push({name: 'CreateStudent'})">Add student</v-btn>
+    <v-btn icon="mdi-menu" variant="text" v-if="mobile"></v-btn>
+    <v-btn prepend-icon="mdi-logout" color="error" variant="elevated" v-else>Sign out</v-btn>
+    <!-- 
     <div class="d-flex align-center">
       <v-avatar size="45">
         <v-img src="https://www.w3schools.com/w3css/img_avatar3.png"></v-img>
@@ -26,7 +28,7 @@
         <h6 class="ml-3 font-weight-regular">{{ "administrator" }}</h6>
       </div>
       <v-btn size="small" class="ml-5" icon="mdi-chevron-down"></v-btn>
-    </div>
+    </div> -->
   </v-app-bar>
 </template>
 
@@ -36,6 +38,8 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const { mobile} = useDisplay()
 const { user } = storeToRefs(useUserStore());
 const search = ref('')
 const router = useRouter()

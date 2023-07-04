@@ -1,6 +1,5 @@
 <template>
   <v-navigation-drawer
-    v-if="!$route.name?.toString().includes('Student')"
     location="right"
     width="350"
     class="pa-0"
@@ -13,9 +12,9 @@
       <v-app-bar flat class="border-b pa-0">
         <!-- <v-btn v-if="rail" icon="mdi-chevron-left" class="rounded-0" @click="rail = false"></v-btn>
         <v-btn v-else icon="mdi-chevron-right" class="rounded-0" @click="rail = true"></v-btn> -->
-        <h3 class="text-grey-darken-3 ml-3" v-if="!rail">
+        <v-icon :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="mx-2" size="35" >mdi-school</v-icon>
+        <h3 :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="ml-1" v-if="!rail">
         OJT Students</h3>
-        <v-icon class="text-grey-darken-3 mx-auto" size="35" v-else>mdi-school</v-icon>
       </v-app-bar>
       <v-main :class="rail ? 'disable-scroll' : ''" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
 >
@@ -33,6 +32,8 @@ import { useAppStore } from "@/stores/app";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
+import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
+const {current} = useTheme()
 const { students } = storeToRefs(useAppStore());
 const rail = ref(true)
 

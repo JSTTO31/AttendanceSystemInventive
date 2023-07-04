@@ -1,14 +1,16 @@
 <template>
   <v-container class="px-0" fluid>
-    <v-row>
+    <v-row align-content="stretch">
       <v-col cols="8">
         <StudentLineChart
+          :month="selectedMonth"
           v-if="student.attendances && student.attendances.length > 0"
         ></StudentLineChart>
         <v-card
           v-else
-          class="pa-5 h-100 d-flex align-center justify-center rounded-lg border"
+          class="pa-5 d-flex align-center justify-center rounded-lg border"
           flat
+          height="450"
         >
           <v-avatar class="mr-4" size="60">
             <v-img src="/src/assets/data-quality.png"></v-img>
@@ -17,7 +19,7 @@
         </v-card>
       </v-col>
       <v-col cols="4">
-        <Calendar></Calendar>
+        <Calendar v-model:selected-month="selectedMonth"></Calendar>
       </v-col>
     </v-row>
     <v-row>
@@ -35,7 +37,7 @@
             </thead>
             <tbody>
               <AttendanceListItem
-                v-for="attendance in attendancesReverse.slice(page - 1 * perPage)"
+                v-for="attendance in attendancesReverse.slice((page - 1) * perPage, page * perPage)"
                 :key="attendance.id"
                 :attendance="attendance"
               ></AttendanceListItem>
@@ -60,19 +62,15 @@
 import StudentLineChart from "@/components/StudentLineChart.vue";
 import AttendanceListItem from "@/components/AttendanceListItem.vue";
 import Calendar from "@/components/Calendar.vue";
-import { useAttendanceStore } from "@/stores/attendance";
 import { useStudentStore } from "@/stores/student";
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+const now = new Date(); 
+const selectedMonth = ref(now.getMonth())
 const { student } = storeToRefs(useStudentStore());
-const $attendance = useAttendanceStore();
-// const props = defineProps(['student_id'])
-const route = useRoute();
-$attendance.getAllStudentAttendance(parseInt(route.params.student_id.toString()));
 const page = ref(1);
-const perPage = 10;
+const perPage = 9;
 let page_total = computed(() =>
   Math.ceil((student.value.attendances?.length || 0) / perPage)
 );

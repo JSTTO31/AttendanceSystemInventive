@@ -1,27 +1,20 @@
-import { useStudentStore } from "@/stores/student"
 import useVuelidate from "@vuelidate/core"
-import { required, numeric, email, maxLength, minLength, minValue, maxValue } from "@vuelidate/validators"
+import { required, numeric, email, maxLength, minLength } from "@vuelidate/validators"
 import { reactive } from "vue"
-
-// complete name
-// Mobile number
-// Birthday
-// schoolname
-// year
-// address
-// courses
 
 export default () => {
   const student = reactive({
-    first_name: '',
-    last_name: '',
-    gender: '',
-    email: '',
-    phone_number: '',
-    school_name: '',
-    school_year: '',
-    address: '',
-    course: ''
+    first_name: 'Joshua',
+    last_name: 'Sotto',
+    gender: 'male',
+    email: 'joshuasotto@example.example',
+    phone_number: '09231238471',
+    school_name: 'AU',
+    school_year: '2022-2023',
+    address: 'Malabon City',
+    course: 'BSCS',
+    remaining: 550,
+    position: 'Web Developer'
   })
 
   const rules = {
@@ -34,11 +27,28 @@ export default () => {
     school_year: {required},
     address: {required},
     course: {required},
+    remaining: {required},
+    position: {required},
   }
 
   const $v = useVuelidate(rules, student)
 
+  const reset = () => {
+    student.first_name = ''
+    student.last_name = ''
+    //@ts-ignore
+    student.gender = null
+    student.email = ''
+    student.phone_number = ''
+    student.school_name = ''
+    student.school_year = ''
+    student.address = ''
+    student.course = ''
+    student.remaining = 550
+    //@ts-ignore
+    student.position = null
+  }
 
 
-  return {student, $v}
+  return {student, $v, reset}
 }

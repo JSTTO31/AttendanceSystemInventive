@@ -13,14 +13,13 @@
   </v-card>
   <v-hover v-else v-slot="{ props, isHovering }">
     <v-card
-      v-bind="props"
-      style="width: 150px; height: 150px; position: relative"
-      class="border bg-transparent d-flex align-center justify-center"
+      v-bind="{...props, ...$attrs}"
+      class="bg-transparent d-flex align-center justify-center"
       flat
       @click="showDialog"
     >
-      <img :src="url" />
-      <v-btn
+      <img :src="url" style="height: 100%;" />
+      <!-- <v-btn
         v-if="!persistent || (beforeUrl.length > 0 && beforeUrl != url)"
         id="remove"
         icon="mdi-close"
@@ -28,7 +27,7 @@
         class="mt-n4 mr-n4"
         color="grey-lighten-2"
         @click.stop="removeImage"
-      ></v-btn>
+      ></v-btn> -->
       <v-overlay :model-value="isHovering" contained class="d-flex align-center justify-center">
         <v-icon color="white" size="60">mdi-image-edit</v-icon>
       </v-overlay>
@@ -37,7 +36,11 @@
 
   <input id="file" type="file" @change="setImage" hidden ref="file" accept="image/png, image/jpg, image/jpeg" />
 </template>
-
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
+</script>
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTheme } from "vuetify/lib/framework.mjs";

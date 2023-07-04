@@ -3,36 +3,28 @@
    <v-card class="pa-2 rounded-lg">
     <v-card-text>
       <h3>Add Attendees</h3>
-      <v-text-field class="my-2" single-line hide-details variant="outlined" density="compact" label="Search students..."></v-text-field>
+      <v-text-field class="my-2" single-line hide-details variant="outlined" density="compact" label="Search students..." v-model="search"></v-text-field>
       <v-card color="transparent" flat height="350" style="overflow-y: scroll;">
-        <div v-if="!isLoading">
-          {{ selectedStudents }}
-          <v-card @click="selectedStudents.add(student.id)" class="pa-2 mb-1" flat :key="student.id" v-for="student in students">
-            <v-row>
-              <v-col cols="1">
-                <v-checkbox v-model="selectedStudents" :value="student" hide-details></v-checkbox>
-              </v-col>
-              <v-col cols="1" class="d-flex align-center">
-                <v-avatar class="bg-grey-lighten-2" size="45">
-                  <v-img :src="student.image"></v-img>
-                </v-avatar>
-              </v-col>
-              <v-col class="d-flex align-center pl-5">
-                <div>
-                  <h5>{{ student.first_name }} {{ student.last_name }}</h5>
-                  <h6>{{ student.email }}</h6>
-                </div>
-              </v-col>
-            </v-row>
-          </v-card>
+        <AddAttendeeStudentList v-model:selected-students="selectedStudents" v-for="student in searchedStudent" :key="student.id" :student="student"></AddAttendeeStudentList>
+        <div v-if="searchedStudent.length < 1" class="h-100 d-flex align-center justify-center">
+          <span class="d-flex align-center">
+            <v-icon class="mr-2">mdi-school</v-icon>
+            No students</span>
         </div>
-        <div v-else class="h-100 w-100 d-flex align-center justify-center">
-          <v-progress-circular color="primary" indeterminate size="55"></v-progress-circular>
-        </div>    
-      </v-card>  
+      </v-card>
       <div class="d-flex mt-5">
-        <v-btn color="primary">Add</v-btn>
+        <v-btn color="primary" @click="submit" :disabled="selectedStudents.length < 1">Add</v-btn>
         <v-btn flat class="mx-2" @click="emits('update:showDialog', false)">Cancel</v-btn>
+        <v-spacer></v-spacer>
+        <VueDatePicker
+          v-model="date"
+          class="w-50"
+          :clearable="false"
+          id="start"
+          auto-apply
+          placeholder="Start date"
+          dark
+        ></VueDatePicker>
       </div>
     </v-card-text>
    </v-card>
@@ -40,21 +32,32 @@
 </template>
 
 <script setup lang="ts">
-import { useStudentStore } from '@/stores/student';
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+import AddAttendeeStudentList from './AddAttendeeStudentList.vue';
+import { Student, useStudentStore } from '@/stores/student';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref, Ref, onMounted } from 'vue';
+import { useCourseStore } from "@/stores/course";
+const $course = useCourseStore()
 const {students} = storeToRefs(useStudentStore())
-const props = defineProps(['showDialog'])
+const props = defineProps(['showDialog', 'course'])
 const emits = defineEmits(['update:showDialog'])
-const $student = useStudentStore()
-const isLoading = ref(false)
-const selectedStudents = ref(new Set()) 
-// const addStudent = 
-
-if(students.value.length < 1){
-  isLoading.value = true
-  $student.getAll().then(() => isLoading.value = false)
+const selectedStudents : Ref<Student[]> = ref([])
+const date = ref(new Date())
+const search = ref('')
+const searchedStudent = computed(() => students.value.filter(item =>
+  item.first_name.toLocaleLowerCase().includes(search.value.toLocaleLowerCase()) ||
+  item.last_name.toLocaleLowerCase().includes(search.value.toLocaleLowerCase()) ||
+  !search.value))
+const submit = () => {
+  $course.add_attendee(props.course.id, selectedStudents.value[0].id, date.value)
 }
+
+onMounted(() => {
+  console.log('triggered');
+  
+})
 </script>
 
 <style scoped>

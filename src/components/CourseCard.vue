@@ -23,7 +23,7 @@
           </template>
           <v-card width="200">
             <v-list>
-              <v-list-item @click="showAddAttendeesDialog = true" prepend-icon="mdi-plus">Add attendees</v-list-item>
+              <v-list-item @click="$router.push({name: 'AddAttendeesCourse', params: {course_id: course.id, sub_category_id: course.sub_category_id}})" prepend-icon="mdi-plus">Add attendees</v-list-item>
               <v-list-item @click="showEditDialog = true" prepend-icon="mdi-pencil">Edit</v-list-item>
               <v-list-item @click="showDeleteDialog = true" prepend-icon="mdi-trash-can">Delete</v-list-item>
             </v-list>
@@ -32,10 +32,11 @@
       </span>
       <div class="px-5 pb-5">
       </div>
-      <!-- <v-overlay contained :model-value="isHovering" persistent class="d-flex align-center justify-center">
-        <v-btn block prepend-icon="mdi-plus" color="primary" class="rounded-0">Add Attendee</v-btn>
+      <!-- <v-overlay :model-value="isHovering" contained class="d-flex align-center justify-center">
+          <v-btn block class="rounded-0 my-2" @click="$router.push({name: 'AddAttendeesCourse', params: {course_id: course.id, sub_category_id: course.sub_category_id}})" prepend-icon="mdi-plus">Add attendees</v-btn>
+          <v-btn block class="rounded-0 my-2" @click="showEditDialog = true" prepend-icon="mdi-pencil">Edit</v-btn>
+          <v-btn block class="rounded-0 my-2" @click="showDeleteDialog = true" prepend-icon="mdi-trash-can">Delete</v-btn>
       </v-overlay> -->
-      <AddAttendeesVue v-model:show-dialog="showAddAttendeesDialog"></AddAttendeesVue>
       <DeleteCourseDialog v-model:show-dialog="showDeleteDialog" :course="course"></DeleteCourseDialog>
       <EditCategoryDialog v-model:show-dialog="showEditDialog" :course="course"></EditCategoryDialog>
     </v-card>
@@ -43,15 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import AddAttendeesVue from './AddAttendees.vue';
 import EditCategoryDialog from './EditCourseDialog.vue'
 import { ref } from 'vue';
 import DeleteCourseDialog from '../components/DeleteCourseDialog.vue'
 import { Course } from '@/stores/course';
-import { reactive } from 'vue';
 const showDeleteDialog = ref(false)
 const showEditDialog = ref(false)
-const showAddAttendeesDialog = ref(false)
 const props = defineProps<{course: Course}>()
 </script>
 

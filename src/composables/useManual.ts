@@ -11,8 +11,6 @@ export default (start_at: any) => {
   timeEnd.setHours(18);
 
   if(start_at){
-    console.log('triggered');
-
     const currentDate = new Date(start_at)
     timeStart.setFullYear(currentDate.getFullYear())
     timeStart.setMonth(currentDate.getMonth())
