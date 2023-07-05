@@ -55,6 +55,15 @@ export const useUserStore = defineStore('user', {
         this.token = token
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       }
+    },
+    async logout(){
+      try {
+        const response = await api.post('/logout')
+        console.log(response)
+        return response
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 })

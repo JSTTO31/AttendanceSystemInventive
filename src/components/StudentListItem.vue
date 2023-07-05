@@ -5,26 +5,30 @@
     :to="{ name: 'ShowStudent', params: { student_id: student.id } }"
   >
     <v-row>
-      <v-col v-if="!mobile" class="d-flex align-center" cols="4">
+      <v-col class="d-flex align-center" cols="12" md="4">
         <v-avatar size="65" class="bg-grey-lighten-3">
           <v-img :src="student.image"></v-img>
         </v-avatar>
-        <div class="ml-4">
-          <h4>{{ student.first_name + " " + student.last_name }}</h4>
-          <h5 class="font-weight-regular text-capitalize">{{ student.position }}</h5>
+        <div class="ml-4 w-100 align-center d-flex">
+          <div>
+            <h4>{{ student.first_name + " " + student.last_name }}</h4>
+            <h5 class="font-weight-regular text-capitalize">{{ student.position }}</h5>
+          </div>
+          <v-spacer></v-spacer>
+          <h4 v-if="mobile" class="mr-5 font-weight-regular text-capitalize">{{ parseInt(student.remaining).toFixed(0) + "h" }}</h4>
         </div>
       </v-col>
-      <v-col class="d-flex align-center justify-center" md="2" cols="3">
-        <span class="font-weight-medium mr-2"></span> {{ timeIn }}
+      <v-col class="d-flex align-center justify-center " md="2" cols="4">
+         {{ timeIn }}
       </v-col>
-      <v-col class="d-flex align-center justify-center" md="2" cols="3">
-        <span class="font-weight-medium mr-2"></span> {{ timeOut }}
+      <v-col class="d-flex align-center justify-center " md="2" cols="4">
+         {{ timeOut }}
       </v-col>
-      <v-col class="d-flex align-center justify-center" md="2" cols="3">
-        <span class="font-weight-medium mr-2"></span> {{ workTime }}
+      <v-col class="d-flex align-center justify-center " md="2" cols="4">
+         {{ workTime }}
       </v-col>
-      <v-col class="d-flex align-center justify-center" md="2" cols="3">
-        <span class="font-weight-medium mr-2"></span>
+      <v-col class="d-flex align-center justify-center " md="2" v-if="!mobile" cols="3">
+        
         {{ parseInt(student.remaining).toFixed(0) + "h" }}
       </v-col>
     </v-row>

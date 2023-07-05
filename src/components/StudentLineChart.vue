@@ -55,6 +55,7 @@ const data = () => {
         backgroundColor: current.value.colors.primary,
         borderJoinStyle: "round",
         borderColor: current.value.colors.primary,
+        borderWidth: 100,
         tension: 0.1,
         //@ts-ignore
         data: container.map((item) =>
