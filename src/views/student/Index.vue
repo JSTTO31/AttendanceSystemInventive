@@ -1,10 +1,10 @@
 <template>
-  <v-container class="pa-10">
-    <h1 class="text-h4 font-weight-bold">Students</h1>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+  <v-container class="pa-3 pa-md-10">
+    <h2 class="text-md-h4 font-weight-bold">Students</h2>
+    <p class="text-md-subtitle-1 text-subtitle-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
     <div class="mt-4">
-      <div class="w-100 d-flex align-center justify-space-between">
-        <div class="w-50 d-flex align-center">
+      <div class="w-100 mb-5 mb-md-0 d-flex flex-column flex-md-row" :class="!mobile ? 'align-center' : ''">
+        <div class="w-50 d-flex align-center" :class="mobile ? 'w-75' : 'w-50'">
           <v-text-field
             density="compact"
             v-model="search"
@@ -38,7 +38,7 @@
           >
         </v-tabs>
       </div>
-      <v-card flat class="mt-2 bg-primary rounded-b-0 py-2">
+      <v-card flat class="mt-2 bg-primary rounded-b-0 py-2" v-if="!mobile">
         <v-row>
           <v-col class="d-flex align-center" cols="4"> </v-col>
           <v-col class="d-flex align-center justify-center" cols="2">
@@ -96,6 +96,8 @@ import { storeToRefs } from "pinia";
 import { watch } from "vue";
 import { ref } from "vue";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
 const router = useRouter();
 const route = useRoute();
 const selectedTab = ref(route.query.filter || "");

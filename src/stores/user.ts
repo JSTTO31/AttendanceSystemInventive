@@ -32,7 +32,6 @@ export const useUserStore = defineStore('user', {
      login(credentials: {email: string, password: string}){
       const api = axios.create({
         baseURL: "http://127.0.0.1:8000/",
-        // withCredentials: true,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -53,13 +52,15 @@ export const useUserStore = defineStore('user', {
         const {user, token} = JSON.parse(userData)
         this.user = user;
         this.token = token
+        api.defaults.withCredentials = true
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       }
     },
     async logout(){
       try {
         const response = await api.post('/logout')
-        console.log(response)
+        window.location.reload()
+        localStorage.removeItem('userData')
         return response
       } catch (error) {
         console.log(error)
@@ -67,5 +68,6 @@ export const useUserStore = defineStore('user', {
     }
   }
 })
+
 
 

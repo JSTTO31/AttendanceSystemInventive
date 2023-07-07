@@ -2,10 +2,10 @@
   <v-app>
     <v-layout class="h-100 w-100 bg-blue-darken-1">
       <v-main>
-        <v-container class="" style="padding: 145px 350px 50px">
+        <v-container class="" :style="!mobile ? 'padding: 145px 350px 50px' : ''">
           <v-row>
             <v-col class="px-5">
-              <v-card class="pa-5 rounded-lg" elevation="5">
+              <v-card class="pa-5 rounded-lg" :disabled="isLoading" elevation="5">
                 <h2>Attendance System Login</h2>
                 <p>
                   Please log in to access your attendance records and manage
@@ -40,6 +40,7 @@
                     color="primary"
                     size="large"
                     flat
+                    :loading="isLoading"
                     >Login</v-btn
                   >
                 </v-form>
@@ -60,8 +61,10 @@ import { showError } from "../utils";
 import { required, email } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { reactive } from "vue";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
 const $user = useUserStore();
-
+const isLoading = ref(false)
 const showPassword = ref(false);
 const credentials = reactive({
   email: "",
@@ -80,7 +83,7 @@ const submit = () => {
     $v.value.$touch();
     return;
   }
-
+  isLoading.value = true
   $user.login(credentials).then(() => window.location.reload());
 };
 </script>
