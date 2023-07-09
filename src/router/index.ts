@@ -4,6 +4,7 @@ import { useCategoryStore } from '@/stores/category'
 import { useStudentStore } from '@/stores/student'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
+import PageNotFound from '@/views/PageNotFound.vue'
 //@ts-ignore
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css';
@@ -151,13 +152,14 @@ const routes = [
     component: () => import('@/views/Login.vue'),
     meta: {guest: true}
   },
+  // { path: "*", component: PageNotFound }
 
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition){
+  scrollBehavior(){
     return {top: 0}
   }
 })

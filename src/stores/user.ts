@@ -9,7 +9,7 @@ export interface User{
 }
 
 export const auth = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: 'http://192.168.254.162:8000/api/',
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -31,7 +31,7 @@ export const useUserStore = defineStore('user', {
   actions: {
      login(credentials: {email: string, password: string}){
       const api = axios.create({
-        baseURL: "http://192.168.100.107:8000/",
+        baseURL: "http://192.168.254.162:8000/",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
