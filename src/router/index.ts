@@ -157,7 +157,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition){
+  scrollBehavior(){
     return {top: 0}
   }
 })
@@ -168,7 +168,6 @@ router.afterEach(() => {
 
 
 router.beforeEach((to, from, next) => {
-  const {isLoading} = storeToRefs(useAppStore())
   nprogress.configure({
     speed: 400,
     trickleSpeed: 500,
