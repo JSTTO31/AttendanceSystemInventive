@@ -30,8 +30,8 @@
             <v-col class="text-center">{{ timeIn }}</v-col>
             <v-col class="text-center">{{ timeIn}}</v-col>
             <v-col class="text-center">
-              {{ student.is_absent }}
-              <v-chip color="success" prepend-icon="mdi-check" v-if="!student.is_absent">Present</v-chip>
+              {{ student.attendance.is_absent }}
+              <v-chip color="success" prepend-icon="mdi-check" v-if="!student.attendance.is_absent">Present</v-chip>
               <v-chip color="error" prepend-icon="mdi-close" v-else>Absent</v-chip>
             </v-col>
           </v-row>

@@ -34,7 +34,7 @@ export default {
         plugins: {
           tooltip: {
               callbacks: {
-                  label: function(context) {
+                  label: function(context: any) {
                       let label = context.dataset.label || '';
 
                       if (label) {

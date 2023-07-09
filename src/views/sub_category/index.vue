@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify/lib/framework.mjs';
-import SubCategoryTableRow  from '../../components/SubCategoryTableRow'
+import SubCategoryTableRow  from '@/components/SubCategoryTableRow.vue'
 import { useSubCategoryStore } from '../../stores/sub_category'
 import { storeToRefs } from 'pinia';
 const {mobile} = useDisplay()
