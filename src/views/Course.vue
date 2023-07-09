@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-10 h-100">
+  <v-container class="pa-5 pa-md-10 h-100">
     <router-view></router-view>
   </v-container>
 </template>

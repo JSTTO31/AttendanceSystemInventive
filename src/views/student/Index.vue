@@ -17,7 +17,7 @@
           ></v-text-field>
         </div>
         <v-spacer></v-spacer>
-        <v-tabs v-model="selectedTab" color="primary">
+        <v-tabs v-model="selectedTab" color="primary" class="mt-2 mt-md-0">
           <v-tab
             class="text-capitalize"
             value=""
@@ -74,12 +74,13 @@
         :student="student"
       ></StudentListItemVue>
       <div
-        class="d-flex align-center mt-5"
+        class="d-flex align-center justify-between mt-5"
         v-if="Math.ceil(pageOptions.total / pageOptions.per_page) > 1"
       >
         <div>Page {{ page }} / {{ Math.ceil(pageOptions.total / pageOptions.per_page) }}</div>
         <v-spacer></v-spacer>
         <v-pagination
+          :total-visible="mobile ? 1 : 5"
           v-model="page"
           :length="Math.ceil(pageOptions.total / pageOptions.per_page)"
           color="primary"

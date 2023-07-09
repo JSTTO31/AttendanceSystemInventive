@@ -16,7 +16,7 @@ const app = createApp({...App, mounted(){
     $user.setUser()
     $app.getCurrentOJT()
   }
-  
+
 }})
 
 registerPlugins(app)

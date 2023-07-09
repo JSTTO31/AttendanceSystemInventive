@@ -1,7 +1,7 @@
 <template>
   <div v-if="courses.length > 0">
     <TransitionGroup name="slide">
-      <CourseListItem v-for="course in courses" :key="course.id" :course="course"></CourseListItem>
+      <CourseListItem class="mb-5" v-for="course in courses" :key="course.id" :course="course"></CourseListItem>
     </TransitionGroup>
   </div>
   <div class="pt-15 d-flex justify-center" v-else>
@@ -24,9 +24,9 @@ $course.getAll(route.params.student_id)
 <style scoped>
 .slide-enter-active, .slide-leave-active{
   transition: transform .15s ease-in-out, opacity .05s linear;
-} 
+}
 .slide-enter-from, .slide-leave-to{
   transform: translateX(-10%);
   opacity: 0;
-} 
+}
 </style>

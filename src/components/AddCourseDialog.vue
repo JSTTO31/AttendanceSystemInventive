@@ -1,6 +1,6 @@
 <template>
-  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" width="650">
-   <v-card class="pa-2 rounded-lg" :disabled="isLoading">
+  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" :fullscreen="mobile" width="650">
+   <v-card class="pa-2 rounded-0 rounded-md-lg" :disabled="isLoading">
       <v-card-text>
         <h3 class="d-flex align-center mb-5">
           <v-icon class="mr-2">mdi-plus</v-icon>
@@ -8,12 +8,12 @@
           <v-spacer></v-spacer>
         </h3>
         <v-row>
-          <v-col cols="4">
+          <v-col :cols="mobile?  12 : 4">
             <div>
               <h5 class="mb-2">Course Image</h5>
               <div class="">
-                <ImageCard v-model:image="$v.image.$model"></ImageCard>
-                <v-list class="mt-2">
+                <ImageCard height="250" v-model:image="$v.image.$model"></ImageCard>
+                <v-list class="mt-2 pa-0">
                   <v-list-item class="text-error text-caption">
                     {{showError($v.image)}}
                   </v-list-item>
@@ -21,7 +21,7 @@
               </div>
             </div>
           </v-col>
-          <v-col cols="8">
+          <v-col :cols="mobile? 12 : 8">
             <div>
             <h5 class="mb-2">
               Course name
@@ -56,6 +56,9 @@
           <v-btn class="mr-1" variant="text" @click="emits('update:showDialog', false)">Cancel</v-btn>
         </div>
       </v-card-text>
+      <span  style="position: absolute;top: 15px;right: 15px">
+        <v-btn flat @click="emits('update:showDialog', false)" icon="mdi-close"></v-btn>
+      </span>
    </v-card>
  </v-dialog>
 </template>
@@ -69,6 +72,8 @@ import { useCategoryStore } from '@/stores/category';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+const {mobile} = useDisplay()
 const props = defineProps(['showDialog'])
 const emits = defineEmits(['update:showDialog'])
 const {category} = storeToRefs(useCategoryStore())

@@ -2,18 +2,18 @@
   <v-card
     :key="student.email"
     class="d-flex flex-column justify-center align-center rounded-xl"
-    :class="rail ? 'ma-1 my-5' : 'mb-5 pa-5 py-10'"
+    :class="rail && !mobile ? 'ma-1 my-5' : 'mb-5 pa-5 py-10'"
     @click="$router.push({ name: 'ShowStudent', params: { student_id: student.id } })"
     flat
   >
-    <v-avatar :size="rail ? 40 : 145" class="bg-grey-lighten-4">
+    <v-avatar :size="rail && !mobile ? 40 : 145" class="bg-grey-lighten-4">
       <v-img :src="student.image"></v-img>
     </v-avatar>
-    <v-card-text class="text-center" v-if="!rail">
+    <v-card-text class="text-center" v-if="!rail || mobile">
       <h2>{{ `${student.first_name} ${student.last_name}` }}</h2>
       <h4 class="font-weight-regular text-capitalize mt-2">{{ student.position }}</h4>
     </v-card-text>
-    <div v-if="!rail">
+    <div v-if="!rail || mobile">
       <v-card-actions
         class="w-100 d-flex align-center justify-center"
         v-if="!student.attendance"
@@ -89,6 +89,8 @@
 import ShowPolicyDialogVue from './ShowPolicyDialog.vue';
 import useAttendance from '@/composables/useAttedance'
 import { Student } from "@/stores/student";
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+const {mobile} = useDisplay()
 const props = defineProps<{ student: Student; rail: boolean }>();
 const {enter, absent, leave, enterWithPolicy, isLoading, showPolicyConfirmation} = useAttendance(props.student)
 </script>

@@ -3,7 +3,7 @@
     location="right"
     width="350"
     class="pa-0"
-    rail
+    :rail="!mobile"
     expand-on-hover
     @mouseover="rail = false"
     @mouseleave="rail = true"
@@ -13,12 +13,12 @@
         <!-- <v-btn v-if="rail" icon="mdi-chevron-left" class="rounded-0" @click="rail = false"></v-btn>
         <v-btn v-else icon="mdi-chevron-right" class="rounded-0" @click="rail = true"></v-btn> -->
         <v-icon :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="mx-2" size="35" >mdi-school</v-icon>
-        <h3 :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="ml-1" v-if="!rail">
+        <h3 :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="ml-1" v-if="!rail || mobile">
         OJT Students</h3>
       </v-app-bar>
       <v-main :class="rail ? 'disable-scroll' : ''" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
 >
-        <div :class="rail ? '' : 'pa-5'">
+        <div :class="rail && !mobile ? '' : 'pa-5'">
           <AttendanceStudentCardVue v-for="student in students" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
         </div>
       </v-main>
@@ -33,6 +33,7 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
 const {current} = useTheme()
 const { students } = storeToRefs(useAppStore());
 const rail = ref(true)

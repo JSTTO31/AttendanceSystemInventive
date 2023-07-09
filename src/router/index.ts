@@ -23,7 +23,7 @@ const routes = [
       {
         path: '/student/create',
         name: 'CreateStudent',
-        component: () => import(/* webpackChunkName: "home" */ '@/views/student/Create.vue'),
+        component: () => import(/* webpackChunkName: "student.create" */ '@/views/student/Create.vue'),
 
       },
       // Student Index
@@ -54,23 +54,22 @@ const routes = [
           $student.get(to.params.student_id).then(() => {
             return next();
           })
-
         },
         children: [
           {
             path: '',
             name: 'ShowStudent.index',
-            component: () => import('@/views/student/show/Index.vue'),
+            component: () => import(/* webpackChunkName: "student_index" */ '@/views/student/show/Index.vue'),
           },
           {
             path: 'information',
             name: 'ShowStudent.information',
-            component: () => import('@/views/student/show/Information.vue'),
+            component: () => import(/* webpackChunkName: "student_information */ '@/views/student/show/Information.vue'),
           },
           {
             path: 'courses',
             name: 'ShowStudent.courses',
-            component: () => import(/* webpackChunkName: "home" */  '@/views/student/show/Course.vue'),
+            component: () => import(/* webpackChunkName: "student_course" */  '@/views/student/show/Course.vue'),
           },
         ]
       },

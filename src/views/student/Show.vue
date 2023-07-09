@@ -1,20 +1,21 @@
 <template>
-  <v-container class="h-100" v-if="student">
+  <v-container class="h-100 pb-15 pb-md-5" style="overflow-x: hidden;" v-if="student">
     <v-row>
-      <v-col cols="3" class="d-flex align-end">
+      <v-col cols="3" class="d-flex align-end" v-if="!mobile">
           <ImageCard height="250" :url="student.image" class="rounded-xl bg-grey-lighten-3 w-100" v-model:image="image" :key="student.id"></ImageCard>
       </v-col>
       <v-col class="px-5 pt-5">
         <v-card class="d-flex stretch mb-4 bg-transparent" flat>
-          <div class="mt-3 align-end w-100 d-flex">
+          <ImageCard v-if="mobile" height="125" :url="student.image" class="rounded-lg bg-grey-lighten-3 w-75" v-model:image="image" :key="student.id"></ImageCard>
+          <div class="mt-3 px-5 px-md-0 align-end w-100 d-flex">
             <div>
-              <h1 class="">{{ student.first_name + " " + student.last_name }}</h1>
-              <h4 class="font-weight-regular text-capitalize">{{student.position}}</h4>
+              <h1 class="text-md-h3 font-weight-medium">{{ student.first_name + " " + student.last_name }}</h1>
+              <h5 class="font-weight-regular text-md-subtitle-1 text-capitalize">{{student.position}}</h5>
             </div>
           </div>
           <v-menu location="bottom left" :close-on-content-click="false">
             <template #activator="{ props }">
-              <v-btn class="mx-2" icon="mdi-dots-horizontal" v-bind="props"></v-btn>
+              <v-btn v-if="!mobile" :size="mobile ? 'small' : 'default'" class="mx-2" icon="mdi-dots-horizontal" v-bind="props"></v-btn>
             </template>
             <v-card width="325" class="rounded-lg pa-2 px-4 mr-5">
               <v-list>
@@ -78,7 +79,7 @@
             </span>
           </VProgressLinear
         >
-        <v-row>
+        <v-row v-if="!mobile">
           <v-col>
             <v-card flat class="pa-5 bg-transparent align-center d-flex rounded-lg">
               <v-icon size="60">mdi-clock-in</v-icon>
@@ -122,7 +123,7 @@
       </v-col>
     </v-row>
     <nav class="d-flex">
-      <v-tabs class="mt-4">
+      <v-tabs class="mt-1 mt-md-4">
         <v-tab
           color="primary"
           value="index"
@@ -146,7 +147,7 @@
         >
       </v-tabs>
     </nav>
-    <div class="py-5">
+   <div class="py-5">
       <RouterView v-if="student" v-slot="{ Component }">
         <component :is="Component"></component>
       </RouterView>
@@ -158,7 +159,8 @@
       :is-loading="isLoading"
     ></ShowPolicyDialog>
     <ManualAttendanceDialog
-      :start_at="null"
+      :start_at="now"
+      key="now"
       v-model:show-dialog="showManualAttendanceDialog"
     ></ManualAttendanceDialog>
     <v-dialog v-model="showApplyImageDialog" width="300" persistent  scrim="transparent">
@@ -172,10 +174,12 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <mobileAttendanceActions @manual="showManualAttendanceDialog = true" @enter="enter" @absent="absent" @leave="leave(student.id, student.attendance.id)"></mobileAttendanceActions>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import mobileAttendanceActions from '@/components/MobileAttendanceActions.vue'
 import ImageCard from "@/components/ImageCard.vue";
 import ManualAttendanceDialog from "@/components/ManualAttendanceDialog.vue";
 import ShowPolicyDialog from "@/components/ShowPolicyDialog.vue";
@@ -187,10 +191,11 @@ import { useStudentStore } from "../../stores/student";
 import { computed } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
-import { useAttendanceStore } from "@/stores/attendance";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const now = new Date()
+const {mobile} = useDisplay()
 const $student = useStudentStore()
 const showManualAttendanceDialog = ref(false)
-const $attendance = useAttendanceStore()
 const { student, workTimeTotal } = storeToRefs(useStudentStore());
 const { timeIn, timeOut, workTime } = useStudent(student);
 const {applyImage, cancelImage, image, showApplyImageDialog} = useChangeProfile()

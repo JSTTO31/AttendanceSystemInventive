@@ -1,6 +1,6 @@
 <template>
-  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)"  width="450">
-    <v-card class="pa-2 rounded-lg" :disabled="isLoading">
+  <v-dialog :fullscreen="mobile" :model-value="showDialog" @click:outside="emits('update:showDialog', false)"  width="450">
+    <v-card class="pa-2 rounded-md-lg rounded-0" :disabled="isLoading">
       <v-card-text>
         <h3 class="mb-4">Create Sub Category</h3>
         <h4 class="text-grey-darken-3 mb-4">Sub Category name {{ sub_category.id }}</h4>
@@ -11,9 +11,13 @@
         </v-radio-group>
         <div class="pa-0 w-100 d-flex">
           <v-spacer></v-spacer>
+          <v-btn class="mx-2" flat @click="emits('update:showDialog', false)">Cancel</v-btn>
           <v-btn color="primary" variant="elevated" :disabled="name.length < 1 && !!category_id" @click="submit" :loading="isLoading">Create</v-btn>
         </div>
       </v-card-text>
+      <span style="position: absolute;top: 15px;right: 15px">
+        <v-btn icon="mdi-close" flat @click="emits('update:showDialog', false)"></v-btn>
+      </span>
     </v-card>
   </v-dialog>
 </template>
@@ -23,6 +27,8 @@ import { ref } from 'vue';
 import {useCategoryStore} from '../stores/category'
 import {useSubCategoryStore} from '../stores/sub_category'
 import { storeToRefs } from 'pinia';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+const {mobile} = useDisplay()
 const props = defineProps(['showDialog', 'sub_category'])
 const emits = defineEmits(['update:showDialog'])
 const $category = useCategoryStore()

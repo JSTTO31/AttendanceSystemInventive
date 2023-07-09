@@ -25,6 +25,12 @@ export default (student: Ref<Student>) => {
       ? student.value.attendance.work_time + "h"
       : "--"
   );
+  const status = computed(() => {
+    if(!student.value.attendance){
+      return 'pending'
+    }
+    return student.value.attendance.is_absent ? 'absent' : !!student.value.attendance.late_time ? 'late' : student.value.attendance.is_event ? 'event' : 'present'
+})
 
-  return {timeIn, timeOut, workTime}
+  return {timeIn, timeOut, workTime, status}
 }

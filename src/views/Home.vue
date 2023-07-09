@@ -55,7 +55,7 @@ const chartData : any = computed(() => ({
         data: students.value.map(item => item.work_time_total?.toFixed(0) || 0),
         backgroundColor: [current.value.colors.primary, current.value.colors.primary, current.value.colors.primary],
         borderRadius: 5,
-        barThickness: 55,
+        barThickness: mobile.value ? 35 : 55,
       }
     ]
 }))

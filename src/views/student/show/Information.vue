@@ -3,11 +3,17 @@
     <v-row>
       <v-col>
         <v-card class="pa-5 rounded-lg border" flat>
-          <h3 class="mb-5">Basic Information</h3>
+          <h3 class="mb-5 d-flex align-center">Basic Information
+            <v-spacer></v-spacer>
+            <v-btn icon="mdi-pencil" variant="text" v-if="!editMode" @click="editMode = true"></v-btn>
+            <v-btn icon="mdi-close" variant="text" v-else @click="editMode = false"></v-btn>
+          </h3>
           <v-row>
-            <v-col>
+            <v-col :cols="mobile ? 12 : 6">
               <label class="mb-2">First name</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.first_name.$model"
                 :error-messages="showError($v.first_name)"
                 label="First name"
@@ -19,9 +25,11 @@
                 class="mt-3"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col :cols="mobile ? 12 : 6">
               <label class="mb-2">Last name</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.last_name.$model"
                 :error-messages="showError($v.last_name)"
                 label="Last name"
@@ -38,6 +46,8 @@
             <v-col>
               <label class="mb-2">Email address</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.email.$model"
                 :error-messages="showError($v.email)"
                 label="Email address"
@@ -53,6 +63,8 @@
             <v-col>
               <label class="mb-2">Gender</label>
               <v-select
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.gender.$model"
                 :error-messages="showError($v.gender)"
                 label="Gender"
@@ -67,6 +79,8 @@
             <v-col>
               <label class="mb-2">Mobile</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.phone_number.$model"
                 :error-messages="showError($v.phone_number)"
                 label="Phone number"
@@ -84,6 +98,8 @@
             <v-col>
               <label class="mb-2">Address</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.address.$model"
                 :error-messages="showError($v.address)"
                 label="Home address"
@@ -102,6 +118,8 @@
             <v-col>
               <label class="mb-2">School name</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.school_name.$model"
                 :error-messages="showError($v.school_name)"
                 label="School name"
@@ -117,6 +135,8 @@
             <v-col>
               <label class="mb-2">School Year</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 label="School Year"
                 variant="outlined"
                 color="primary"
@@ -131,6 +151,8 @@
             <v-col>
               <label class="mb-2">Course</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.course.$model"
                 :error-messages="showError($v.course)"
                 label="Course"
@@ -149,6 +171,8 @@
             <v-col>
               <label class="mb-2">Position</label>
               <v-select
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 v-model="$v.position.$model"
                 :error-messages="showError($v.position)"
                 label="Position"
@@ -165,6 +189,8 @@
             <v-col>
               <label class="mb-2">Time to render</label>
               <v-text-field
+                :readonly="!editMode"
+                :density="mobile ? 'compact' : 'default'"
                 label="Time to render"
                 variant="outlined"
                 color="primary"
@@ -194,6 +220,10 @@ import { showError } from '@/utils';
 import useStudentEdit from '@/composables/useStudentEdit';
 import { ref } from 'vue';
 import { useStudentStore } from '@/stores/student';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+import { watch } from 'vue';
+const editMode = ref(false)
+const {mobile} = useDisplay()
 const {student, $v, reset} = useStudentEdit()
 const isLoading = ref(false)
 const submit = () => {
@@ -207,6 +237,12 @@ const submit = () => {
     isLoading.value = false;
   })
 }
+
+watch(() => editMode.value, () => {
+  if(!editMode.value){
+    reset()
+  }
+})
 
 </script>
 

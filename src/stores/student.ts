@@ -71,10 +71,9 @@ export const useStudentStore = defineStore('student', {
     get(student_id: any){
       const $attendance = useAttendanceStore()
       const {students} = storeToRefs(useAppStore())
-      const isExists = students.value.find(item => item.id == student_id) 
+      const isExists = students.value.find(item => item.id == student_id)
       if(isExists){
         this.student = isExists
-        
         if(this.student.attendances && this.student.attendances.length > 0){
           $attendance.getAllStudentAttendance(student_id);
           return new Promise((resolve) => {
@@ -82,7 +81,7 @@ export const useStudentStore = defineStore('student', {
           })
         }
         $attendance.getAllStudentAttendance(student_id);
-        
+
         return new Promise((resolve) => {
           resolve(this.student)
         })

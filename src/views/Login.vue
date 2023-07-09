@@ -5,7 +5,7 @@
         <v-container class="" :style="!mobile ? 'padding: 145px 350px 50px' : ''">
           <v-row>
             <v-col class="px-5">
-              <v-card class="pa-5 rounded-lg" :disabled="isLoading" elevation="5">
+              <v-card class="pa-5 rounded-0 rounded-md-lg" :class="mobile ? 'fullscreen' : ''" :disabled="isLoading" elevation="5">
                 <h2>Attendance System Login</h2>
                 <p>
                   Please log in to access your attendance records and manage
@@ -33,6 +33,7 @@
                     "
                     @click:append-inner="showPassword = !showPassword"
                   ></v-text-field>
+                  <v-spacer v-if="mobile"></v-spacer>
                   <v-btn
                     class="mt-5"
                     @click="submit"
@@ -88,4 +89,12 @@ const submit = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.fullscreen{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+</style>

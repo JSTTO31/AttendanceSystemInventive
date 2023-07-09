@@ -1,9 +1,9 @@
 <template>
-  <v-card class="pa-2 rounded-lg" v-if="!isLoading">
+  <v-card class="pa-2 rounded-md-lg rounded-0" v-if="!isLoading">
     <v-card-text>
       <h3>Add Attendees</h3>
       <v-text-field class="my-2" single-line hide-details variant="outlined" density="compact" label="Search students..." v-model="search"></v-text-field>
-      <v-card color="transparent" flat height="400" style="overflow-y: scroll;">
+      <v-card color="transparent" flat :height="mobile ? 365 : 400" style="overflow-y: scroll;">
         <AddAttendeeStudentList v-model:selected-students="selectedStudents" v-for="student in searchedStudent" :key="student.id" :student="student"></AddAttendeeStudentList>
         <div v-if="searchedStudent.length < 1" class="h-100 d-flex align-center justify-center">
           <span class="d-flex align-center">
@@ -67,7 +67,8 @@ import { storeToRefs } from 'pinia';
 import { computed, ref, Ref } from 'vue';
 import { useCourseStore } from "@/stores/course";
 import { useRoute, useRouter } from "vue-router";
-import { useTheme } from "vuetify/lib/framework.mjs";
+import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
 const $student = useStudentStore();
 const $course = useCourseStore()
 const {students} = storeToRefs(useStudentStore())

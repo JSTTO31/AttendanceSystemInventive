@@ -1,7 +1,7 @@
 <template>
-  <v-container class="pa-10">
-    <h1 class="text-h4 font-weight-bold">Create Student</h1>
-    <p>Designed a student form to gather key details.</p>
+  <v-container class="pa-5 pa-md-10">
+    <h2 class="text-md-h4 font-weight-bold">Create student</h2>
+    <p class="text-md-subtitle-1 text-subtitle-2">Designed a student form to gather key details.</p>
     <div :disabled="isLoading">
       <v-form class="mt-5">
         <v-card class="pa-5 rounded-lg border" flat>

@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="d-flex align-center pa-3 rounded-b-0 mt-0 border-b"
+    class=" pa-3 rounded-b-0 mt-0 border-b"
     flat
     :to="{ name: 'ShowStudent', params: { student_id: student.id } }"
   >
@@ -15,22 +15,21 @@
             <h5 class="font-weight-regular text-capitalize">{{ student.position }}</h5>
           </div>
           <v-spacer></v-spacer>
-          <h4 v-if="mobile" class="mr-5 font-weight-regular text-capitalize">{{ parseInt(student.remaining).toFixed(0) + "h" }}</h4>
+          <h4 v-if="mobile" class="mr-5 font-weight-bold text-capitalize">{{ parseInt(student.remaining).toFixed(0) + "h" }}</h4>
         </div>
       </v-col>
-      <v-col class="d-flex align-center justify-center " md="2" cols="4">
+        <v-col class="d-flex align-center justify-center " md="2" cols="4">
          {{ timeIn }}
-      </v-col>
-      <v-col class="d-flex align-center justify-center " md="2" cols="4">
-         {{ timeOut }}
-      </v-col>
-      <v-col class="d-flex align-center justify-center " md="2" cols="4">
-         {{ workTime }}
-      </v-col>
-      <v-col class="d-flex align-center justify-center " md="2" v-if="!mobile" cols="3">
-        
-        {{ parseInt(student.remaining).toFixed(0) + "h" }}
-      </v-col>
+        </v-col>
+        <v-col class="d-flex align-center justify-center " md="2" cols="4">
+          {{ timeOut }}
+        </v-col>
+        <v-col class="d-flex align-center justify-center " md="2" cols="4">
+          {{ workTime }}
+        </v-col>
+        <v-col class="d-flex align-center justify-center " md="2" v-if="!mobile" cols="3">
+          {{ parseInt(student.remaining).toFixed(0) + "h" }}
+        </v-col>
     </v-row>
   </v-card>
 </template>

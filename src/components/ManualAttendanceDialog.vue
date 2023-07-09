@@ -2,9 +2,10 @@
   <v-dialog
     :model-value="showDialog"
     width="500"
+    :fullscreen="mobile"
     @click:outside="emits('update:showDialog', false)"
   >
-    <v-card v-if="!interceptEvent" style="overflow: visible !important;" class="rounded-lg pa-5" >
+    <v-card v-if="!interceptEvent" style="overflow: visible !important;" class="rounded-md-lg rounded-0 pa-5" >
       <v-card-title class="d-flex align-center">
         <v-icon class="mr-2">mdi-book-open-outline</v-icon>
         Manual Attendance</v-card-title
@@ -75,7 +76,7 @@
           :loading="isLoading"
           >Save</v-btn
         >
-        <v-btn @click="emits('update:showDialog', false)">No</v-btn>
+        <v-btn @click="emits('update:showDialog', false)">Cancel</v-btn>
       </v-card-actions>
       <v-btn
         icon="mdi-close"
@@ -93,12 +94,12 @@
         Event Intercept</v-card-title
       >
           <p>
-            It's seems the selected date has event, you can't modify this attendance unless you remove it. Do you want to remove it? 
+            It's seems the selected date has event, you can't modify this attendance unless you remove it. Do you want to remove it?
           </p>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="removeAttendee" :loading="isLoading">Remove</v-btn>
-            <v-btn @click="emits('update:showDialog', false)">Cancel</v-btn>
+            <v-btn @click="emits('update:showDialog', false)">no</v-btn>
           </v-card-actions>
       </v-card-text>
       <v-btn
@@ -125,7 +126,8 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-import { useTheme } from "vuetify/lib/framework.mjs";
+import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
 const $course = useCourseStore()
 const {current} = useTheme()
 const { student } = storeToRefs(useStudentStore());
@@ -137,6 +139,10 @@ const { attendance, enablePolicy, isLoading, options, followDate } = useManual(
   props.start_at
 );
 const interceptEvent = computed(() => {
+  if(student.value.attendances.length < 1){
+    return false
+  }
+
   return student.value.attendances.find(item => {
     const attendanceDate = new Date(item.created_at)
     const currentDate = new Date(props.start_at)

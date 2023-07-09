@@ -1,8 +1,9 @@
 <template>
   <v-container class="px-0" fluid>
     <v-row align-content="stretch">
-      <v-col cols="8">
+      <v-col :cols="mobile ? 12 : 8">
         <StudentLineChart
+          style="height: 50px"
           :month="selectedMonth"
           v-if="student.attendances && student.attendances.length > 0"
         ></StudentLineChart>
@@ -18,31 +19,35 @@
           <h2 class="ml-2">No chart</h2>
         </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col :cols="mobile ? 12 : 4">
         <Calendar v-model:selected-month="selectedMonth"></Calendar>
       </v-col>
     </v-row>
     <v-row>
-      <v-col class="pa-5">
+      <v-col>
         <div v-if="student.attendances && student.attendances.length > 0">
           <h3 class="mb-2">Attendance History</h3>
-          <v-table hover>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Time in</th>
-                <th>Time out</th>
-                <th>Work time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <AttendanceListItem
-                v-for="attendance in attendancesReverse.slice((page - 1) * perPage, page * perPage)"
-                :key="attendance.id"
-                :attendance="attendance"
-              ></AttendanceListItem>
-            </tbody>
-          </v-table>
+          <v-card :width="mobile ? 366 : 'auto'" :style="mobile ? 'overflow-x: scroll;' : ''">
+            <v-card flat :width="mobile ? 550 : 'auto'">
+              <v-table hover>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time in</th>
+                    <th>Time out</th>
+                    <th>Work time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <AttendanceListItem
+                    v-for="attendance in attendancesReverse.slice((page - 1) * perPage, page * perPage)"
+                    :key="attendance.id"
+                    :attendance="attendance"
+                  ></AttendanceListItem>
+                </tbody>
+              </v-table>
+              </v-card>
+            </v-card>
         </div>
         <div class="w-100 align-center mt-5 d-flex" v-if="page_total > 1">
           Page {{ page }} / {{ page_total }}
@@ -50,6 +55,7 @@
           <v-pagination
             :length="page_total"
             color="primary"
+            :total-visible="mobile ? 1 : 5"
             v-model="page"
           ></v-pagination>
         </div>
@@ -66,7 +72,9 @@ import { useStudentStore } from "@/stores/student";
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-const now = new Date(); 
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
+const now = new Date();
 const selectedMonth = ref(now.getMonth())
 const { student } = storeToRefs(useStudentStore());
 const page = ref(1);

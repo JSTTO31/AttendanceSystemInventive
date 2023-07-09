@@ -1,7 +1,7 @@
 <template>
-  <v-card class="h-100 border pa-4" flat>
+  <v-card class="h-100 border pa-md-4 pa-0" flat>
     <v-card-title> Weekly work time </v-card-title>
-    <v-card-text>
+    <v-card-text class="pa-0">
       <LineChart style="height: 350px" :data="data()" class="pa-5"></LineChart>
     </v-card-text>
   </v-card>
@@ -55,7 +55,6 @@ const data = () => {
         backgroundColor: current.value.colors.primary,
         borderJoinStyle: "round",
         borderColor: current.value.colors.primary,
-        borderWidth: 100,
         tension: 0.1,
         //@ts-ignore
         data: container.map((item) =>

@@ -3,17 +3,17 @@
     <v-card class="my-2 rounded-0" :elevation="isHovering ? 0 : 5" v-bind="props">
       <v-img :src="course.image"></v-img>
       <v-card-text>
-        <v-chip class="mb-2 pa-0" variant="text">{{ course.sub_category.name }}</v-chip>
-        <h2 class="text-capitalize" prepend-icon>{{ course.name }}</h2>
+        <v-chip class="mb-2 pa-0" :size="mobile ? 'small' : 'default'" variant="text">{{ course.sub_category.name }}</v-chip>
+        <h3 class="text-capitalize text-md-h6 font-weight-medium">{{ course.name }}</h3>
         <p class="my-2">{{ course.description }}</p>
-        <div class="d-flex align-center mt-2">
-          <v-chip v-if="false">+{{ course.sub_category_id }}</v-chip>
-          <span class="text-grey-darken-2">No attendees</span>
-          <v-spacer></v-spacer>
-          <h4>
+        <div class="d-flex flex-column flex-md-row mt-2">
+          <h5 class="text-subtitle-md-1">
             <v-icon>mdi-calendar</v-icon>
             Day <span v-if="course.number_of_session > 1">1 -</span> {{ course.number_of_session }}
-          </h4>
+          </h5>
+          <v-spacer></v-spacer>
+          <v-chip v-if="false">+{{ course.sub_category_id }}</v-chip>
+          <span class="mt-2 mt-md-0 text-grey-darken-2">No attendees</span>
         </div>
       </v-card-text>
       <span id="menu-button">
@@ -48,9 +48,11 @@ import EditCategoryDialog from './EditCourseDialog.vue'
 import { ref } from 'vue';
 import DeleteCourseDialog from '../components/DeleteCourseDialog.vue'
 import { Course } from '@/stores/course';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
 const showDeleteDialog = ref(false)
 const showEditDialog = ref(false)
 const props = defineProps<{course: Course}>()
+const {mobile} = useDisplay()
 </script>
 
 <style scoped>
