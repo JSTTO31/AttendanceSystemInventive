@@ -1,5 +1,5 @@
 <template>
-  <Line :data="data" :options="options" style="height: 100%" />
+  <LineChart :data="data" :options="options" style="height: 100%" />
 </template>
 
 <script lang="ts" >
@@ -13,7 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line } from "vue-chartjs";
+import { Line as LineChart } from "vue-chartjs";
 
 ChartJS.register(
   CategoryScale,
@@ -25,11 +25,17 @@ ChartJS.register(
   Legend
 );
 
+interface Data{
+  labels: String[]
+  datasets: []
+}
+
 export default{
-  components: { Line},
+  components: { LineChart },
   props: {
+    //@ts-ignore
     data: {
-      type: Object,
+      type: {} as Data,
       default: () => ({
         labels: ["Day 1", "Day 2", "Day3", "Day4", "Day5", "Day6", "Day7"],
         datasets: [
