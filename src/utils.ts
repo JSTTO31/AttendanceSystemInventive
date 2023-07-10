@@ -9,7 +9,7 @@ export function showError(validator: any, error_message = ""){
 }
 
 export const api = axios.create({
-  baseURL: 'https://www.inventivemedia.com.ph/ojt/index.php/api',
+  baseURL: 'https://www.inventivemedia.com.ph/ojt/public/api',
   headers: {
     Accept: 'application/json',
     "Content-Type": 'application/json',

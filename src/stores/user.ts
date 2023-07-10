@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
   actions: {
      login(credentials: {email: string, password: string}){
       const api = axios.create({
-        baseURL: "https://www.inventivemedia.com.ph/ojt/index.php/",
+        baseURL: "https://www.inventivemedia.com.ph/ojt/public",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
