@@ -1,1 +1,0 @@
-import{_ as o,J as r,A as t,B as a,C as s,c}from"./index-df5c3e00.js";import{V as n}from"./VContainer-4bb91f49.js";/* empty css              */import"./tag-c06c36d9.js";const _={};function p(i,m){const e=r("router-view");return t(),a(n,{class:"pa-5 pa-md-10 h-100"},{default:s(()=>[c(e)]),_:1})}const C=o(_,[["render",p]]);export{C as default};

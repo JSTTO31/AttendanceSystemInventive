@@ -1,6 +1,5 @@
 import { Page, api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
-import { auth } from "./user";
 import { Attendance, month_attendances, useAttendanceStore } from "./attendance";
 import { useAppStore } from "./app";
 
