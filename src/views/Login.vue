@@ -58,7 +58,7 @@
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useUserStore } from "../stores/user";
-import { showError } from "../utils";
+import { api, showError } from "../utils";
 import { required, email } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { reactive } from "vue";
@@ -76,16 +76,32 @@ const rules = {
   email: { required, email },
   password: { required },
 };
+const $externalResults = ref({})
+const $v = useVuelidate(rules, credentials, { $externalResults });
 
-const $v = useVuelidate(rules, credentials);
-
-const submit = () => {
-  if ($v.value.$invalid) {
-    $v.value.$touch();
-    return;
-  }
+async function validate () {
+  if (!await $v.value.$validate()) return false
   isLoading.value = true
-  $user.login(credentials).then(() => window.location.reload());
+
+  const response = await api.post('/api/validation/check-credentials', {...credentials})
+  const errors = {
+    email: response.data
+  }
+  $externalResults.value = errors
+  isLoading.value = false
+  if(response.data.length > 0){
+    return true
+  }else{
+    return false
+  }
+}
+
+const submit = async () => {
+  await validate()
+  if($v.value.$invalid){
+    return
+  }
+  $user.login(credentials)
 };
 </script>
 

@@ -44,6 +44,7 @@ export const useUserStore = defineStore('user', {
         const {user, token} = JSON.parse(userData)
         this.user = user;
         this.token = token
+        api.defaults.baseURL = 'https://www.inventivemedia.com.ph/ojt/public/api'
         api.defaults.withCredentials = true
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       }
