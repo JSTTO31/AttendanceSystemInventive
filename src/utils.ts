@@ -8,8 +8,8 @@ export function showError(validator: any, error_message = ""){
   return ""
 }
 export const api = axios.create({
-  // baseURL: 'https://www.inventivemedia.com.ph/ojt/public',
-  baseURL: 'http://192.168.100.107:8000',
+  baseURL: 'https://www.inventivemedia.com.ph/ojt/public',
+  // baseURL: 'http://192.168.100.107:8000',
   headers: {
     Accept: 'application/json',
     "Content-Type": 'application/json',

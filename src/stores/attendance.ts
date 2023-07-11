@@ -69,7 +69,7 @@ export const useAttendanceStore = defineStore('attendance', {
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
         students.value = students.value.map(item => item.id == student_id ? {...item, remaining: remaining, attendance: attendance} : item)
-        
+
 
         if(student.value.id == student_id){
           student.value.attendance = attendance
@@ -142,7 +142,7 @@ export const useAttendanceStore = defineStore('attendance', {
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
         students.value = students.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-    
+
 
         if(student.value.id == student_id){
           student.value.attendance = response.data
@@ -165,7 +165,7 @@ export const useAttendanceStore = defineStore('attendance', {
         this.attendances.unshift(response.data)
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
-        
+
         students.value = students.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
 
         if(student.value.id == student_id && new Date().toDateString()  == new Date(response.data.created_at).toDateString()){
@@ -177,8 +177,8 @@ export const useAttendanceStore = defineStore('attendance', {
         }
 
         student.value.attendances.unshift(response.data)
-        student.value.work_time_total += response.data.work_time || 0 
-        student.value.late_time_total += response.data.late_time || 0 
+        student.value.work_time_total += response.data.work_time || 0
+        student.value.late_time_total += response.data.late_time || 0
 
         return response
       } catch (error) {
