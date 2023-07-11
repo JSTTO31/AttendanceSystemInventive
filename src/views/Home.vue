@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-md-10 pa-5">
-    <h2 class="text-md-h4 font-weight-bold">Welcome Joshua Sotto!</h2>
+    <h2 class="text-md-h4 font-weight-bold">Hello! Welcome to your dashboard</h2>
     <p class="text-subtitle-2 text-md-subtitle-1">Effortlessly manage attendance with our intuitive dashboard.</p>
     <v-container fluid class="px-0">
       <v-row>

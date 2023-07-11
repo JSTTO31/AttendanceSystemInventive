@@ -5,7 +5,7 @@
     <NavigationBarRight></NavigationBarRight>
     <default-view />
     <!-- <LoadingOverlayVue :show="isLoading"></LoadingOverlayVue> -->
-    <v-banner width="450" elevation="5" id="banner" v-if="showNetworkError">
+    <v-banner :class="mobile ? 'banner-mobile' : 'banner'" elevation="5" v-if="showNetworkError">
       <template #prepend>
         <v-icon size="35">mdi-server-network-off</v-icon>
       </template>
@@ -42,6 +42,8 @@ import { storeToRefs } from "pinia";
 import { useAppStore } from "@/stores/app";
 import { ref } from "vue";
 import { api } from "@/utils";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const {mobile} = useDisplay()
 const {isLoading} = storeToRefs(useAppStore())
 const showNetworkError = ref(false)
 const reload = () => window.location.reload()
@@ -55,10 +57,18 @@ api.interceptors.response.use(response => {
 })
 </script>
 <style scoped>
-#banner{
+.banner{
   position: absolute;
   bottom: 15px;
   right: 15px;
   z-index: 2000;
+  width: 450;
+}
+.banner-mobile{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 2000;
+  width: 100%;
 }
 </style>

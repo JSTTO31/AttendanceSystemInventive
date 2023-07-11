@@ -23,7 +23,8 @@ export const useUserStore = defineStore('user', {
   actions: {
      login(credentials: {email: string, password: string}){
       const api = axios.create({
-        baseURL: "https://www.inventivemedia.com.ph/ojt/public",
+        // baseURL: "https://www.inventivemedia.com.ph/ojt/public",
+        baseURL: 'http://192.168.100.107:8000',
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -44,7 +45,8 @@ export const useUserStore = defineStore('user', {
         const {user, token} = JSON.parse(userData)
         this.user = user;
         this.token = token
-        api.defaults.baseURL = 'https://www.inventivemedia.com.ph/ojt/public/api'
+        // api.defaults.baseURL = 'https://www.inventivemedia.com.ph/ojt/public/api'
+        api.defaults.baseURL = 'http://192.168.100.107:8000/api'
         api.defaults.withCredentials = true
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       }

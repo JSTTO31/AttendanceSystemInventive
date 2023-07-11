@@ -1,55 +1,53 @@
 <template>
   <v-app>
-    <v-layout class="h-100 w-100 bg-blue-darken-1">
-      <v-main>
-        <v-container class="" :style="!mobile ? 'padding: 145px 350px 50px' : ''">
-          <v-row>
-            <v-col class="px-5">
-              <v-card class="pa-5 rounded-0 rounded-md-lg" :class="mobile ? 'fullscreen' : ''" :disabled="isLoading" elevation="5">
-                <h2>Attendance System Login</h2>
-                <p>
-                  Please log in to access your attendance records and manage
-                  your attendance effortlessly.
-                </p>
-                <v-form class="mt-5">
-                  <v-text-field
-                    v-model="$v.email.$model"
-                    :error-messages="showError($v.email)"
-                    label="Email address"
-                    color="primary"
-                    @keyup.enter="submit"
-                    prepend-inner-icon="mdi-email"
-                  ></v-text-field>
-                  <v-text-field
-                    :type="showPassword ? 'text' : 'password'"
-                    :error-messages="showError($v.password)"
-                    v-model="$v.password.$model"
-                    label="Password"
-                    color="primary"
-                    @keyup.enter="submit"
-                    prepend-inner-icon="mdi-lock"
-                    :append-inner-icon="
-                      showPassword ? 'mdi-eye' : 'mdi-eye-off'
-                    "
-                    @click:append-inner="showPassword = !showPassword"
-                  ></v-text-field>
-                  <v-spacer v-if="mobile"></v-spacer>
-                  <v-btn
-                    class="mt-5"
-                    @click="submit"
-                    block
-                    color="primary"
-                    size="large"
-                    flat
-                    :loading="isLoading"
-                    >Login</v-btn
-                  >
-                </v-form>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-main>
+    <v-layout class="h-100 w-100 d-flex pa-2 align-center justify-center bg-blue-darken-1">
+        <v-card class="pa-5 py-10 pa-md-10" :class="mobile ? ' rounded-lg' : 'rounded-lg h-75 w-33'" :disabled="isLoading" elevation="5">
+            <v-avatar class="mb-2 rounded-0 mx-auto" :size="46">
+            <v-img src="/src/assets/schedule.png"></v-img>
+          </v-avatar>
+          <h1 class="text-md-h4 font-weight-medium">Hello! Welcome back</h1>
+          <p class="mb-5 text-md-subtitle-2 font-weight-regular">
+            Please log in to access your attendance records and manage
+            your attendance effortlessly.
+          </p>
+          <v-form class="mt-5">
+            <v-text-field
+              v-model="$v.email.$model"
+              :error-messages="showError($v.email)"
+              label="Email address"
+              variant="outlined"
+              color="primary"
+              @keyup.enter="submit"
+              prepend-inner-icon="mdi-email"
+            ></v-text-field>
+            <v-text-field
+              :type="showPassword ? 'text' : 'password'"
+              :error-messages="showError($v.password)"
+              v-model="$v.password.$model"
+              label="Password"
+              variant="outlined"
+              color="primary"
+              @keyup.enter="submit"
+              prepend-inner-icon="mdi-lock"
+              :append-inner-icon="
+                showPassword ? 'mdi-eye' : 'mdi-eye-off'
+              "
+              @click:append-inner="showPassword = !showPassword"
+            ></v-text-field>
+            <v-spacer v-if="mobile"></v-spacer>
+            <v-btn
+              class="mt-5"
+              @click="submit"
+              block
+              variant="elevated"
+              color="primary"
+              size="large"
+              flat
+              :loading="isLoading"
+              >Login</v-btn
+            >
+          </v-form>
+        </v-card>
     </v-layout>
   </v-app>
 </template>

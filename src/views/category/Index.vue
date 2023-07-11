@@ -2,8 +2,8 @@
   <v-container class="pa-5 pa-md-10">
     <h2 class="text-md-h4 font-weight-bold">Categories</h2>
     <p class="text-md-subtitle-1 text-subtitle-2 mb-2 mb-md-0">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-    <v-card :width="mobile ? 366 : 'auto'" :style="mobile ? 'overflow-x: scroll;' : ''">
-      <v-card flat :width="mobile ? 550 : 'auto'">
+    <v-card class="bg-transparent" :width="mobile ? 366 : 'auto'" flat :style="mobile ? 'overflow-x: scroll;' : ''">
+      <v-card flat class="bg-transparent" :width="mobile ? 550 : 'auto'">
         <v-table hover class="mt-5">
           <thead>
             <tr>

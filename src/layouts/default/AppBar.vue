@@ -17,8 +17,8 @@
     </div>
     <v-spacer></v-spacer>
     <v-btn @click="$user.logout()" icon="mdi-logout" variant="text" v-if="mobile"></v-btn>
-    <v-btn @click="$user.logout()" prepend-icon="mdi-logout" color="error" variant="elevated" v-if="!mobile">Sign out</v-btn>
-    <!-- 
+    <v-btn @click="$user.logout()" prepend-icon="mdi-logout" color="white" variant="elevated" v-if="!mobile">Sign out</v-btn>
+    <!--
     <div class="d-flex align-center">
       <v-avatar size="45">
         <v-img src="https://www.w3schools.com/w3css/img_avatar3.png"></v-img>

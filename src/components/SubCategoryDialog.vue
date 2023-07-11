@@ -1,6 +1,6 @@
 <template>
   <v-dialog :fullscreen="mobile" :model-value="showDialog" @click:outside="emits('update:showDialog', false)"  width="450">
-    <v-card class="pa-2 rounded-0 rounded-md-lg" :disabled="isLoading">
+    <v-card class="pa-2" :disabled="isLoading">
       <v-card-text>
         <h3 class="mb-4">Create Sub Category</h3>
         <h4 class="text-grey-darken-3 mb-4">Sub Category name</h4>
@@ -11,7 +11,7 @@
         </v-radio-group>
         <div class="pa-0 w-100 d-flex">
           <v-spacer></v-spacer>
-          <v-btn flat class="mx-2" @click="emits('update:showDialog', false)" :loading="isLoading">Cancel</v-btn>
+          <v-btn flat class="mx-2" @click="emits('update:showDialog', false)">Cancel</v-btn>
           <v-btn color="primary" variant="elevated" :disabled="name.length < 1 && !!category_id" @click="submit" :loading="isLoading">Create</v-btn>
         </div>
       </v-card-text>
@@ -44,6 +44,7 @@ const submit = () => {
   isLoading.value = true;
   $sub_category.store(category_id.value, name.value).then(() => {
     isLoading.value = false;
+    name.value = ''
     emits('update:showDialog', false)
   })
 }
