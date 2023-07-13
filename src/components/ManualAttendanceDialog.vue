@@ -5,7 +5,7 @@
     :fullscreen="mobile"
     @click:outside="emits('update:showDialog', false)"
   >
-    <v-card v-if="!interceptEvent" style="overflow: visible !important;" class="rounded-md-lg rounded-0 pa-5" >
+    <v-card v-if="!interceptEvent" style="overflow: visible !important;" class="rounded-md-lg pa-5" >
       <v-card-title class="d-flex align-center">
         <v-icon class="mr-2">mdi-book-open-outline</v-icon>
         Manual Attendance</v-card-title

@@ -6,7 +6,8 @@ export default (start_at: any) => {
 
   const timeStart = new Date();
   timeStart.setHours(9);
-  timeStart.setMinutes(16);
+  timeStart.setMinutes(0);
+  timeStart.setSeconds(0);
   const timeEnd = new Date();
   timeEnd.setHours(18);
 

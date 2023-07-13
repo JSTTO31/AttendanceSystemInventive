@@ -11,7 +11,7 @@
         </v-avatar>
         <div class="ml-4 w-100 align-center d-flex">
           <div>
-            <h4>{{ student.first_name + " " + student.last_name }}</h4>
+            <h4 style="text-transform: capitalize !important;">{{ student.first_name + " " + student.last_name }}</h4>
             <h5 class="font-weight-regular text-capitalize">{{ student.position }}</h5>
           </div>
           <v-spacer></v-spacer>

@@ -22,7 +22,7 @@
             <VProgressCircular width="20" :model-value="(number_of_students - remaining) / remaining * 100" color="primary" size="199">
               <h1 class="d-flex text-h3 flex-column align-center">
                 <span>{{ remaining }}</span>
-                <span class="text-subtitle-1 text-caption mt-n2 font-weight-medium">Remaining</span>
+                <span class="text-subtitle-1 text-caption font-weight-medium">Remaining</span>
               </h1>
             </VProgressCircular>
           </v-card>

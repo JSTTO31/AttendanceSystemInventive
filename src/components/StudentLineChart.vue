@@ -25,23 +25,25 @@ const data = () => {
   let container: any = [];
   let weeks = [attendances[0]];
   //@ts-ignore
-  attendances.slice(1).forEach((item) => {
-    let currentDay = new Date(item.created_at);
-    let currentWeek = new Date(weeks[0].created_at);
-    let startWeek = new Date(weeks[0].created_at);
-    let lastWeek = new Date(weeks[0].created_at);
-    let first = startWeek.getDate() - currentWeek.getDay();
-    startWeek.setDate(first);
-    lastWeek.setDate(first + 6);
-    currentDay.setHours(0, 0, 0, 0);
+  if(attendances.length > 1){
+    attendances.slice(1).forEach((item) => {
+      let currentDay = new Date(item.created_at);
+      let currentWeek = new Date(weeks[0].created_at);
+      let startWeek = new Date(weeks[0].created_at);
+      let lastWeek = new Date(weeks[0].created_at);
+      let first = startWeek.getDate() - currentWeek.getDay();
+      startWeek.setDate(first);
+      lastWeek.setDate(first + 6);
+      currentDay.setHours(0, 0, 0, 0);
 
-    if (startWeek <= currentDay && lastWeek >= currentDay) {
-      weeks.push(item);
-    } else {
-      container.push(weeks);
-      weeks = [item];
-    }
-  });
+      if (startWeek <= currentDay && lastWeek >= currentDay) {
+        weeks.push(item);
+      } else {
+        container.push(weeks);
+        weeks = [item];
+      }
+    });
+  }
 
   if (weeks.length > 0) {
     container.push(weeks);

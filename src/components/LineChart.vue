@@ -13,7 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line as LineChart } from "vue-chartjs";
+import { Line as LineChart,  } from "vue-chartjs";
 
 ChartJS.register(
   CategoryScale,
@@ -35,9 +35,8 @@ export default{
   props: {
     //@ts-ignore
     data: {
-      type: {} as Data,
       default: () => ({
-        labels: ["Day 1", "Day 2", "Day3", "Day4", "Day5", "Day6", "Day7"],
+        labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
         datasets: [
           {
             backgroundColor: "#2196F3",

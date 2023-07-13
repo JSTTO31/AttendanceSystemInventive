@@ -88,6 +88,7 @@ export const useStudentStore = defineStore('student', {
 
       return api.get('students/' + student_id).then((response) => {
         this.student = response.data
+        this.student.attendances = []
         $attendance.getAllStudentAttendance(student_id);
       })
     },

@@ -2,6 +2,7 @@ import { api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
 import { useAppStore } from "./app";
 import { Student, useStudentStore } from "./student";
+import { log } from "console";
 
 export interface Attendance{
   id: number;
@@ -176,7 +177,16 @@ export const useAttendanceStore = defineStore('attendance', {
           student.value.attendances = []
         }
 
-        student.value.attendances.unshift(response.data)
+        let existsAttendance = student.value.attendances.find(item => item.id == response.data.id)
+
+        if(existsAttendance){
+          existsAttendance = response.data
+        }else{
+          student.value.attendances.unshift(response.data)
+        }
+
+
+
         student.value.work_time_total += response.data.work_time || 0
         student.value.late_time_total += response.data.late_time || 0
 

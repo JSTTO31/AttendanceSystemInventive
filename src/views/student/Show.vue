@@ -9,7 +9,7 @@
           <ImageCard v-if="mobile" height="125" :url="student.image" class="rounded-lg bg-grey-lighten-3 w-75" v-model:image="image" :key="student.id"></ImageCard>
           <div class="mt-3 px-5 px-md-0 align-end w-100 d-flex">
             <div>
-              <h1 class="text-md-h3 font-weight-medium">{{ student.first_name + " " + student.last_name }}</h1>
+              <h1 class="text-md-h3 font-weight-medium " style="text-transform: capitalize !important;">{{ student.first_name + " " + student.last_name }}</h1>
               <h5 class="font-weight-regular text-md-subtitle-1 text-capitalize">{{student.position}}</h5>
             </div>
           </div>
@@ -113,7 +113,7 @@
                       student.attendance.time_out
                     "
                   >
-                    -{{ parseInt(student.attendance.late_time).toFixed(2) || 0 }}h
+                    -{{ parseFloat(student.attendance.late_time).toFixed(2) || 0 }}h
                   </span>
                 </h3>
               </div>
@@ -158,11 +158,11 @@
       v-model:show-policy-confirmation="showPolicyConfirmation"
       :is-loading="isLoading"
     ></ShowPolicyDialog>
-    <ManualAttendanceDialog
+    <!-- <ManualAttendanceDialog
       :start_at="now"
       key="now"
       v-model:show-dialog="showManualAttendanceDialog"
-    ></ManualAttendanceDialog>
+    ></ManualAttendanceDialog> -->
     <v-dialog v-model="showApplyImageDialog" width="300" persistent  scrim="transparent">
       <v-card class="pa-5 rounded-lg">
         <v-card-text class="text-center">
@@ -201,7 +201,7 @@ const { timeIn, timeOut, workTime } = useStudent(student);
 const {applyImage, cancelImage, image, showApplyImageDialog} = useChangeProfile()
 const remainingPercent = computed(
   // @ts-ignore
-  () => ((workTimeTotal.value() / student.value.remaining) * 100 )
+  () => ((student.value.work_time_total / student.value.remaining) * 100 )
 );
 const {
   enter,

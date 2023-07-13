@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-3 pa-md-10">
     <h2 class="text-md-h4 font-weight-bold">Students</h2>
-    <p class="text-md-subtitle-1 text-subtitle-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+    <p class="text-md-subtitle-1 text-subtitle-2">Here is the list of OJT students, and it some details.</p>
     <div class="mt-4">
       <div class="w-100 mb-5 mb-md-0 d-flex flex-column flex-md-row" :class="!mobile ? 'align-center' : ''">
         <div class="w-50 d-flex align-center" :class="mobile ? 'w-75' : 'w-50'">

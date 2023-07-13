@@ -10,6 +10,7 @@
         height="40"
         style="user-select: none"
         width="40"
+        v-if="Array.isArray(student.attendances)"
         >{{ day }}</v-card
       >
     </template>
@@ -72,6 +73,7 @@ export default {
 <script setup lang="ts">
 import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 import { computed } from "vue";
 
 const { student, } = storeToRefs(useStudentStore());
@@ -92,7 +94,7 @@ const attributes: any = computed(() => {
       return { variant: "elevated", color: "warning" };
     }else if(attendance.value.is_event){
       return { variant: "elevated", color: "green" };
-    } 
+    }
     else if (!attendance.value.time_in || !attendance.value.time_out && !attendance.value.is_event) {
       return { variant: "outlined", color: "primary" };
     }  else {
@@ -126,6 +128,7 @@ const status = computed(() =>
     ? "present"
     : attendance.value?.is_event ? 'event' : "pending"
 );
+
 </script>
 
 <style scoped></style>

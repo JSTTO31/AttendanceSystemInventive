@@ -1,7 +1,7 @@
 import { api } from '@/utils';
 import {defineStore} from 'pinia'
 import { Course } from './course';
-
+import {Page} from '../utils'
 export interface SubCategory{
   id: number;
   name: string;
@@ -15,20 +15,23 @@ export interface SubCategory{
 export interface SubCategoryState{
   sub_categories: SubCategory[];
   sub_category: SubCategory
+  paginationOptions: Page
 }
 
 
 export const useSubCategoryStore = defineStore('sub_category', {
   state: () : SubCategoryState => ({
     sub_categories: [],
-    sub_category: {} as SubCategory
+    sub_category: {} as SubCategory,
+    paginationOptions: {} as Page
   }),
   actions: {
-    async getAll(){
+    async getAll(currentPage = 1){
       try {
-        const response = await api.get('sub_categories')
-        this.sub_categories = response.data;
-
+        const response = await api.get('sub_categories?page=' + currentPage)
+        const {sub_categories, paginationOptions} = response.data;
+        this.sub_categories = sub_categories;
+        this.paginationOptions = paginationOptions
         return response
       } catch (error) {
         console.log();

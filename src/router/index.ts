@@ -59,17 +59,17 @@ const routes = [
           {
             path: '',
             name: 'ShowStudent.index',
-            component: () => import(/* webpackChunkName: "student_index" */ '@/views/student/show/Index.vue'),
+            component: () => import('@/views/student/show/Index.vue'),
           },
           {
             path: 'information',
             name: 'ShowStudent.information',
-            component: () => import(/* webpackChunkName: "student_information */ '@/views/student/show/Information.vue'),
+            component: () => import('@/views/student/show/Information.vue'),
           },
           {
             path: 'courses',
             name: 'ShowStudent.courses',
-            component: () => import(/* webpackChunkName: "student_course" */  '@/views/student/show/Course.vue'),
+            component: () => import('@/views/student/show/Course.vue'),
           },
         ]
       },
