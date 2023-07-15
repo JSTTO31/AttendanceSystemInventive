@@ -16,6 +16,7 @@
             <div>
               <label for="from">Time in:</label>
               <VueDatePicker
+                :timezone="'Asia/Manila'"
                 :dark="current.dark"
                 @closed="followDate('time_in')"
                 :clearable="false"
@@ -29,6 +30,7 @@
             <div>
               <label for="to">Time out:</label>
               <VueDatePicker
+                :timezone="'Asia/Manila'"
                 :dark="current.dark"
                 @closed="followDate('time_out')"
                 :clearable="false"

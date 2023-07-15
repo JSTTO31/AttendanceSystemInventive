@@ -48,6 +48,8 @@ import CalendarBoxDayVue from "./CalendarBoxDay.vue";
 import { useStudentStore } from "@/stores/student";
 import ManualAttendanceDialog from "./ManualAttendanceDialog.vue";
 import { watch, computed, ref } from "vue";
+import { useAttendanceStore } from "@/stores/attendance";
+const {attendances} = storeToRefs(useAttendanceStore())
 const showManualDialog = ref(false)
 const props = defineProps(['selectedMonth'])
 const emits = defineEmits(['update:selectedMonth'])

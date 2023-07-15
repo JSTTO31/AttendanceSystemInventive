@@ -27,7 +27,7 @@
       <v-col>
         <div v-if="student.attendances && student.attendances.length > 0">
           <h3 class="mb-2">Attendance History</h3>
-          <v-card :width="mobile ? 366 : 'auto'" :style="mobile ? 'overflow-x: scroll;' : ''">
+          <v-card :width="mobile ? 366 : 'auto'" flat :style="mobile ? 'overflow-x: scroll;' : ''">
             <v-card flat :width="mobile ? 550 : 'auto'">
               <v-table hover>
                 <thead>

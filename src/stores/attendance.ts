@@ -2,7 +2,6 @@ import { api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
 import { useAppStore } from "./app";
 import { Student, useStudentStore } from "./student";
-import { log } from "console";
 
 export interface Attendance{
   id: number;
@@ -71,7 +70,6 @@ export const useAttendanceStore = defineStore('attendance', {
         const {students} = storeToRefs(useAppStore())
         students.value = students.value.map(item => item.id == student_id ? {...item, remaining: remaining, attendance: attendance} : item)
 
-
         if(student.value.id == student_id){
           student.value.attendance = attendance
         }
@@ -124,12 +122,10 @@ export const useAttendanceStore = defineStore('attendance', {
           student.value.attendance = response.data
         }
 
-        console.log(response.data);
-
-
         student.value.attendances = student.value.attendances.map(item => item.id == attendance_id ? response.data : item)
 
         student.value.work_time_total += response.data.work_time
+        student.value.late_time_total += response.data.late_time
 
         return response
       } catch (error) {
@@ -143,7 +139,6 @@ export const useAttendanceStore = defineStore('attendance', {
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
         students.value = students.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-
 
         if(student.value.id == student_id){
           student.value.attendance = response.data
@@ -162,7 +157,7 @@ export const useAttendanceStore = defineStore('attendance', {
     },
     async manual(student_id: number, attendance: any){
       try {
-        const response = await api.post(`student/${student_id}/attendances/manual`, attendance)
+        const response = await api.post(`student/${student_id}/attendances/manual`, {...attendance})
         this.attendances.unshift(response.data)
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
@@ -180,15 +175,14 @@ export const useAttendanceStore = defineStore('attendance', {
         let existsAttendance = student.value.attendances.find(item => item.id == response.data.id)
 
         if(existsAttendance){
-          existsAttendance = response.data
+          student.value.attendances = student.value.attendances.map(item => item.id == response.data.id ? response.data: item)
         }else{
           student.value.attendances.unshift(response.data)
         }
 
-
-
-        student.value.work_time_total += response.data.work_time || 0
-        student.value.late_time_total += response.data.late_time || 0
+        student.value.work_time_total = student.value.attendances.reduce((sum, item) => sum += !item.work_time ? 0 : parseInt(item.work_time), 0)
+        student.value.late_time_total = student.value.attendances.reduce((sum, item) =>
+        sum += !item.late_time ? 0 : parseInt(item.late_time), 0)
 
         return response
       } catch (error) {

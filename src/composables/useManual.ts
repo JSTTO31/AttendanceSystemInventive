@@ -1,15 +1,40 @@
+import { useAttendanceStore } from "@/stores/attendance";
+import { useStudentStore } from "@/stores/student";
+import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 
 
 export default (start_at: any) => {
-
-  const timeStart = new Date();
-  timeStart.setHours(9);
-  timeStart.setMinutes(0);
-  timeStart.setSeconds(0);
   const timeEnd = new Date();
-  timeEnd.setHours(18);
+  const timeStart = new Date();
+  const month = new Date(start_at).getMonth()
+  const date = new Date(start_at).getDate()
+  const {student} = storeToRefs(useStudentStore())
+  const exists = student.value.attendances.find(item => {
+    return new Date(item.time_in).getMonth() == month && new Date(item.time_in).getDate() == date
+  })
+
+  if(exists){
+    const time_in = new Date(exists.time_in)
+    const time_out = new Date(exists.time_out)
+    timeStart.setHours(time_in.getHours());
+    timeStart.setMinutes(time_in.getMinutes());
+    timeStart.setSeconds(time_in.getSeconds());
+    timeEnd.setHours(time_out.getHours());
+    timeEnd.setMinutes(time_out.getMinutes());
+    timeEnd.setSeconds(time_out.getSeconds());
+  }
+
+  if(!exists){
+    timeStart.setHours(9);
+    timeStart.setMinutes(0);
+    timeStart.setSeconds(0);
+    timeEnd.setHours(18);
+  }
+
+
+
 
   if(start_at){
     const currentDate = new Date(start_at)
@@ -25,7 +50,7 @@ export default (start_at: any) => {
   const attendance = ref({
     time_in: timeStart,
     time_out: timeEnd,
-    option: "present",
+    option: exists && exists.is_absent ? 'absent' : exists && exists.policy ? 'policy' : 'present',
   });
 
   const isLoading = ref(false);

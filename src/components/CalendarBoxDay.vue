@@ -78,10 +78,10 @@ import { computed } from "vue";
 
 const { student, } = storeToRefs(useStudentStore());
 const props = defineProps<{ day: number, month: number }>();
-const attendance = computed(() =>
-  student.value.attendances.find(
+const attendance = computed(() =>{
+  return student.value.attendances.find(
     (item) => new Date(item.created_at).getDate() == props.day && new Date(item.created_at).getMonth() == props.month
-  )
+  )}
 );
 const date = computed(() =>
   attendance.value ? new Date(attendance.value.created_at).toDateString() : "-- -- --"
