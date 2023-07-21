@@ -30,6 +30,7 @@
 import AttendanceStudentCardVue from "@/components/AttendanceStudentCard.vue";
 import { useAppStore } from "@/stores/app";
 import { storeToRefs } from "pinia";
+import { watch } from "vue";
 import { ref } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
@@ -37,11 +38,12 @@ const {mobile} = useDisplay()
 const {current} = useTheme()
 const { students } = storeToRefs(useAppStore());
 const rail = ref(true)
-
 onBeforeRouteUpdate((to, from, next) => {
   rail.value = true
   next()
 })
+
+
 </script>
 
 <style scoped>

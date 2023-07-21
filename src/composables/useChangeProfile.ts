@@ -24,7 +24,9 @@ export default () => {
     image.value = null
   }
   watch(() => image.value, () => {
-    showApplyImageDialog.value = true
+    if(image.value){
+      showApplyImageDialog.value = true
+    }
   })
 
   return {image, applyImage, cancelImage, showApplyImageDialog}

@@ -86,6 +86,8 @@ import SubCategoryDialog from '../../components/SubCategoryDialog.vue'
 import { ref, watch } from 'vue';
 import CategoryDialog from '../../components/CategoryDialog.vue'
 import { useTheme } from 'vuetify/lib/framework.mjs';
+import { useAppStore } from '@/stores/app';
+import { storeToRefs } from 'pinia';
 const showCategoryDialog = ref(false)
 const showSubCategoryDialog = ref(false)
 const theme = useTheme()

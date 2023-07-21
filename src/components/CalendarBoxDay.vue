@@ -4,8 +4,8 @@
       <v-card
         v-bind="{ ...props, ...$attrs }"
         flat
-        :color="attributes.color"
-        :variant="attributes.variant"
+        :color="attributes(attendance).color"
+        :variant="attributes(attendance).variant"
         class="mr-2  d-flex align-center justify-center"
         height="40"
         style="user-select: none"
@@ -16,27 +16,51 @@
     </template>
     <v-card width="380" class="pa-3 rounded-lg" style="user-select: none">
       <div>
-        <div class="d-flex">
+        <div class="d-flex" v-if="attendances.length > 0" v-for="attendance in attendances">
           <v-col
             class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
           >
             Time in
             <span class="font-weight-medium">
-              {{ timeIn }}
+              {{ timeIn(attendance) }}
             </span>
           </v-col>
           <v-col
             class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
             >Time out
             <span class="font-weight-medium">
-              {{ timeOut }}
+              {{ timeOut(attendance) }}
             </span>
           </v-col>
           <v-col
             class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
             >Work time
             <span class="font-weight-medium">
-              {{ workTime }}
+              {{ workTime(attendance) }}
+            </span>
+          </v-col>
+        </div>
+        <div v-else class="d-flex">
+          <v-col
+            class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
+          >
+            Time in
+            <span class="font-weight-medium">
+              {{ timeIn(attendance) }}
+            </span>
+          </v-col>
+          <v-col
+            class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
+            >Time out
+            <span class="font-weight-medium">
+              {{ timeOut(attendance) }}
+            </span>
+          </v-col>
+          <v-col
+            class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
+            >Work time
+            <span class="font-weight-medium">
+              {{ workTime(attendance) }}
             </span>
           </v-col>
         </div>
@@ -45,21 +69,21 @@
       <div class="d-flex text-subtitle-2 align-center justify-sm-space-between">
         <span>
           <v-icon size="23">mdi-clock-outline</v-icon>
-          {{ date }}
+          {{ date(attendance) }}
         </span>
         <v-chip
           :color="
-            status == 'absent'
+            status(attendance) == 'absent'
               ? 'error'
-              : status == 'present'
+              : status(attendance) == 'present'
               ? 'primary'
-              : status == 'late'
+              : status(attendance) == 'late'
               ? 'warning'
-              : status == 'event' ? 'green' : 'grey'
+              : status(attendance) == 'event' ? 'green' : 'grey'
           "
           class="text-capitalize"
           size="small"
-          >{{ status }}</v-chip
+          >{{ status(attendance) }}</v-chip
         >
       </div>
     </v-card>
@@ -71,31 +95,36 @@ export default {
 };
 </script>
 <script setup lang="ts">
+import { Attendance } from "@/stores/attendance";
 import { useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
 import { computed } from "vue";
-
 const { student, } = storeToRefs(useStudentStore());
 const props = defineProps<{ day: number, month: number }>();
+const attendances = computed(() => student.value.attendances.filter(
+    (item) => new Date(item.created_at).getDate() == props.day && new Date(item.created_at).getMonth() == props.month
+))
 const attendance = computed(() =>{
   return student.value.attendances.find(
     (item) => new Date(item.created_at).getDate() == props.day && new Date(item.created_at).getMonth() == props.month
   )}
 );
-const date = computed(() =>
-  attendance.value ? new Date(attendance.value.created_at).toDateString() : "-- -- --"
+
+const date = computed(() => (attendance: Attendance | undefined) =>
+  attendance ? new Date(attendance.created_at).toDateString() : "-- -- --"
 );
-const attributes: any = computed(() => {
-  if (attendance.value) {
-    if (attendance.value.is_absent) {
+
+const attributes: any = computed(() => (attendance: Attendance | undefined) => {
+  if (attendance) {
+    if (attendance.is_absent) {
       return { variant: "elevated", color: "error" };
-    } else if (attendance.value.policy && attendance.value.time_out) {
+    } else if (attendance.policy && attendance.time_out) {
       return { variant: "elevated", color: "warning" };
-    }else if(attendance.value.is_event){
+    }else if(attendance.is_event){
       return { variant: "elevated", color: "green" };
     }
-    else if (!attendance.value.time_in || !attendance.value.time_out && !attendance.value.is_event) {
+    else if (!attendance.time_in || !attendance.time_out && !attendance.is_event) {
       return { variant: "outlined", color: "primary" };
     }  else {
       return { variant: "elevated", color: "primary" };
@@ -104,30 +133,31 @@ const attributes: any = computed(() => {
   return { variant: "outlined", color: "primary" };
 });
 
-const timeIn = computed(() =>
-  attendance.value && attendance.value.time_in
-    ? new Date(attendance.value.time_in).toLocaleTimeString()
+const timeIn = computed(() => (attendance: Attendance | undefined) =>
+  attendance && attendance.time_in
+    ? new Date(attendance.time_in).toLocaleTimeString()
     : "--"
 );
-const timeOut = computed(() =>
-  attendance.value && attendance.value.time_out
-    ? new Date(attendance.value.time_out).toLocaleTimeString()
+const timeOut = computed(() => (attendance: Attendance | undefined) =>
+  attendance && attendance.time_out
+    ? new Date(attendance.time_out).toLocaleTimeString()
     : "--"
 );
-const workTime = computed(() =>
-  attendance.value && attendance.value.time_in && attendance.value.time_out
-    ? parseInt(attendance.value.work_time).toFixed(0) + "h"
+const workTime = computed(() => (attendance: Attendance | undefined) =>
+  attendance && attendance.time_in && attendance.time_out
+    ? parseInt(attendance.work_time).toFixed(0) + "h"
     : "--"
 );
-const status = computed(() =>
-  attendance.value?.is_absent
+const status = computed(() => (attendance: Attendance | undefined) =>
+  attendance?.is_absent
     ? "absent"
-    : attendance.value?.policy
+    : attendance?.policy
     ? "late"
-    : attendance.value?.time_in && attendance.value.time_out
+    : attendance?.time_in && attendance.time_out
     ? "present"
-    : attendance.value?.is_event ? 'event' : "pending"
+    : attendance?.is_event ? 'event' : "pending"
 );
+
 
 </script>
 

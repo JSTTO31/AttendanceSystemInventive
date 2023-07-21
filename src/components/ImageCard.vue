@@ -18,7 +18,7 @@
       flat
       @click="showDialog"
     >
-      <img :src="url" style="height: 100%;" />
+      <img :src="url" style="width: 100%;" />
       <!-- <v-btn
         v-if="!persistent || (beforeUrl.length > 0 && beforeUrl != url)"
         id="remove"
@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useTheme } from "vuetify/lib/framework.mjs";
 const {current} = useTheme()
 const props = defineProps({
@@ -52,7 +52,7 @@ const props = defineProps({
   disabled: {default: false}
 });
 const beforeUrl = props.url;
-const emits = defineEmits(["update:image", "remove", "update"]);
+const emits = defineEmits(["update:image", "update"]);
 const url = ref(props.url);
 const file = ref();
 const showDialog = () => {
@@ -64,27 +64,30 @@ const showDialog = () => {
 const setImage = (e: any) => {
   if (e.target.files.length > 0) {
     const file = e.target.files[0];
-    const reader = new FileReader();
+    emits("update:image", file);
 
-    reader.onload = () => {
-      //@ts-ignore
-      url.value = reader.result;
-      emits("update:image", file);
-    };
-
-    reader.readAsDataURL(file);
     //@ts-ignore
     document.getElementById("file").value = "";
-
     emits("update");
   }
 };
-const removeImage = () => {
-  emits("update:image", "");
-  url.value = beforeUrl;
 
-  emits("remove");
-};
+
+watch(() => props.image, () => {
+  if(props.image){
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      //@ts-ignore
+      url.value = reader.result
+    }
+    //@ts-ignore
+    reader.readAsDataURL(props.image)
+  }else{
+    url.value = props.url
+  }
+})
+
 </script>
 
 <style scoped>

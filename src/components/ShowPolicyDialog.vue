@@ -1,5 +1,5 @@
 <template>
- <v-dialog :model-value="showPolicyConfirmation" @click:outside="emits('update:showPolicyConfirmation', false)" width="450" >
+ <v-dialog :model-value="showPolicyConfirmation" scrim="transparent" @click:outside="emits('update:showPolicyConfirmation', false)" width="450" >
       <v-card :loading="isLoading" :disabled="isLoading">
         <v-card-text>
           <h4 class="mb-3 text-warning d-flex align-center">

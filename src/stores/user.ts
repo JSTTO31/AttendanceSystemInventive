@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
   actions: {
      login(credentials: {email: string, password: string}){
       const api = axios.create({
-        baseURL: process.env.API_LOCAL_URL?.replace('api', ''),
+        baseURL: process.env.API_LOCAL_URL,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const useUserStore = defineStore('user', {
         const {user, token} = JSON.parse(userData)
         this.user = user;
         this.token = token
-        api.defaults.baseURL = process.env.API_LOCAL_URL
+        api.defaults.baseURL = process.env.API_LOCAL_URL + '/api'
         api.defaults.withCredentials = true
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       }
@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
   }
 })
 

@@ -10,7 +10,7 @@
       <v-img :src="student.image"></v-img>
     </v-avatar>
     <v-card-text class="text-center" v-if="!rail || mobile">
-      <h2>{{ `${student.first_name} ${student.last_name}` }}</h2>
+      <h2 class="text-capitalize">{{ `${student.first_name} ${student.last_name}` }}</h2>
       <h4 class="font-weight-regular text-capitalize mt-2">{{ student.position }}</h4>
     </v-card-text>
     <div v-if="!rail || mobile">

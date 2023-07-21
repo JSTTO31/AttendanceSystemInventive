@@ -1,3 +1,4 @@
+import { useAttendanceStore } from "@/stores/attendance";
 import { Student } from "@/stores/student";
 import { Ref, computed } from "vue";
 
@@ -20,9 +21,8 @@ export default (student: Ref<Student>) => {
   );
   const workTime = computed(() =>
     student.value.attendance &&
-    student.value.attendance.time_in &&
-    student.value.attendance.time_out
-      ? student.value.attendance.work_time + "h"
+    student.value.attendance.work_time != null
+      ? parseFloat(student.value.attendance.work_time).toFixed(2) + "h"
       : "--"
   );
   const status = computed(() => {
@@ -31,6 +31,12 @@ export default (student: Ref<Student>) => {
     }
     return student.value.attendance.is_absent ? 'absent' : !!student.value.attendance.late_time ? 'late' : student.value.attendance.is_event ? 'event' : 'present'
 })
+const remainingPercent = computed(
+  // @ts-ignore
+  () => ((student.value.work_time_total / student.value.remaining) * 100 )
+);
 
-  return {timeIn, timeOut, workTime, status}
+
+
+  return {timeIn, timeOut, workTime, status, remainingPercent}
 }

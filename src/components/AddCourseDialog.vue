@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" :fullscreen="mobile" width="650">
+  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" scrim="transparent" :fullscreen="mobile" width="650">
    <v-card class="pa-2 rounded-0 rounded-md-lg" :disabled="isLoading">
       <v-card-text>
         <h3 class="d-flex align-center mb-5">

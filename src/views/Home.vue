@@ -49,7 +49,7 @@ const {mobile} = useDisplay()
 const {current} = useTheme()
 const {students, number_of_students, remaining} = storeToRefs(useAppStore())
 const chartData : any = computed(() => ({
-    labels: students.value.map(item => item.first_name),
+    labels: students.value.map(item => item.first_name.length > 10 ? item.first_name.substring(0, 10) + '...' : item.first_name),
     datasets: [
       {
         data: students.value.map(item => item.work_time_total?.toFixed(0) || 0),

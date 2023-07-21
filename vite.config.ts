@@ -21,7 +21,7 @@ export default defineConfig({
     }),
   ],
   define: { 'process.env': {
-    API_LOCAL_URL: 'http://localhost:8000/api',
+    API_LOCAL_URL: 'http://localhost:8000',
     API_PRODUCTION_URL: 'https://www.inventivemedia.com.ph/ojt/public',
   } },
   resolve: {

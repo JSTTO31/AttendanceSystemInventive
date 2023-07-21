@@ -2,6 +2,7 @@ import { Page, api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
 import { Attendance, month_attendances, useAttendanceStore } from "./attendance";
 import { useAppStore } from "./app";
+import { useRouter } from "vue-router";
 
 export interface Student{
   id: number;
@@ -127,6 +128,35 @@ export const useStudentStore = defineStore('student', {
         console.log(error);
         return error
       }
+    },
+    async remove(student_id: number){
+      try {
+        const response = await api.delete('students/' + student_id)
+        this.student = this.student.id == student_id ? {} as Student : this.student;
+        this.students = this.students.filter(student => student.id != student_id)
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    updateStudentAttendance(student_id: number, attendance: Attendance){
+
+      if(this.student.id == student_id && new Date().toDateString()  == new Date(attendance.created_at).toDateString()){
+
+        this.student.attendance = attendance
+      }
+
+      let existsAttendance = this.student.attendances.find(item => item.id == attendance.id)
+
+      if(existsAttendance){
+        this.student.attendances = this.student.attendances.map(item => item.id == attendance.id ? attendance : item)
+      }else{
+        this.student.attendances.unshift(attendance)
+      }
+
+      this.student.work_time_total = this.student.attendances.reduce((sum, item) => sum += !item.work_time ? 0 : parseFloat(item.work_time), 0)
+      this.student.late_time_total = this.student.attendances.reduce((sum, item) =>
+      sum += !item.late_time ? 0 : parseFloat(item.late_time), 0)
     }
   }
 })

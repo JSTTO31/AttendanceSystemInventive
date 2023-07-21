@@ -74,11 +74,6 @@ export const useAttendanceStore = defineStore('attendance', {
           student.value.attendance = attendance
         }
 
-        if(!student.value.attendances){
-          student.value.attendances = []
-        }
-
-
         student.value.attendances.unshift(attendance)
 
         return response
@@ -99,10 +94,6 @@ export const useAttendanceStore = defineStore('attendance', {
           student.value.attendance = attendance
         }
 
-        if(!student.value.attendances){
-          student.value.attendances = []
-        }
-
         student.value.attendances.unshift(attendance)
 
         return response
@@ -114,19 +105,10 @@ export const useAttendanceStore = defineStore('attendance', {
       try {
         const response = await api.put(`student/${student_id}/attendances/${attendance_id}/leave`)
         this.attendances = this.attendances.map(item => item.id == response.data.id ? response.data : item)
-        const {student} = storeToRefs(useStudentStore())
-        const {students} = storeToRefs(useAppStore())
-         students.value = students.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-
-        if(student.value.id == student_id){
-          student.value.attendance = response.data
-        }
-
-        student.value.attendances = student.value.attendances.map(item => item.id == attendance_id ? response.data : item)
-
-        student.value.work_time_total += response.data.work_time
-        student.value.late_time_total += response.data.late_time
-
+        const $student = useStudentStore()
+        const $app = useAppStore()
+        $app.updateStudentAttendances(student_id, response.data);
+        $student.updateStudentAttendance(student_id, response.data)
         return response
       } catch (error) {
         console.log(error);
@@ -144,10 +126,6 @@ export const useAttendanceStore = defineStore('attendance', {
           student.value.attendance = response.data
         }
 
-        if(!student.value.attendances){
-          student.value.attendances = []
-        }
-
         student.value.attendances.unshift(response.data)
 
         return response
@@ -159,35 +137,73 @@ export const useAttendanceStore = defineStore('attendance', {
       try {
         const response = await api.post(`student/${student_id}/attendances/manual`, {...attendance})
         this.attendances.unshift(response.data)
-        const {student} = storeToRefs(useStudentStore())
-        const {students} = storeToRefs(useAppStore())
-
-        students.value = students.value.map(item => item.id == student_id ? {...item, attendance: response.data} : item)
-
-        if(student.value.id == student_id && new Date().toDateString()  == new Date(response.data.created_at).toDateString()){
-          student.value.attendance = response.data
-        }
-
-        if(!student.value.attendances){
-          student.value.attendances = []
-        }
-
-        let existsAttendance = student.value.attendances.find(item => item.id == response.data.id)
-
-        if(existsAttendance){
-          student.value.attendances = student.value.attendances.map(item => item.id == response.data.id ? response.data: item)
-        }else{
-          student.value.attendances.unshift(response.data)
-        }
-
-        student.value.work_time_total = student.value.attendances.reduce((sum, item) => sum += !item.work_time ? 0 : parseInt(item.work_time), 0)
-        student.value.late_time_total = student.value.attendances.reduce((sum, item) =>
-        sum += !item.late_time ? 0 : parseInt(item.late_time), 0)
+        const $student = useStudentStore()
+        const $app = useAppStore()
+        $app.updateStudentAttendances(student_id, response.data);
+        $student.updateStudentAttendance(student_id, response.data)
 
         return response
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    async manual_remove(student_id: number, attendance: any){
+      console.log(attendance);
+
+      try {
+        const response = await api.post(`student/${student_id}/attendances/manual-remove`, attendance);
+        const {student} = storeToRefs(useStudentStore())
+        const {students} = storeToRefs(useAppStore())
+
+        this.attendances = this.attendances.filter(item => new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString())
+
+        student.value.attendances = student.value.attendances.filter(item =>  new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString())
+
+        if(student.value.attendance && new Date(student.value.attendance.created_at).toDateString() == new Date(attendance.time_in).toDateString()){
+          //@ts-ignore
+          student.value.attendance = null
+        }
+
+        students.value = students.value.map(item => item.id == student_id ? {...item, attendances: item.attendances.filter(item =>  new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString())} : item)
+
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async remove(student_id: number, attendance_id: number){
+      try {
+        const response = await api.delete(`student/${student_id}/attendances/${attendance_id}`)
+        const {student} = storeToRefs(useStudentStore())
+        const $app = useAppStore()
+        this.attendances = this.attendances.filter(item => item.id != attendance_id)
+        student.value.attendances = student.value.attendances.filter(item => item.id != attendance_id)
+
+        $app.removeInStudentAttendances(student_id, attendance_id)
+
+        if(student.value.attendance && student.value.attendance.id == attendance_id){
+          //@ts-ignore
+          student.value.attendance = null
+        }
+
+        return response;
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async relogin(student_id: number, attendance_id: number){
+      try {
+        const response = await api.put(`student/${student_id}/attendances/${attendance_id}/re-enter`)
+        const $student = useStudentStore()
+        const $app = useAppStore()
+        $app.updateStudentAttendances(student_id, response.data);
+        $student.updateStudentAttendance(student_id, response.data)
+        this.attendances = this.attendances.map(item => item.id == attendance_id ? response.data : item)
+
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+    },
   }
 })

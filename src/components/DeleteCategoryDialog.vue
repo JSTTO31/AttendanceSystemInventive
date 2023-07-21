@@ -1,5 +1,5 @@
 <template>
-   <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" width="450">
+   <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" scrim="transparent" width="450">
     <v-card class="pa-2 rounded-lg" :disabled="isLoading">
       <v-card-text>
         <h4 class="mb-4 text-error d-flex align-center">

@@ -13,11 +13,11 @@
               <h5 class="font-weight-regular text-md-subtitle-1 text-capitalize">{{student.position}}</h5>
             </div>
           </div>
-          <v-menu location="bottom left" :close-on-content-click="false">
+          <v-menu location="bottom left">
             <template #activator="{ props }">
               <v-btn v-if="!mobile" :size="mobile ? 'small' : 'default'" class="mx-2" icon="mdi-dots-horizontal" v-bind="props"></v-btn>
             </template>
-            <v-card width="325" class="rounded-lg pa-2 px-4 mr-5">
+            <v-card width="325" class="rounded-lg pa-2 px-5 mr-5" :disabled="isLoading" :loading="isLoading" >
               <v-list>
                 <h4>General options</h4>
                 <v-list-item
@@ -54,14 +54,20 @@
                   "
                   >Leave</v-list-item
                 >
+                <v-list-item  :disabled="!student.attendance || student.attendance && !student.attendance.time_in || !student.attendance.time_out" prepend-icon="mdi-repeat"
+                  @click="showReloginDialog = true">Re-enter</v-list-item
+                >
+                <v-list-item @click="removeAttendance" :disabled="!student.attendance" prepend-icon="mdi-cancel"
+                  >Remove</v-list-item
+                >
                 <h4>Other</h4>
                 <v-list-item
                   prepend-icon="mdi-book-open-outline"
                   @click="showManualAttendanceDialog = true"
                   >Manual Attendance</v-list-item
                 >
-                <v-list-item prepend-icon="mdi-trash-can-outline"
-                  >Permanent Delete</v-list-item
+                <v-list-item color="error" @click="showRemoveStudent = true" prepend-icon="mdi-trash-can-outline"
+                  >Delete Student</v-list-item
                 >
               </v-list>
             </v-card>
@@ -73,7 +79,7 @@
           :model-value="remainingPercent"
           class="bg-blue-grey-lighten-1 text-subtitle-1 my-5 text-capitalize font-weight-medium"
           >
-            <span v-if="remainingPercent <= 100">Time Remaining {{ workTimeTotal() }}/550h</span>
+            <span v-if="remainingPercent <= 100">Time Remaining {{ workTimeTotal() }}/{{student.remaining}}</span>
             <span v-else>
               Completed
             </span>
@@ -158,11 +164,14 @@
       v-model:show-policy-confirmation="showPolicyConfirmation"
       :is-loading="isLoading"
     ></ShowPolicyDialog>
-    <!-- <ManualAttendanceDialog
+    <ManualAttendanceDialog
       :start_at="now"
       key="now"
       v-model:show-dialog="showManualAttendanceDialog"
-    ></ManualAttendanceDialog> -->
+    ></ManualAttendanceDialog>
+    <mobileAttendanceActions @manual="showManualAttendanceDialog = true" @enter="enter" @absent="absent" @leave="leave(student.id, student.attendance.id)" @remove="removeAttendance" @re-enter="showReloginDialog = true"></mobileAttendanceActions>
+    <RemoveStudentDialog v-model:show-remove-student="showRemoveStudent"></RemoveStudentDialog>
+    <ReloginDialog v-model:show-relogin-dialog="showReloginDialog" :attendance_id="student.attendance ? student.attendance.id : -1"></ReloginDialog>
     <v-dialog v-model="showApplyImageDialog" width="300" persistent  scrim="transparent">
       <v-card class="pa-5 rounded-lg">
         <v-card-text class="text-center">
@@ -174,11 +183,12 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <mobileAttendanceActions @manual="showManualAttendanceDialog = true" @enter="enter" @absent="absent" @leave="leave(student.id, student.attendance.id)"></mobileAttendanceActions>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import ReloginDialog from '@/components/ReloginDialog.vue'
+import RemoveStudentDialog from '@/components/RemoveStudentDialog.vue'
 import mobileAttendanceActions from '@/components/MobileAttendanceActions.vue'
 import ImageCard from "@/components/ImageCard.vue";
 import ManualAttendanceDialog from "@/components/ManualAttendanceDialog.vue";
@@ -188,21 +198,19 @@ import useChangeProfile from "@/composables/useChangeProfile";
 import useAttendance from "@/composables/useAttedance";
 import { storeToRefs } from "pinia";
 import { useStudentStore } from "../../stores/student";
-import { computed } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import { ref } from "vue";
 import { useDisplay } from "vuetify/lib/framework.mjs";
+const showRemoveStudent = ref(false)
+const showReloginDialog = ref(false)
 const now = new Date()
 const {mobile} = useDisplay()
 const $student = useStudentStore()
 const showManualAttendanceDialog = ref(false)
 const { student, workTimeTotal } = storeToRefs(useStudentStore());
-const { timeIn, timeOut, workTime } = useStudent(student);
+const { timeIn, timeOut, workTime, remainingPercent } = useStudent(student);
 const {applyImage, cancelImage, image, showApplyImageDialog} = useChangeProfile()
-const remainingPercent = computed(
-  // @ts-ignore
-  () => ((student.value.work_time_total / student.value.remaining) * 100 )
-);
+
 const {
   enter,
   absent,
@@ -210,6 +218,7 @@ const {
   enterWithPolicy,
   isLoading,
   showPolicyConfirmation,
+  removeAttendance,
 } = useAttendance(student.value);
 
 

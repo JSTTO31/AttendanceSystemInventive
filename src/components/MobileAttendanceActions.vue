@@ -1,6 +1,6 @@
 <template>
   <Transition>
-    <v-card v-if="mobile && student" class="rounded-t-xl" height="400" elevation="5" id="main">
+    <v-card v-if="mobile && student" class="rounded-t-xl" height="520" elevation="5" id="main">
       <div class="d-flex justify-space-around pt-8 align-center">
         <h4>
           <v-icon>mdi-login</v-icon>
@@ -55,13 +55,19 @@
           "
           >Leave</v-list-item
         >
+        <v-list-item  :disabled="!student.attendance || student.attendance && !student.attendance.time_in || !student.attendance.time_out" prepend-icon="mdi-repeat"
+          @click="emits('re-enter')">Re-enter</v-list-item
+        >
+        <v-list-item @click="emits('remove')" prepend-icon="mdi-cancel"
+          >Remove</v-list-item
+        >
         <h4>Other</h4>
         <v-list-item
           @click="emits('manual')"
           prepend-icon="mdi-book-open-outline"
           >Manual Attendance</v-list-item
         >
-        <v-list-item prepend-icon="mdi-trash-can-outline"
+        <v-list-item :disabled="mobile" prepend-icon="mdi-trash-can-outline"
           >Permanent Delete</v-list-item
         >
       </v-list>
@@ -70,18 +76,16 @@
 </template>
 
 <script setup lang="ts">
-import ManualAttendanceDialog from './ManualAttendanceDialog.vue';
 import useStudent from '@/composables/useStudent';
 import { useStudentStore } from '@/stores/student';
 import { storeToRefs } from 'pinia';
 import { watch } from 'vue';
 import { ref } from 'vue';
 import { useDisplay } from 'vuetify/lib/framework.mjs';
-const emits = defineEmits(['enter', 'absent', 'leave', 'manual'])
-const showManualAttendanceDialog = ref(false)
+const emits = defineEmits(['enter', 'absent', 'leave', 'manual', 'remove', 're-enter'])
 const show = ref(false)
 const {student} = storeToRefs(useStudentStore())
-const {timeIn, timeOut, workTime, status} = useStudent(student)
+const {timeIn, timeOut, workTime, status,} = useStudent(student)
 const {mobile} = useDisplay()
 
 watch(() => show.value, () => {
@@ -90,7 +94,7 @@ watch(() => show.value, () => {
     if(show.value){
         main.style.transform = 'translateY(0)'
     }else{
-        main.style.transform = 'translateY(82%)'
+        main.style.transform = 'translateY(85%)'
     }
   }
 })
@@ -110,7 +114,7 @@ watch(() => show.value, () => {
   left: 0;
   width: 100%;
   z-index: 2000;
-  transform: translateY(82%);
+  transform: translateY(85%);
   transition: .1567s ease-in-out;
 }
 

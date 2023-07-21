@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :fullscreen="mobile" :model-value="showDialog" @click:outside="emits('update:showDialog', false)"  width="450">
+  <v-dialog :fullscreen="mobile" :model-value="showDialog" scrim="transparent" @click:outside="emits('update:showDialog', false)"  width="450">
     <v-card class="pa-2" :disabled="isLoading">
       <v-card-text>
         <h3 class="mb-4">Create Sub Category</h3>

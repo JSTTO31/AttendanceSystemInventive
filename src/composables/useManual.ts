@@ -12,10 +12,10 @@ export default (start_at: any) => {
   const date = new Date(start_at).getDate()
   const {student} = storeToRefs(useStudentStore())
   const exists = student.value.attendances.find(item => {
-    return new Date(item.time_in).getMonth() == month && new Date(item.time_in).getDate() == date
+    return new Date(item.created_at).getMonth() == month && new Date(item.created_at).getDate() == date
   })
 
-  if(exists){
+  if(exists && !!exists.time_in && !!exists.time_out){
     const time_in = new Date(exists.time_in)
     const time_out = new Date(exists.time_out)
     timeStart.setHours(time_in.getHours());
@@ -33,9 +33,6 @@ export default (start_at: any) => {
     timeEnd.setHours(18);
   }
 
-
-
-
   if(start_at){
     const currentDate = new Date(start_at)
     timeStart.setFullYear(currentDate.getFullYear())
@@ -46,11 +43,12 @@ export default (start_at: any) => {
     timeEnd.setDate(currentDate.getDate())
   }
 
-
   const attendance = ref({
     time_in: timeStart,
     time_out: timeEnd,
     option: exists && exists.is_absent ? 'absent' : exists && exists.policy ? 'policy' : 'present',
+    allow_relogin: false,
+    break: true
   });
 
   const isLoading = ref(false);
@@ -101,5 +99,5 @@ export default (start_at: any) => {
     }
   }
 
-  return {attendance, isLoading, enablePolicy, options, followDate}
+  return {attendance, isLoading, enablePolicy, options, followDate, exists}
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" width="650">
+  <v-dialog :model-value="showDialog" @click:outside="emits('update:showDialog', false)" scrim="transparent" width="650">
    <v-card class="pa-2 rounded-lg" :disabled="isLoading">
       <v-card-text>
         <h3 class="d-flex align-center mb-5">
@@ -81,7 +81,7 @@ const submit = () => {
   }
   isLoading.value = true
   const $course = useCourseStore()
-  
+
   //@ts-ignore
   if(edit.image && edit.image.type && edit.image.type.includes('image'))
   {
@@ -104,7 +104,7 @@ const submit = () => {
     isLoading.value = false;
     emits('update:showDialog', false)
   });
- 
+
 }
 onMounted(() => {
   $v.value.sub_category_id.$model = category.value.sub_categories[0].id || -1

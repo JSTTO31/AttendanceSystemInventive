@@ -54,6 +54,7 @@ api.interceptors.response.use(response => {
   if(error.message == 'Network Error'){
     showNetworkError.value = true
   }
+  return Promise.reject(error)
 })
 </script>
 <style scoped>

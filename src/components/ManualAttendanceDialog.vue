@@ -3,16 +3,20 @@
     :model-value="showDialog"
     width="500"
     :fullscreen="mobile"
+    scrim="transparent"
     @click:outside="emits('update:showDialog', false)"
   >
-    <v-card v-if="!interceptEvent" style="overflow: visible !important;" class="rounded-md-lg pa-5" >
+    <v-card v-if="!interceptEvent" :disabled="isLoading" style="overflow: visible !important;" class="pa-5" >
       <v-card-title class="d-flex align-center">
         <v-icon class="mr-2">mdi-book-open-outline</v-icon>
         Manual Attendance</v-card-title
       >
       <v-card-text class="mt-3">
         <v-row>
-          <v-col>
+          <v-col cols="12" class="py-0">
+            <h4 class="">Attendance Time</h4>
+          </v-col>
+          <v-col cols="12" md="6">
             <div>
               <label for="from">Time in:</label>
               <VueDatePicker
@@ -21,18 +25,20 @@
                 @closed="followDate('time_in')"
                 :clearable="false"
                 v-model="attendance.time_in"
+                :flow="['hours', 'minutes']"
                 id="from"
                 auto-apply
               ></VueDatePicker>
             </div>
           </v-col>
-          <v-col>
+          <v-col cols="12" md="6">
             <div>
               <label for="to">Time out:</label>
               <VueDatePicker
                 :timezone="'Asia/Manila'"
                 :dark="current.dark"
                 @closed="followDate('time_out')"
+                :flow="['hours', 'minutes']"
                 :clearable="false"
                 v-model="attendance.time_out"
                 id="to"
@@ -69,8 +75,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-actions class="px-4">
-        <v-spacer></v-spacer>
+      <v-card-actions class="px-6 mt-2">
         <v-btn
           color="primary"
           variant="elevated"
@@ -79,15 +84,39 @@
           >Save</v-btn
         >
         <v-btn @click="emits('update:showDialog', false)">Cancel</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn @click="remove" :disabled="!exists" color="error" prepend-icon="mdi-trash-can">Delete</v-btn>
       </v-card-actions>
-      <v-btn
-        icon="mdi-close"
-        variant="text"
-        class="ma-1"
-        size="small"
-        @click="emits('update:showDialog', false)"
-        style="position: absolute; top: 15px; right: 15px"
-      ></v-btn>
+      <v-menu :close-on-content-click="false">
+        <template #activator="{props}">
+          <v-btn
+            v-bind="props"
+            icon="mdi-cogs"
+            variant="text"
+            class="ma-1"
+            color="grey-darken-3"
+            style="position: absolute; top: 15px; right: 15px"
+          ></v-btn>
+        </template>
+        <v-card width="350" class="rounded-lg py-5 px-8" flat>
+          <v-list >
+            <h3>Settings</h3>
+            <v-divider class="my-2"></v-divider>
+            <v-list-item class="px-0 pr-5 text-subtitle-1 font-weight-medium">
+              <template #append>
+                <v-switch color="primary" hide-details density="compact" v-model="attendance.allow_relogin"></v-switch>
+              </template>
+              Allow re-enter
+            </v-list-item>
+            <v-list-item class="px-0 pr-5 text-subtitle-1 font-weight-medium">
+              <template #append>
+                <v-switch color="primary" hide-details density="compact" v-model="attendance.break"></v-switch>
+              </template>
+              Break
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-menu>
     </v-card>
     <v-card v-else :disabled="isLoading">
       <v-card-text>
@@ -110,7 +139,6 @@
         class="ma-1"
         size="small"
         @click="emits('update:showDialog', false)"
-        v
         style="position: absolute; top: 15px; right: 15px"
       ></v-btn>
     </v-card>
@@ -137,7 +165,7 @@ const { students } = storeToRefs(useAppStore());
 const $attendance = useAttendanceStore();
 const props = defineProps(["showDialog", "start_at"]);
 const emits = defineEmits(["update:showDialog"]);
-const { attendance, enablePolicy, isLoading, options, followDate } = useManual(
+const { attendance, enablePolicy, isLoading, options, followDate, exists } = useManual(
   props.start_at
 );
 const interceptEvent = computed(() => {
@@ -158,6 +186,14 @@ const submit = () => {
     emits("update:showDialog", false);
   });
 };
+const remove = () => {
+  isLoading.value = true;
+
+  $attendance.manual_remove(student.value.id, attendance.value).then(() => {
+    isLoading.value = false;
+    emits("update:showDialog", false);
+  });
+}
 const removeAttendee = () => {
   if(!interceptEvent.value){
     return
@@ -173,6 +209,7 @@ const removeAttendee = () => {
 
   });
 }
+
 </script>
 
 <style scoped></style>

@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import { Student } from './student'
 import { api } from '@/utils';
+import { Attendance } from './attendance';
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -22,6 +23,26 @@ export const useAppStore = defineStore('app', {
         console.log(error);
 
       }
+    },
+    async updateStudentAttendances(student_id: number, attendance: Attendance){
+        //@ts-ignore
+        this.students = this.students.map(item => item.id == student_id ? {
+          ...item,
+          attendance: new Date(attendance.created_at).toDateString() == new Date().toDateString() ? attendance : null,
+        } : item)
+        const student = this.students.find(item => item.id == student_id)
+        if(student){
+          let existsAttendance = student.attendances.find(item => item.id == attendance.id)
+          if(existsAttendance){
+            student.attendances = student.attendances.map(item => item.id == attendance.id ? attendance : item)
+          }else{
+            student.attendances.unshift(attendance)
+          }
+        }
+    },
+    async removeInStudentAttendances(student_id: number, attendance_id: number){
+      //@ts-ignore
+      this.students = this.students.map(item => item.id == student_id ? {...item, attendances: item.attendances.filter(item => item.id != attendance_id), attendance: item.attendance.id == attendance_id ? null : item.attendance} : item)
     }
   }
 })
