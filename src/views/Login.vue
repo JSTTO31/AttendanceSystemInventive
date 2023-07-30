@@ -12,10 +12,12 @@
           </p>
           <v-form class="mt-5">
             <v-text-field
+              class="mb-1"
               v-model="$v.email.$model"
               :error-messages="showError($v.email)"
               label="Email address"
               variant="outlined"
+              single-line
               color="primary"
               @keyup.enter="submit"
               prepend-inner-icon="mdi-email"
@@ -26,6 +28,7 @@
               v-model="$v.password.$model"
               label="Password"
               variant="outlined"
+              single-line
               color="primary"
               @keyup.enter="submit"
               prepend-inner-icon="mdi-lock"
@@ -77,29 +80,15 @@ const rules = {
 const $externalResults = ref({})
 const $v = useVuelidate(rules, credentials, { $externalResults });
 
-async function validate () {
-  if (!await $v.value.$validate()) return false
-  isLoading.value = true
-
-  const response = await api.post('/api/validation/check-credentials', {...credentials})
-  const errors = {
-    email: response.data
-  }
-  $externalResults.value = errors
-  isLoading.value = false
-  if(response.data.length > 0){
-    return true
-  }else{
-    return false
-  }
-}
-
 const submit = async () => {
-  await validate()
-  if($v.value.$invalid){
-    return
+  if(!await $v.value.$validate()){
+    return;
   }
-  $user.login(credentials)
+
+  $user.login(credentials).catch(error => {
+    $externalResults.value = error.response.data.errors
+  })
+
 };
 </script>
 

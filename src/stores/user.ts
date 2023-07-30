@@ -1,5 +1,4 @@
 import { api } from "@/utils";
-import axios from "axios";
 import { defineStore } from "pinia";
 
 export interface User{
@@ -22,19 +21,13 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
      login(credentials: {email: string, password: string}){
-      const api = axios.create({
-        baseURL: process.env.API_LOCAL_URL,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-
       return api.get("/sanctum/csrf-cookie").then(() => {
         return api.post("/api/login", { ...credentials }).then((response) => {
           localStorage.setItem('userData', JSON.stringify(response.data))
           window.location.reload()
+        }).catch((error) => {
+          return Promise.reject(error)
+
         });
       });
     },
@@ -52,8 +45,9 @@ export const useUserStore = defineStore('user', {
     async logout(){
       try {
         const response = await api.post('/logout')
-        window.location.reload()
         localStorage.removeItem('userData')
+        window.location.reload()
+
         return response
       } catch (error) {
         console.log(error)

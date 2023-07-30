@@ -30,23 +30,7 @@
         </v-list>
       </v-card>
     </v-menu>
-    <v-dialog width="450" v-model="showChangePassword">
-      <v-card class="py-5 rounded-lg">
-        <v-card-title class="px-6">Change Password</v-card-title>
-        <v-card-text>
-          <v-form>
-            <v-text-field :error-messages="showError($v.old_password)" color="primary" v-model="$v.old_password.$model" label="Old Password" variant="outlined"></v-text-field>
-            <v-text-field :error-messages="showError($v.new_password)" color="primary" v-model="$v.new_password.$model" label="New Password" variant="outlined"></v-text-field>
-            <v-text-field :error-messages="showError($v.password_confirmation)" color="primary" v-model="$v.password_confirmation.$model" label="Password Confirmation" variant="outlined"></v-text-field>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn variant="elevated" color="primary" @click="submit" flat>Save</v-btn>
-              <v-btn @click="showChangePassword = false">Cancel</v-btn>
-            </v-card-actions>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <ChangePasswordDialog v-model:show-dialog="showChangePassword"></ChangePasswordDialog>
     <!-- <v-btn @click="$user.logout()" icon="mdi-logout" variant="text" v-if="mobile"></v-btn>
     <v-btn @click="$user.logout()" prepend-icon="mdi-logout" color="white" variant="elevated" v-if="!mobile">Sign out</v-btn> -->
   </v-app-bar>
@@ -54,14 +38,12 @@
 </template>
 
 <script lang="ts" setup>
+import ChangePasswordDialog from "@/components/ChangePasswordDialog.vue";
 import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { useDisplay } from "vuetify/lib/framework.mjs";
-import useChangePasswordForm from "@/composables/useChangePasswordForm";
-import { showError } from "@/utils";
-const {password, showChangePassword, $v, submit} = useChangePasswordForm()
+const showChangePassword = ref(false)
 const $user = useUserStore()
 const { mobile} = useDisplay()
 const search = ref('')

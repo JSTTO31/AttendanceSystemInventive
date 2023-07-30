@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia"
 
 export default () => {
   const router = useRouter()
-
+  const isLoading = ref(false)
   const showChangePassword = ref(false)
   const $externalResults  = ref({})
   const password = reactive({
@@ -29,19 +29,32 @@ export default () => {
     if(!await $v.value.$validate()){
       return
     }
+
+    isLoading.value = true
     try {
       const {user, token} = storeToRefs(useUserStore())
       const response = await api.put('/change-password', {...password})
       user.value = response.data
       localStorage.setItem('userData', JSON.stringify({user: user.value, token: token.value}))
+      showChangePassword.value = false;
+      clear();
+      isLoading.value = false
       return response
     } catch (error) {
       //@ts-ignore
       $externalResults.value = error.response.data.errors
-
+      isLoading.value = false
       return error
     }
   }
 
-  return {showChangePassword, password, $v, submit}
+  const clear = () => {
+    password.new_password = ''
+    password.old_password = ''
+    password.password_confirmation = ''
+
+    $v.value.$reset()
+  }
+
+  return {showChangePassword, password, $v, submit, clear, isLoading}
 }

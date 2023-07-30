@@ -2,15 +2,15 @@
   <v-container class="h-100 pb-15 pb-md-5" style="overflow-x: hidden;" v-if="student">
     <v-row>
       <v-col cols="3" class="d-flex align-end" v-if="!mobile">
-          <ImageCard height="250" :url="student.image" class="rounded-xl bg-grey-lighten-3 w-100" v-model:image="image" :key="student.id"></ImageCard>
+          <ImageCard height="100%" :url="student.image" class="rounded-xl bg-grey-lighten-5 w-100" v-model:image="image" :key="student.id"></ImageCard>
       </v-col>
       <v-col class="px-5 pt-5">
-        <v-card class="d-flex stretch mb-4 bg-transparent" flat>
-          <ImageCard v-if="mobile" height="125" :url="student.image" class="rounded-lg bg-grey-lighten-3 w-75" v-model:image="image" :key="student.id"></ImageCard>
-          <div class="mt-3 px-5 px-md-0 align-end w-100 d-flex">
-            <div>
-              <h1 class="text-md-h3 font-weight-medium " style="text-transform: capitalize !important;">{{ student.first_name + " " + student.last_name }}</h1>
-              <h5 class="font-weight-regular text-md-subtitle-1 text-capitalize">{{student.position}}</h5>
+        <v-card class="d-flex flex-column flex-lg-row stretch mb-4 bg-transparent" flat>
+          <ImageCard v-if="mobile" height="225" :url="student.image" class="rounded-lg mx-auto bg-grey-lighten-5 w-75" v-model:image="image" :key="student.id"></ImageCard>
+          <div class="mt-3 px-5 px-md-0 align-end w-100  d-flex">
+            <div class="w-100">
+              <h1 class="text-center text-md-left text-md-h3 font-weight-medium " style="text-transform: capitalize !important;">{{ student.first_name + " " + student.last_name }}</h1>
+              <h5 class="text-center text-md-left font-weight-regular text-md-subtitle-1 text-capitalize">{{student.position}}</h5>
             </div>
           </div>
           <v-menu location="bottom left">

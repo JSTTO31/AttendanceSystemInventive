@@ -8,7 +8,7 @@
         :variant="attributes(attendance).variant"
         class="mr-2  d-flex align-center justify-center"
         height="40"
-        style="user-select: none"
+        style="user-select: none;"
         width="40"
         v-if="Array.isArray(student.attendances)"
         >{{ day }}</v-card
@@ -16,29 +16,31 @@
     </template>
     <v-card width="380" class="pa-3 rounded-lg" style="user-select: none">
       <div>
-        <div class="d-flex" v-if="attendances.length > 0" v-for="attendance in attendances">
-          <v-col
-            class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
-          >
-            Time in
-            <span class="font-weight-medium">
-              {{ timeIn(attendance) }}
-            </span>
-          </v-col>
-          <v-col
-            class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
-            >Time out
-            <span class="font-weight-medium">
-              {{ timeOut(attendance) }}
-            </span>
-          </v-col>
-          <v-col
-            class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
-            >Work time
-            <span class="font-weight-medium">
-              {{ workTime(attendance) }}
-            </span>
-          </v-col>
+        <div v-if="attendances.length > 0">
+          <div class="d-flex" :key="attendance.id"  v-for="attendance in attendances">
+            <v-col
+              class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
+            >
+              Time in
+              <span class="font-weight-medium">
+                {{ timeIn(attendance) }}
+              </span>
+            </v-col>
+            <v-col
+              class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
+              >Time out
+              <span class="font-weight-medium">
+                {{ timeOut(attendance) }}
+              </span>
+            </v-col>
+            <v-col
+              class="d-flex align-center justify-end font-weight-regular flex-column flex-column-reverse"
+              >Work time
+              <span class="font-weight-medium">
+                {{ workTime(attendance) }}
+              </span>
+            </v-col>
+          </div>
         </div>
         <div v-else class="d-flex">
           <v-col

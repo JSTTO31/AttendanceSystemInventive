@@ -1,35 +1,24 @@
-.ajde_evcal_calendar.boxy .eventon_events_list .eventon_list_event .evcal_desc {
-    flex: 1 0 0%;
-    width: 100%;
+/* MOBILE */
+.eventon_events_list .eventon_list_event .evcal_list_a {
+    display: flex;
+    flex-wrap: inherit;
 }
 
-
-.ajde_evcal_calendar.boxy.boxstyle2 #evcal_list .eventon_list_event .evcal_desc span.evcal_event_title, .ajde_evcal_calendar.boxy.boxstyle2 #evcal_list .eventon_list_event .evcal_desc span.evcal_event_subtitle {
-    word-wrap: normal;
-    text-overflow: inherit;
+.ajde_evcal_calendar.boxy .eventon_list_event .evcal_list_a {
+    flex-direction: column;
 }
 
-.eventon_events_list .eventon_list_event .evoet_cx span.evcal_desc2, .evo_pop_body .evoet_cx span.evcal_desc2 {
-    font-size: 20px;
+@media only screen and (min-width: 600px) {
+    /* TABLET */
+    .ajde_evcal_calendar.boxy .eventon_list_event .evcal_list_a {
+        flex-direction: row;
+    }
 }
 
-.eventon_events_list .eventon_list_event .evoet_cx, .evo_pop_body .evoet_cx {
-    margin-right: 0px;
+@media only screen and (min-width: 768px) {
+    /* DESKTOP */
+    .ajde_evcal_calendar.boxy .eventon_list_event .evcal_list_a {
+        flex-direction: column;
+    }
 }
 
-.eventon_list_event .evoet_cx span.evcal_event_title, .evo_metarow_ICS .evcal_evdata_cell p a, .evo_metarow_learnMICS .evcal_col50 .evcal_evdata_cell p a, .eventon_list_event .evo_metarow_locImg p.evoLOCtxt .evo_loc_text_title, .evo_clik_row .evo_h3, h2.evo_h2, h3.evo_h3, h4.evo_h4, body .ajde_evcal_calendar h4.evo_h4, .evo_content_in h4.evo_h4, .eventon_main_section #evcal_cur, .ajde_evcal_calendar .calendar_header p.evo_month_title, .eventon_events_list .eventon_list_event .cancel_event .evo_event_headers, .evo_pop_body .evo_event_headers.canceled, .eventon_events_list .eventon_list_event .evcal_list_a .evo_above_title span, .evo_pop_body .evcal_list_a .evo_above_title span, .ajde_evcal_calendar .evcal_month_line p, .ajde_evcal_calendar .evo_footer_nav p.evo_month_title, .evo_eventon_live_now_section h3 {
-    font-weight: 400;
-}
-
-.ajde_evcal_calendar.boxy.boxstyle2 #evcal_list .eventon_list_event .evcal_cblock {
-    height: 45px;
-}
-
-
-.ajde_evcal_calendar.boxy.boxstyle2 .evo_boxtop{
-    margin-bottom: 0px;
-}
-
-.ajde_evcal_calendar.boxy.boxstyle1 .evo_boxtop, .ajde_evcal_calendar.boxy.boxstyle2 .evo_boxtop {
-    border-radius: 20px 20px 0px 0px;
-}

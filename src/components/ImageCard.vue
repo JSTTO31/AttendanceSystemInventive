@@ -51,7 +51,6 @@ const props = defineProps({
   persistent: { default: true },
   disabled: {default: false}
 });
-const beforeUrl = props.url;
 const emits = defineEmits(["update:image", "update"]);
 const url = ref(props.url);
 const file = ref();

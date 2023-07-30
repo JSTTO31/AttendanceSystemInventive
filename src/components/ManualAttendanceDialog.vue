@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     :model-value="showDialog"
-    width="500"
+    :width="mobile ? 'auto' : 500"
     :fullscreen="mobile"
     scrim="transparent"
     @click:outside="emits('update:showDialog', false)"
