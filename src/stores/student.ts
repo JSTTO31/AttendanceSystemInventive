@@ -1,8 +1,7 @@
 import { Page, api } from "@/utils";
 import { defineStore, storeToRefs } from "pinia";
-import { Attendance, month_attendances, useAttendanceStore } from "./attendance";
+import { Attendance, useAttendanceStore } from "./attendance";
 import { useAppStore } from "./app";
-import { useRouter } from "vue-router";
 
 export interface Student{
   id: number;
@@ -53,7 +52,16 @@ export const useStudentStore = defineStore('student', {
       return ''
     },
     workTimeTotal: state => () => {
-      return (state.student.work_time_total - state.student.late_time_total)?.toFixed(2) || 0
+      const attendances = state.student.attendances.filter(attendance => !!attendance.work_time)
+
+
+      const hours = attendances.reduce((sum, item) => sum += parseInt(item.work_time), 0)
+      const minutes = attendances.reduce((sum, item) => {
+        return sum += parseFloat(parseFloat(item.work_time).toFixed(2).toString().split('.')[1]) || 0
+      },0)
+      const convert_minutes_to_hours = (minutes / 60).toFixed(0)
+
+      return hours + parseInt(convert_minutes_to_hours) + parseFloat('.' + (minutes % 60).toString())
     }
    },
   actions: {
@@ -132,8 +140,10 @@ export const useStudentStore = defineStore('student', {
     async remove(student_id: number){
       try {
         const response = await api.delete('students/' + student_id)
+        const {students: appStoreStudents} = storeToRefs(useAppStore())
         this.student = this.student.id == student_id ? {} as Student : this.student;
         this.students = this.students.filter(student => student.id != student_id)
+        appStoreStudents.value = this.students.filter(student => student.id != student_id);
         return response
       } catch (error) {
         console.log(error)
@@ -146,7 +156,7 @@ export const useStudentStore = defineStore('student', {
         this.student.attendance = attendance
       }
 
-      let existsAttendance = this.student.attendances.find(item => item.id == attendance.id)
+      const existsAttendance = this.student.attendances.find(item => item.id == attendance.id)
 
       if(existsAttendance){
         this.student.attendances = this.student.attendances.map(item => item.id == attendance.id ? attendance : item)

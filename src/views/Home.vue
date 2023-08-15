@@ -1,6 +1,6 @@
 <template>
-  <v-container class="pa-md-10 pa-5">
-    <h2 class="text-md-h4 font-weight-bold">Hello! Welcome to your dashboard</h2>
+  <v-container class=" pa-5 px-md-15">
+    <h2 class="text-md-h4 font-weight-regular">ATTENDANCE OVERVIEW</h2>
     <p class="text-subtitle-2 text-md-subtitle-1">Effortlessly manage attendance with our intuitive dashboard.</p>
     <v-container fluid class="px-0">
       <v-row align-content="stretch">
@@ -31,10 +31,16 @@
         </v-col>
       </v-row>
       <v-row>
-      <v-col>
-        <h4 class="mb-2 text-md-h6">Remaining students</h4>
-        <StudentListItem v-for="student in students" :key="student.id" :student="student"></StudentListItem>
-      </v-col>
+        <v-col>
+          <v-card class="pa-5 rounded-lg">
+            <div class="d-flex align-center">
+              <h4 class="mb-2 text-md-h6">Remaining students</h4>
+              <v-spacer></v-spacer>
+              <v-btn size="small" flat color="transparent" append-icon="mdi-chevron-right">More students</v-btn>
+            </div>
+            <StudentListItem v-for="student in students" :key="student.id" :student="student"></StudentListItem>
+          </v-card>
+        </v-col>
       </v-row>
     </v-container>
   </v-container>

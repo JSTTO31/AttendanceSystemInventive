@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     location="right"
-    width="350"
+    width="380"
     class="pa-0"
     :rail="!mobile"
     expand-on-hover
@@ -47,6 +47,7 @@ onBeforeRouteUpdate((to, from, next) => {
 </script>
 
 <style scoped>
+
 #nav-right::-webkit-scrollbar {
   background-color: transparent;
   width: 10px;

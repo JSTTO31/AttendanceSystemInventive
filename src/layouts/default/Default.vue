@@ -33,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import LoadingOverlayVue from "@/components/LoadingOverlay.vue";
 import DefaultBar from "./AppBar.vue";
 import DefaultView from "./View.vue";
 import NavigationBarLeft from "./NavigationBarLeft.vue";
@@ -44,7 +43,6 @@ import { ref } from "vue";
 import { api } from "@/utils";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 const {mobile} = useDisplay()
-const {isLoading} = storeToRefs(useAppStore())
 const showNetworkError = ref(false)
 const reload = () => window.location.reload()
 //@ts-ignore
@@ -63,7 +61,7 @@ api.interceptors.response.use(response => {
   bottom: 15px;
   right: 15px;
   z-index: 2000;
-  width: 450;
+  width: 450px;
 }
 .banner-mobile{
   position: absolute;

@@ -56,10 +56,9 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useUserStore } from "../stores/user";
-import { api, showError } from "../utils";
+import {  showError } from "../utils";
 import { required, email } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { reactive } from "vue";

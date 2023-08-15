@@ -1,6 +1,6 @@
 <template>
-  <v-container class="pa-3 pa-md-10">
-    <h2 class="text-md-h4 font-weight-bold">Students</h2>
+  <v-container class="pa-3 px-md-10">
+    <h2 class="text-md-h4 font-weight-regular">Students</h2>
     <p class="text-md-subtitle-1 text-subtitle-2">Here is the list of OJT students, and some details.</p>
     <div class="mt-4">
       <div class="w-100 mb-5 mb-md-0 d-flex flex-column flex-md-row" :class="!mobile ? 'align-center' : ''">

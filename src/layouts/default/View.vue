@@ -1,10 +1,12 @@
 <template>
-  <v-main>
-    <router-view v-slot="{Component}">
-      <transition name="slide" mode="out-in">
-        <component :is="Component"></component>
-      </transition>
+  <v-main class="">
+    <div class="pa-0 pa-md-5">
+      <router-view v-slot="{Component}">
+        <transition name="slide" mode="out-in">
+          <component :is="Component"></component>
+        </transition>
     </router-view>
+    </div>
   </v-main>
 </template>
 
@@ -15,9 +17,9 @@
 <style scoped>
 .slide-enter-active, .slide-leave-active{
   transition: transform .15s ease-in-out, opacity .05s linear;
-} 
+}
 .slide-enter-from, .slide-leave-to{
   transform: translateX(-10%);
   opacity: 0;
-} 
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-card class="pa-3 border h-100" flat>
-      <v-card class="d-flex pl-1 mt-1 align-start flex-wrap h-100 mb-5" flat>
+      <v-card class="pl-1 mt-1 h-100 mb-5" flat>
         <div class="d-flex align-center w-100">
           <h3>
             <v-icon class="mr-3">mdi-calendar</v-icon>{{ monthsName[selectedMonth] }}
@@ -24,14 +24,18 @@
             variant="text"
           ></v-btn>
         </div>
-        <CalendarBoxDayVue
-          :status="'absent'"
-          v-for="day in daysInMonth"
-          :key="day"
-          :day="day"
-          :month="selectedMonth"
-          @click="setStartAt(day)"
-        ></CalendarBoxDayVue>
+        <div class="d-flex flex-wrap justify-space-between">
+          <CalendarBoxDayVue
+            class="my-2"
+            :status="'absent'"
+            v-for="day in daysInMonth"
+            :key="day"
+            :day="day"
+            :month="selectedMonth"
+            @click="setStartAt(day)"
+          ></CalendarBoxDayVue>
+          <v-spacer></v-spacer>
+        </div>
         <!-- <v-card variant="outlined" class="mr-2 my-2 d-flex align-center justify-center" height="51" color="grey" width="51" v-for="z in 34-daysInMonth" :key="z" disabled></v-card> -->
         <ManualAttendanceDialog
           :start_at="start_at"

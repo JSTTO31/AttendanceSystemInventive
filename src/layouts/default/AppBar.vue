@@ -1,24 +1,26 @@
 <template>
   <v-app-bar class="px-2 px-md-5" flat color="primary">
-    <h3 class="text-md-h5 font-weight-medium" style="user-select: cursor;" @click="$router.push({name: 'Home'})">
+    <h3 class="text-md-h5 font-weight-medium" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;" @click="$router.push({name: 'Home'})">
       <v-icon class="mr-1">mdi-calendar</v-icon>
       eAttendance
     </h3>
     <v-spacer></v-spacer>
-    <div v-if="$route.name != 'IndexStudent' && !mobile" class="w-50 ml-5">
+    <div v-if="$route.name != 'IndexStudent' && !mobile" class="w-50 pr-15 ml-5">
       <v-text-field
-      flat
+        flat
         prepend-inner-icon="mdi-magnify"
         v-model="search"
         label="Find students..."
         variant="solo"
         single-line
         density="compact"
+        rounded
         hide-details
         @keyup.enter="findStudent"
       ></v-text-field>
     </div>
     <v-spacer></v-spacer>
+    <v-btn size="small" variant="elevated" icon="mdi-bell-outline" class="mx-2"></v-btn>
     <v-menu>
       <template #activator="{props}">
         <v-btn v-bind="props" size="small" variant="elevated" icon="mdi-chevron-down"></v-btn>

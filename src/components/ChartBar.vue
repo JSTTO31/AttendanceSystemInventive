@@ -21,7 +21,7 @@ export default {
         labels: [ 'January', 'February', 'March', 'February', 'March' ],
         datasets: [
           {
-            data: [40, 20, 12, 20, 12], backgroundColor: ['#2196F3', '#2196F3', '#2196F3'], borderRadius: 5, barThickness: 185,
+            data: [40, 20, 12, 20, 12], backgroundColor: ['#2196F3', '#2196F3', '#2196F3'], borderRadius: 5, barThickness: 155,
           }
         ]
       }),

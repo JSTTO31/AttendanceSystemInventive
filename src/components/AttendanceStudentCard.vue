@@ -6,7 +6,7 @@
     @click="$router.push({ name: 'ShowStudent', params: { student_id: student.id } })"
     flat
   >
-    <v-avatar :size="rail && !mobile ? 40 : 145" class="bg-grey-lighten-4">
+    <v-avatar :size="rail && !mobile ? 40 : 165" class="bg-grey-lighten-4">
       <v-img :src="student.image"></v-img>
     </v-avatar>
     <v-card-text class="text-center" v-if="!rail || mobile">

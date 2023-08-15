@@ -59,6 +59,7 @@
           @click="emits('re-enter')">Re-enter</v-list-item
         >
         <v-list-item @click="emits('remove')" prepend-icon="mdi-cancel"
+        :disabled="!student.attendance || student.attendance && (!student.attendance.time_in || !student.attendance.time_out)"
           >Remove</v-list-item
         >
         <h4>Other</h4>

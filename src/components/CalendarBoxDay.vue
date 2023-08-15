@@ -7,9 +7,9 @@
         :color="attributes(attendance).color"
         :variant="attributes(attendance).variant"
         class="mr-2  d-flex align-center justify-center"
-        height="40"
+        height="45"
         style="user-select: none;"
-        width="40"
+        width="45"
         v-if="Array.isArray(student.attendances)"
         >{{ day }}</v-card
       >

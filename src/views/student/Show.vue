@@ -2,7 +2,7 @@
   <v-container class="h-100 pb-15 pb-md-5" style="overflow-x: hidden;" v-if="student">
     <v-row>
       <v-col cols="3" class="d-flex align-end" v-if="!mobile">
-          <ImageCard height="100%" :url="student.image" class="rounded-xl bg-grey-lighten-5 w-100" v-model:image="image" :key="student.id"></ImageCard>
+          <ImageCard height="100%" :url="student.image" class="rounded-lg bg-grey-lighten-5 w-100" v-model:image="image" :key="student.id"></ImageCard>
       </v-col>
       <v-col class="px-5 pt-5">
         <v-card class="d-flex flex-column flex-lg-row stretch mb-4 bg-transparent" flat>
@@ -198,7 +198,7 @@ import useChangeProfile from "@/composables/useChangeProfile";
 import useAttendance from "@/composables/useAttedance";
 import { storeToRefs } from "pinia";
 import { useStudentStore } from "../../stores/student";
-import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import { onBeforeRouteUpdate } from "vue-router";
 import { ref } from "vue";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 const showRemoveStudent = ref(false)
