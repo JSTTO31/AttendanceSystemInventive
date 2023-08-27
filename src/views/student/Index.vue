@@ -1,6 +1,6 @@
 <template>
-  <v-container class="pa-3 px-md-10">
-    <h2 class="text-md-h4 font-weight-regular">Students</h2>
+  <v-container class="pa-5">
+    <h2 class="text-md-h4 font-weight-medium text-capitalize" style="text-transform: capitalize !important;">Students</h2>
     <p class="text-md-subtitle-1 text-subtitle-2">Here is the list of OJT students, and some details.</p>
     <div class="mt-4">
       <div class="w-100 mb-5 mb-md-0 d-flex flex-column flex-md-row" :class="!mobile ? 'align-center' : ''">
@@ -75,7 +75,6 @@
       ></StudentListItemVue>
       <div
         class="d-flex align-center justify-between mt-5"
-        v-if="Math.ceil(pageOptions.total / pageOptions.per_page) > 1"
       >
         <div>Page {{ page }} / {{ Math.ceil(pageOptions.total / pageOptions.per_page) }}</div>
         <v-spacer></v-spacer>

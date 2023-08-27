@@ -9,7 +9,7 @@
             {{ category.name }}
           </h2>
           <v-list class="px-0">
-            <v-list-item class="px-0" v-for="sub in category.sub_categories">{{ sub.name }}</v-list-item>
+            <v-list-item class="px-0" :key="sub.id" v-for="sub in category.sub_categories">{{ sub.name }}</v-list-item>
           </v-list>
         </v-card>
       </v-hover>

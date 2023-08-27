@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-5 pa-md-10">
+  <v-container class="pa-5">
     <h2 class="text-md-h4 font-weight-bold">Categories</h2>
     <p class="text-md-subtitle-1 text-subtitle-2 mb-2 mb-md-0">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
     <v-card class="bg-transparent" :width="mobile ? 366 : 'auto'" flat :style="mobile ? 'overflow-x: scroll;' : ''">
@@ -22,7 +22,7 @@
             </tr>
           </thead>
           <tbody>
-            <CategoryTableRow v-for="category in categories" :category="category"></CategoryTableRow>
+            <CategoryTableRow :key="category.id" v-for="category in categories" :category="category"></CategoryTableRow>
           </tbody>
         </v-table>
       </v-card>
@@ -33,15 +33,12 @@
 <script setup lang="ts">
 //@ts-ignore
 import CategoryTableRow from '../../components/CategoryTableRow'
-import {ref, watch} from 'vue'
 import {useCategoryStore} from '../../stores/category'
 import { storeToRefs } from 'pinia';
 import { useDisplay } from 'vuetify/lib/framework.mjs';
 const {mobile} = useDisplay()
 const {categories} = storeToRefs(useCategoryStore())
 const $category = useCategoryStore()
-const selectedCategory = ref(null)
-const showDelete =
 $category.getAll()
 
 </script>

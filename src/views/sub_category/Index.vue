@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-5 pa-md-10">
+  <v-container class="pa-5">
     <h2 class="text-md-h4 font-weight-bold">Sub Categories</h2>
     <p class="text-md-subtitle-1 text-subtitle-2 mb-2 mb-md-0">Here's some list of sub categories</p>
     <v-card flat class="bg-transparent" :width="mobile ? 366 : 'auto'" :style="mobile ? 'overflow-x: scroll;' : ''">

@@ -20,7 +20,6 @@
       ></v-text-field>
     </div>
     <v-spacer></v-spacer>
-    <v-btn size="small" variant="elevated" icon="mdi-bell-outline" class="mx-2"></v-btn>
     <v-menu>
       <template #activator="{props}">
         <v-btn v-bind="props" size="small" variant="elevated" icon="mdi-chevron-down"></v-btn>

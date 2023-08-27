@@ -1,6 +1,6 @@
 <template>
-  <v-container class=" pa-5 px-md-15">
-    <h2 class="text-md-h4 font-weight-regular">ATTENDANCE OVERVIEW</h2>
+  <v-container class=" pa-5">
+    <h2 class="text-md-h4 font-weight-medium text-capitalize" style="text-transform: capitalize !important;">Attendance Overview</h2>
     <p class="text-subtitle-2 text-md-subtitle-1">Effortlessly manage attendance with our intuitive dashboard.</p>
     <v-container fluid class="px-0">
       <v-row align-content="stretch">
@@ -32,11 +32,11 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-card class="pa-5 rounded-lg">
+          <v-card flat class="pa-5 rounded-lg border">
             <div class="d-flex align-center">
               <h4 class="mb-2 text-md-h6">Remaining students</h4>
               <v-spacer></v-spacer>
-              <v-btn size="small" flat color="transparent" append-icon="mdi-chevron-right">More students</v-btn>
+              <v-btn size="small" @click="$router.push({name: 'IndexStudent'})" flat color="transparent" append-icon="mdi-chevron-right">More students</v-btn>
             </div>
             <StudentListItem v-for="student in students" :key="student.id" :student="student"></StudentListItem>
           </v-card>
@@ -53,6 +53,8 @@ import ChartBar from '@/components/ChartBar.vue';
 import { useAppStore } from '@/stores/app';
 import { storeToRefs } from 'pinia';
 import { useDisplay, useTheme } from 'vuetify/lib/framework.mjs';
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const {mobile} = useDisplay()
 const {current} = useTheme()
 const {students, number_of_students, remaining} = storeToRefs(useAppStore())
