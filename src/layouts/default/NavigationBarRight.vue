@@ -4,23 +4,22 @@
     width="380"
     class="pa-0"
     :rail="!mobile"
-    expand-on-hover
-    @mouseover="rail = false"
-    @mouseleave="rail = true"
+    :color="current.dark ? 'grey-darken-4' : 'grey-lighten-5'"
   >
     <v-layout class="h-100 pa-0 w-100">
-      <v-app-bar flat class="border-b pa-0">
+      <v-app-bar flat class="border-b pa-0" :color="current.dark ? 'grey-darken-4' : 'grey-lighten-5'" floating>
         <!-- <v-btn v-if="rail" icon="mdi-chevron-left" class="rounded-0" @click="rail = false"></v-btn>
         <v-btn v-else icon="mdi-chevron-right" class="rounded-0" @click="rail = true"></v-btn> -->
-        <v-icon :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="mx-2" size="35" >mdi-school</v-icon>
-        <h3 :class="current.dark ? 'text-white' : 'text-grey-darken-3'" class="ml-1" v-if="!rail || mobile">
+        <v-icon class="mx-2" size="35" >mdi-school</v-icon>
+        <h3 class="ml-1" v-if="!rail || mobile">
         OJT Students</h3>
       </v-app-bar>
-      <v-main :class="rail ? 'disable-scroll' : ''" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
+      <v-main :class="rail ? 'disable-scroll' : ''" class="d-flex flex-column" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
 >
         <div :class="rail && !mobile ? '' : 'pa-5'">
           <AttendanceStudentCardVue v-for="student in students" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
         </div>
+        <v-spacer></v-spacer>
       </v-main>
     </v-layout>
   </v-navigation-drawer>

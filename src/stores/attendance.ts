@@ -17,6 +17,7 @@ export interface Attendance{
   policy: boolean
   late_time: string
   is_event: boolean
+  event: Event
 }
 
 export interface month_attendances{
@@ -38,16 +39,40 @@ export interface month_attendances{
 interface AttendanceState{
   attendances: Attendance[],
   attendance: Attendance,
-  selectedMonth: number
+  selectedMonth: number,
+  weekly_attendances: Attendance[],
+  today_attendances: Attendance[]
 }
 
 export const useAttendanceStore = defineStore('attendance', {
   state: () : AttendanceState => ({
     attendances: [],
     attendance: {} as Attendance,
-    selectedMonth: new Date().getMonth()
+    selectedMonth: new Date().getMonth(),
+    weekly_attendances: [],
+    today_attendances: [],
   }),
   actions: {
+    async getAll(){
+      try {
+        const response = await api.get('/attendances');
+        const {weekly_attendances, today_attendances} = response.data
+        this.weekly_attendances = weekly_attendances
+        this.today_attendances = today_attendances
+      } catch (error) {
+        console.log(error);
+
+      }
+    },
+    async getWeeklyAttendance(){
+      try {
+        const response = await api.get('/attendances/weekly');
+        this.weekly_attendances = response.data
+        return response
+      } catch (error) {
+        console.log()
+      }
+    },
     async getAllStudentAttendance(student_id: number){
       try {
         const response = await api.get(`/student/${student_id}/attendances`)
@@ -154,6 +179,8 @@ export const useAttendanceStore = defineStore('attendance', {
         const response = await api.post(`student/${student_id}/attendances/manual-remove`, attendance);
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
+
+        console.log(response.data);
 
         this.attendances = this.attendances.filter(item => new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString())
 

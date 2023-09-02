@@ -1,5 +1,5 @@
 <template>
-  <v-card class="h-100 border pa-md-4 pa-0" flat>
+  <v-card class="h-100 border rounded-lg pa-md-4 pa-0" flat>
     <v-card-title> Weekly work time </v-card-title>
     <v-card-text class="pa-0">
       <LineChart style="height: 350px" :data="data()" class="pa-5"></LineChart>

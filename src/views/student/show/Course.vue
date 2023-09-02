@@ -1,24 +1,13 @@
 <template>
-  <div v-if="courses.length > 0">
-    <TransitionGroup name="slide">
-      <CourseListItem class="mb-5" v-for="course in courses" :key="course.id" :course="course"></CourseListItem>
-    </TransitionGroup>
-  </div>
-  <div class="pt-15 d-flex justify-center" v-else>
+  <div class="pt-15 d-flex justify-center" >
     <h3>No courses taken</h3>
   </div>
 </template>
 
 <script setup lang="ts">
-import CourseListItem from '../../../components/CourseListItem.vue'
-import { useCourseStore } from '@/stores/course';
-import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
-const {courses} = storeToRefs(useCourseStore())
-const $course = useCourseStore()
 const route = useRoute()
 //@ts-ignore
-$course.getAll(route.params.student_id)
 </script>
 
 <style scoped>

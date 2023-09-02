@@ -12,7 +12,7 @@
       <v-col class="d-flex align-center pl-5">
         <div>
           <h5>{{ student.first_name }} {{ student.last_name }}</h5>
-          <h6>{{ student.email }}</h6>
+          <h6 class="font-weight-regular">{{ student.position }}</h6>
         </div>
       </v-col>
     </v-row>

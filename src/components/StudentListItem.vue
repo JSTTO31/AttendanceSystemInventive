@@ -1,11 +1,16 @@
 <template>
   <v-card
-    class=" pa-3 rounded-b-0 mt-0 border-b"
+    class=" pa-3 mt-0 rounded-0 mb-2"
     flat
     :to="{ name: 'ShowStudent', params: { student_id: student.id } }"
   >
     <v-row>
-      <v-col class="d-flex align-center" cols="12" md="4">
+      <v-col class="d-flex align-center" cols="1">
+        <span class="font-weight-medium text-center ml-5"
+          >{{ student.id }}</span
+        >
+      </v-col>
+      <v-col class="d-flex align-center" cols="12" md="3">
         <v-avatar size="65" class="bg-grey-lighten-3">
           <v-img :src="student.image"></v-img>
         </v-avatar>

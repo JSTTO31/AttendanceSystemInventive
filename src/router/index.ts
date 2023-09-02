@@ -1,13 +1,13 @@
 // Composables
-import { useAppStore } from '@/stores/app'
-import { useCategoryStore } from '@/stores/category'
 import { useStudentStore } from '@/stores/student'
 import { storeToRefs } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 //@ts-ignore
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css';
+
 import { useUserStore } from '@/stores/user'
+import { useEventStore } from '@/stores/events';
 const routes = [
   {
     path: '/',
@@ -18,13 +18,19 @@ const routes = [
         path: '',
         name: 'Home',
         component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        meta: {
+          title: 'Dashboard',
+
+        }
       },
       // Create
       {
         path: '/student/create',
         name: 'CreateStudent',
         component: () => import(/* webpackChunkName: "student.create" */ '@/views/student/Create.vue'),
-
+        meta: {
+          title: 'Student Create',
+        }
       },
       // Student Index
       {
@@ -38,6 +44,10 @@ const routes = [
            $student.getAll(query ? query : '').then(() => {
             return next()
            })
+        },
+        meta: {
+          title: 'Student Management',
+
         }
       },
       // Student show
@@ -54,6 +64,10 @@ const routes = [
           $student.get(to.params.student_id).then(() => {
             return next();
           })
+        },
+        meta: {
+          title: 'Student Information',
+
         },
         children: [
           {
@@ -73,78 +87,56 @@ const routes = [
           },
         ]
       },
-      // Course
       {
-        path: '/course',
-        component: () => import('@/views/Course.vue'),
-        name: 'Course',
-        redirect: {name: 'IndexCourse'},
+        path: '/attendance',
+        name: 'attendanceIndex',
+        component: () => import('@/views/attendance/Index.vue'),
+        meta: {
+          title: 'Attendance Overview',
+
+        },
+      },
+      {
+        path: '/schedule',
+        name: 'schedule',
         //@ts-ignore
-        beforeEnter: (to, from, next) => {
-          const $category = useCategoryStore()
-          const {categories} = storeToRefs(useCategoryStore())
-
-          if(categories.value.length > 0){
-            return next()
-          }
-
-          return $category.getAll().then(() => {
-            next()
-          })
+        component: () => import('@/views/Schedule.vue'),
+        meta: {
+          title: 'Schedule',
         },
         children: [
           {
             path: '',
-            component: () => import('@/views/course/Index.vue'),
-            name: 'IndexCourse',
+            name: 'ScheduleIndex',
+            component: () => import('@/views/schedule/Index.vue'),
           },
           {
-            path: 'category/:category_id',
-            component: () => import('@/views/course/Category.vue'),
-            name: 'CategoryCourse',
+            path: '/events/show/:event_id',
+            name: 'ScheduleShow',
+            component: () => import('@/views/schedule/Show.vue'),
             //@ts-ignore
-            beforeEnter: (to, from, next) => {
-              const {category, categories} = storeToRefs(useCategoryStore())
-              const categoryExists = categories.value.find(item => item.id == to.params.category_id)
-              if(!categoryExists){
-                return next({name: 'IndexCourse'})
-              }
+            beforeEnter(to, from ,next){
+              const {event, events} = storeToRefs(useEventStore())
+              const $event = useEventStore()
 
-              category.value = categoryExists
-              next()
-            },
-            children: [
-              {
-                path: 'sub-category/:sub_category_id/course/:course_id/add-attendees',
-                component: () => import('@/views/course/AddAttendees.vue'),
-                //@ts-ignore
-                props: (route) => {
-                  const {category} = storeToRefs(useCategoryStore())
-                  return {course: category.value.sub_categories.find(item => item.id == route.params.sub_category_id)?.courses.find(item => item.id == route.params.course_id)}
-                },
-                name: 'AddAttendeesCourse'
-              }
-            ]
-          }
+              $event.getEvent(to.params.event_id).then((response: any) => {
+                if(response.data){
+                  event.value = response.data
+                  next()
+                }else{
+                  return next({name: 'ScheduleIndex'})
+                }
+              }).catch((error) => next({name: 'ScheduleIndex'}))
+            }
+          },
         ]
-      },
-      // Category
-      {
-        path: '/category',
-        component: () => import('@/views/category/Index.vue'),
-        name: 'IndexCategory',
-      },
-      // Sub Category
-      {
-        path: '/sub_category',
-        component: () => import('@/views/sub_category/Index.vue'),
-        name: 'IndexSubCategory',
-      },
+      }
     ],
     meta: {
       requiresAuth: true
     }
   },
+
   // Login
   {
     path: '/login',
@@ -171,7 +163,6 @@ router.beforeEach((to, from, next) => {
   nprogress.configure({
     speed: 400,
     trickleSpeed: 500,
-    template: '<div class="bar bg-secondary" style="height: 4px" role="bar"><div class="peg bg-secondary"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
     showSpinner: false
   })
   nprogress.start();

@@ -108,8 +108,36 @@ const attendances = computed(() => student.value.attendances.filter(
     (item) => new Date(item.created_at).getDate() == props.day && new Date(item.created_at).getMonth() == props.month
 ))
 const attendance = computed(() =>{
+  const now = new Date()
+  const date = new Date(now.getFullYear(), props.month, props.day)
+  date.setHours(0)
+  date.setMinutes(0)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
   return student.value.attendances.find(
-    (item) => new Date(item.created_at).getDate() == props.day && new Date(item.created_at).getMonth() == props.month
+    //@ts-ignore
+    (item) => {
+      //@ts-ignore
+      const event_date_start = new Date(item.event?.date_time.event_date_start || 0)
+      event_date_start.setHours(0)
+      event_date_start.setMinutes(0)
+      event_date_start.setSeconds(0)
+          event_date_start.setMilliseconds(0)
+      //@ts-ignore
+      const event_date_end = new Date(item.event?.date_time.event_date_end || 0)
+      event_date_end.setHours(0)
+      event_date_end.setMinutes(0)
+      event_date_end.setSeconds(0)
+          event_date_end.setMilliseconds(0)
+      const created_at = new Date(item.created_at)
+      created_at.setHours(0)
+      created_at.setMinutes(0)
+      created_at.setSeconds(0)
+          created_at.setMilliseconds(0)
+
+      //@ts-ignore
+      return (created_at.getTime() == date.getTime() && !item.is_event) || (item.event && event_date_start.getTime() <= date.getTime() && event_date_end.getTime() >= date.getTime())
+    }
   )}
 );
 

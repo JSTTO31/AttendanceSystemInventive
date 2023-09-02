@@ -13,7 +13,7 @@ import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 
-let currentTheme = localStorage.getItem('currentTheme') || 'light'
+const currentTheme = localStorage.getItem('currentTheme') || 'light'
 
 export default createVuetify({
   theme: {
@@ -21,7 +21,7 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-          primary: '#1867C0',
+          primary: '#615dec',
           secondary: '#5CBBF6',
         },
       },

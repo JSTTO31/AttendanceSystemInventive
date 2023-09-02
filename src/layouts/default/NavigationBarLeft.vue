@@ -1,13 +1,19 @@
 <template>
-  <v-navigation-drawer floating width="300">
-    <div class="h-100" id="nav">
-      <v-list class="pa-5" >
-        <h5 class="font-weight-regular text-grey-darken-1 mb-2 text-uppercase">
-          Attendance Management
-        </h5>
+  <v-navigation-drawer width="280">
+    <div style="background-color: #000f1f;" class="h-100 pt-5 d-flex flex-column" id="nav">
+      <h2 class="text-md-h5 pa-5 font-weight-bold d-flex justify-center" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;" @click="$router.push({name: 'Home'})">
+        <v-avatar class="mr-1 rounded-0 mb-3" size="50">
+          <v-img src="/src/assets/eAttendance Logo.png"></v-img>
+        </v-avatar>
+        <div style="line-height: 1.3;" class="text-h5 ml-2 justify-center pb-2 font-weight-bold d-flex flex-column">
+          <span class="text-white font-weight-medium">eAttendance</span>
+        </div>
+      </h2>
+      <v-list class="pa-5">
         <v-list-item
-          class="my-2 rounded-lg"
-          color="primary"
+          class="text-white my-2 rounded-lg"
+          elevation="0"
+          active-class="bg-primary"
           @click="$router.push({ name: 'Home' })"
           :active="$route.name == 'Home'"
           title="Dashboard"
@@ -15,88 +21,68 @@
         >
         </v-list-item>
         <v-list-item
-          class="my-2 rounded-lg"
-          color="primary"
+          active-class="bg-primary"
+          class=" text-white my-2 rounded-lg"
+          elevation="0"
+          title="Attendance"
+          :active="$route.name == 'attendanceIndex'"
+          @click="$router.push({ name: 'attendanceIndex' })"
+          prepend-icon="mdi-finance"
+        >
+        </v-list-item>
+        <v-list-item
+          active-class="bg-primary"
+          class=" text-white my-2 rounded-lg"
+          elevation="0"
+          title="Schedule"
+          prepend-icon="mdi-calendar-outline"
+          :active="$route.name == 'ScheduleIndex'"
+          @click="$router.push({ name: 'ScheduleIndex' })"
+        >
+        </v-list-item>
+        <v-list-item
+          active-class="bg-primary"
+          class=" text-white my-2 rounded-lg"
+          elevation="0"
           :to="{ name: 'IndexStudent' }"
           title="Students"
           prepend-icon="mdi-school"
         >
         </v-list-item>
         <v-list-item
-          class="my-2 rounded-lg"
-          color="primary"
+          active-class="bg-primary"
+          class=" text-white my-2 rounded-lg"
+          elevation="0"
           title="Add student"
           :to="{ name: 'CreateStudent' }"
           prepend-icon="mdi-plus"
         >
         </v-list-item>
       </v-list>
-      <v-divider></v-divider>
+      <v-spacer></v-spacer>
       <v-list class="pa-5">
-        <h5 class="font-weight-regular text-grey-darken-1 mb-2 text-uppercase">
-          Courses
-        </h5>
+          <!-- <v-list-item>
+          <v-switch prepend-icon="mdi-weather-night" hide-details v-model="currentMode" label="Dark mode"></v-switch>
+        </v-list-item> -->
         <v-list-item
-          class="my-2 rounded-lg"
-          color="primary"
-          title="View courses"
-          :to="{name: 'IndexCourse'}"
-          prepend-icon="mdi-book-open"
-        >
+            @click="$user.logout()"
+            class=" text-white rounded-lg"
+            elevation="0"
+            color="primary"
+            title="Logout"
+            prepend-icon="mdi-logout"
+          >
         </v-list-item>
-      </v-list>
-      <v-divider></v-divider>
-
-      <v-list class="pa-5">
-        <h5 class="font-weight-regular text-grey-darken-1 mb-2 text-uppercase">
-          Course Category
-        </h5>
-        <v-list-item
-          class="my-2 rounded-lg"
-          color="primary"
-          title="Categories"
-          :to="{name: 'IndexCategory'}"
-          prepend-icon="mdi-shape-outline"
-        ></v-list-item>
-        <v-list-item @click="showCategoryDialog = true" prepend-icon="mdi-plus">Category</v-list-item>
-      </v-list>
-      <v-divider></v-divider>
-
-      <v-list class="pa-5">
-        <h5 class="font-weight-regular text-grey-darken-1 mb-2 text-uppercase">
-          Sub Category
-        </h5>
-        <v-list-item
-          class="my-2 rounded-lg"
-          color="primary"
-          title="Sub categories"
-          :to="{name: 'IndexSubCategory'}"
-          prepend-icon="mdi-file-tree"
-        >
-        </v-list-item>
-        <v-list-item @click="showSubCategoryDialog = true" prepend-icon="mdi-plus">Sub category</v-list-item>
-      </v-list>
-      <v-divider></v-divider>
-
-      <v-list class="pa-5">
-        <h5 class="font-weight-regular text-grey-darken-1 mb-2 text-uppercase">
-          Others
-        </h5>
-          <v-switch prepend-icon="mdi-weather-night" v-model="currentMode" label="Dark mode"></v-switch>
       </v-list>
     </div>
-    <category-dialog v-model:show-dialog="showCategoryDialog"></category-dialog>
-    <SubCategoryDialog v-model:show-dialog="showSubCategoryDialog"></SubCategoryDialog>
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
-import SubCategoryDialog from '../../components/SubCategoryDialog.vue'
 import { ref, watch } from 'vue';
-import CategoryDialog from '../../components/CategoryDialog.vue'
 import { useTheme } from 'vuetify/lib/framework.mjs';
-const showCategoryDialog = ref(false)
-const showSubCategoryDialog = ref(false)
+import { useUserStore } from '@/stores/user';
+const $user = useUserStore()
 const theme = useTheme()
 const currentMode = ref(theme.global.current.value.dark ? true : false)
 const toggleTheme = () => {
@@ -110,11 +96,5 @@ watch(() => currentMode.value, () => {
 </script>
 
 <style scoped>
-#nav{
-  overflow-y: hidden;
-}
 
-#nav:hover{
-  overflow-y: scroll;
-}
 </style>

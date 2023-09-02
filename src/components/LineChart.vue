@@ -25,15 +25,9 @@ ChartJS.register(
   Legend
 );
 
-interface Data{
-  labels: String[]
-  datasets: []
-}
-
 export default{
   components: { LineChart },
   props: {
-    //@ts-ignore
     data: {
       default: () => ({
         labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],

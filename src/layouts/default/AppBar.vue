@@ -1,28 +1,31 @@
 <template>
-  <v-app-bar class="px-2 px-md-5" flat color="primary">
-    <h3 class="text-md-h5 font-weight-medium" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;" @click="$router.push({name: 'Home'})">
-      <v-icon class="mr-1">mdi-calendar</v-icon>
-      eAttendance
-    </h3>
+  <v-app-bar class="px-8 border-b" :flat="flat">
+    <h1 class="mr-8">
+      {{ $route.meta.title || 'App Title' }}</h1>
     <v-spacer></v-spacer>
-    <div v-if="$route.name != 'IndexStudent' && !mobile" class="w-50 pr-15 ml-5">
+    <div v-if="!mobile" class="w-33  mr-5">
       <v-text-field
         flat
         prepend-inner-icon="mdi-magnify"
         v-model="search"
         label="Find students..."
-        variant="solo"
+        variant="solo-filled"
         single-line
         density="compact"
-        rounded
         hide-details
         @keyup.enter="findStudent"
       ></v-text-field>
     </div>
-    <v-spacer></v-spacer>
+    <!-- <v-badge color="red" content="2"  class=" mr-5">
+      <v-icon>mdi-bell</v-icon>
+    </v-badge>
+    <v-badge color="red" content="2"  class=" mr-5">
+      <v-icon>mdi-message-text</v-icon>
+    </v-badge> -->
+    <v-divider vertical class="mr-2" inset></v-divider>
     <v-menu>
       <template #activator="{props}">
-        <v-btn v-bind="props" size="small" variant="elevated" icon="mdi-chevron-down"></v-btn>
+        <v-btn v-bind="props" flat variant="elevated" class="mr-n1 border" icon="mdi-chevron-down"></v-btn>
       </template>
       <v-card width="260" class="rounded-lg pa-2">
         <v-list>
@@ -32,8 +35,6 @@
       </v-card>
     </v-menu>
     <ChangePasswordDialog v-model:show-dialog="showChangePassword"></ChangePasswordDialog>
-    <!-- <v-btn @click="$user.logout()" icon="mdi-logout" variant="text" v-if="mobile"></v-btn>
-    <v-btn @click="$user.logout()" prepend-icon="mdi-logout" color="white" variant="elevated" v-if="!mobile">Sign out</v-btn> -->
   </v-app-bar>
 
 </template>
@@ -49,6 +50,7 @@ const $user = useUserStore()
 const { mobile} = useDisplay()
 const search = ref('')
 const router = useRouter()
+const flat = ref(true)
 const findStudent = () => {
   if(!search.value){
     return
@@ -64,6 +66,15 @@ onBeforeRouteUpdate((to, from, next) => {
 
   next()
 
+})
+
+
+window.addEventListener('scroll', () => {
+  if(scrollY > 10){
+    flat.value = false
+  }else{
+    flat.value = true
+  }
 })
 
 </script>

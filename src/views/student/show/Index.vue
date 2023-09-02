@@ -1,5 +1,6 @@
 <template>
   <v-container class="px-0" fluid>
+
     <v-row align-content="stretch">
       <v-col :cols="mobile ? 12 : 8">
         <StudentLineChart
@@ -26,10 +27,9 @@
     <v-row>
       <v-col>
         <div v-if="student.attendances && student.attendances.length > 0">
-          <h3 class="mb-2">Attendance History</h3>
-          <v-card :width="mobile ? 366 : 'auto'" flat :style="mobile ? 'overflow-x: scroll;' : ''">
-            <v-card flat :width="mobile ? 550 : 'auto'">
-              <v-table hover>
+          <v-card class="border rounded-lg" flat>
+            <v-card flat>
+              <v-table style="overflow-x: auto;" hover class="w-100">
                 <thead>
                   <tr>
                     <th>Date</th>
@@ -46,19 +46,20 @@
                   ></AttendanceListItem>
                 </tbody>
               </v-table>
+                <div div class="w-100 align-center mt-5  px-5 pb-5 d-flex" v-if="page_total > 1">
+                  Page {{ page }} / {{ page_total }}
+                  <v-spacer></v-spacer>
+                  <v-pagination
+                    :length="page_total"
+                    color="primary"
+                    :total-visible="mobile ? 1 : 5"
+                    v-model="page"
+                  ></v-pagination>
+                </div>
               </v-card>
             </v-card>
         </div>
-        <div class="w-100 align-center mt-5 d-flex" v-if="page_total > 1">
-          Page {{ page }} / {{ page_total }}
-          <v-spacer></v-spacer>
-          <v-pagination
-            :length="page_total"
-            color="primary"
-            :total-visible="mobile ? 1 : 5"
-            v-model="page"
-          ></v-pagination>
-        </div>
+
       </v-col>
     </v-row>
   </v-container>

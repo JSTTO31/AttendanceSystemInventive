@@ -28,14 +28,18 @@ export interface Student{
 interface StudentState{
   students: Student[],
   student: Student,
-  pageOptions: Page
+  pageOptions: Page,
+  total_students: number,
+  total_remaining_students: number
 }
 
 export const useStudentStore = defineStore('student', {
   state: () : StudentState => ({
     students: [],
     student: {} as Student,
-    pageOptions: {} as Page
+    pageOptions: {} as Page,
+    total_students: 0,
+    total_remaining_students: 0
   }),
   getters: {
     getStatusById: state => (student_id: number) => {
@@ -68,7 +72,9 @@ export const useStudentStore = defineStore('student', {
     async getAll(query = '') {
       try {
         const response = await api.get('/students' + query)
-        const {students, pageOptions} = response.data;
+        const {students, pageOptions, total_students, total_remaining_students} = response.data;
+        this.total_remaining_students = total_remaining_students
+        this.total_students = total_students;
         this.students = students;
         this.pageOptions = pageOptions
         return response;

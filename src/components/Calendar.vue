@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-3 border h-100" flat>
+  <v-card class="pa-3 border h-100 rounded-lg" flat>
       <v-card class="pl-1 mt-1 h-100 mb-5" flat>
         <div class="d-flex align-center w-100">
           <h3>

@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <default-bar />
     <NavigationBarLeft></NavigationBarLeft>
     <NavigationBarRight></NavigationBarRight>
+    <default-bar />
     <default-view />
     <!-- <LoadingOverlayVue :show="isLoading"></LoadingOverlayVue> -->
     <v-banner :class="mobile ? 'banner-mobile' : 'banner'" elevation="5" v-if="showNetworkError">

@@ -1,12 +1,12 @@
 <template>
   <v-card
     :key="student.email"
-    class="d-flex flex-column justify-center align-center rounded-xl"
-    :class="rail && !mobile ? 'ma-1 my-5' : 'mb-5 pa-5 py-10'"
+    class="d-flex flex-column justify-center align-center rounded-xl bg-transparent"
+    :class="rail && !mobile ? 'ma-1 my-5' : 'mb-5 pa-5'"
     @click="$router.push({ name: 'ShowStudent', params: { student_id: student.id } })"
     flat
-  >
-    <v-avatar :size="rail && !mobile ? 40 : 165" class="bg-grey-lighten-4">
+    >
+    <v-avatar :size="rail && !mobile ? 40 : 195" class="bg-grey-lighten-4 border">
       <v-img :src="student.image"></v-img>
     </v-avatar>
     <v-card-text class="text-center" v-if="!rail || mobile">
@@ -87,7 +87,7 @@
 
 <script setup lang="ts">
 import ShowPolicyDialogVue from './ShowPolicyDialog.vue';
-import useAttendance from '@/composables/useAttedance'
+import useAttendance from '@/composables/useAttedanceStudent'
 import { Student } from "@/stores/student";
 import { useDisplay } from 'vuetify/lib/framework.mjs';
 const {mobile} = useDisplay()

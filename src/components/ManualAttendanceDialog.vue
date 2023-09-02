@@ -3,10 +3,9 @@
     :model-value="showDialog"
     :width="mobile ? 'auto' : 500"
     :fullscreen="mobile"
-    scrim="transparent"
     @click:outside="emits('update:showDialog', false)"
   >
-    <v-card v-if="!interceptEvent" :disabled="isLoading" style="overflow: visible !important;" class="pa-5" >
+    <v-card v-if="!interceptEvent" :disabled="isLoading" style="overflow: visible !important;" class="pa-5 rounded-lg" >
       <v-card-title class="d-flex align-center">
         <v-icon class="mr-2">mdi-book-open-outline</v-icon>
         Manual Attendance</v-card-title
@@ -15,6 +14,7 @@
         <v-row>
           <v-col cols="12" class="py-0">
             <h4 class="">Attendance Time</h4>
+
           </v-col>
           <v-col cols="12" md="6">
             <div>
@@ -118,21 +118,20 @@
         </v-card>
       </v-menu>
     </v-card>
-    <v-card v-else :disabled="isLoading">
+    <v-card v-else :disabled="isLoading" class="rounded-lg">
       <v-card-text>
         <v-card-title class="d-flex px-0 align-center">
-        <v-icon class="mr-2">mdi-calendar-alert</v-icon>
         Event Intercept</v-card-title
       >
           <p>
             It's seems the selected date has event, you can't modify this attendance unless you remove it. Do you want to remove it?
           </p>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" @click="removeAttendee" :loading="isLoading">Remove</v-btn>
-            <v-btn @click="emits('update:showDialog', false)">no</v-btn>
-          </v-card-actions>
       </v-card-text>
+      <v-card-actions class="bg-grey-lighten-4">
+        <v-spacer></v-spacer>
+        <v-btn size="small" variant="elevated" color="primary" @click="removeAttendee" :loading="isLoading">Remove</v-btn>
+        <v-btn size="small" variant="elevated" @click="emits('update:showDialog', false)">no</v-btn>
+      </v-card-actions>
       <v-btn
         icon="mdi-close"
         variant="text"
@@ -148,20 +147,18 @@
 <script setup lang="ts">
 //@ts-ignore
 import useManual from "@/composables/useManual";
-import { useAppStore } from "@/stores/app";
 import { useAttendanceStore } from "@/stores/attendance";
-import { useCourseStore } from "@/stores/course";
+import { useEventStore } from "@/stores/events";
 import { useStudentStore } from "@/stores/student";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
+const $event = useEventStore()
 const {mobile} = useDisplay()
-const $course = useCourseStore()
 const {current} = useTheme()
-const { student } = storeToRefs(useStudentStore());
-const { students } = storeToRefs(useAppStore());
+const { student, students } = storeToRefs(useStudentStore());
 const $attendance = useAttendanceStore();
 const props = defineProps(["showDialog", "start_at"]);
 const emits = defineEmits(["update:showDialog"]);
@@ -174,11 +171,31 @@ const interceptEvent = computed(() => {
   }
 
   return student.value.attendances.find(item => {
-    const attendanceDate = new Date(item.created_at)
-    const currentDate = new Date(props.start_at)
-    return attendanceDate.toDateString() == currentDate.toDateString() && item.is_event
+     //@ts-ignore
+    const event_date_start = new Date(item.event?.date_time.event_date_start || 0)
+    event_date_start.setHours(0)
+    event_date_start.setMinutes(0)
+    event_date_start.setSeconds(0)
+    event_date_start.setMilliseconds(0)
+    //@ts-ignore
+    const event_date_end = new Date(item.event?.date_time.event_date_end || 0)
+    event_date_end.setHours(0)
+    event_date_end.setMinutes(0)
+    event_date_end.setSeconds(0)
+    event_date_end.setMilliseconds(0)
+    const date = new Date(props.start_at)
+    date.setHours(0)
+    date.setMinutes(0)
+    date.setSeconds(0)
+    date.setMilliseconds(0)
+
+    return (item.is_event && event_date_start.getTime() <= date.getTime() && event_date_end.getTime() >= date.getTime())
   })
 })
+
+  console.log(interceptEvent.value);
+
+
 const submit = () => {
   isLoading.value = true;
   $attendance.manual(student.value.id, attendance.value).then(() => {
@@ -199,14 +216,15 @@ const removeAttendee = () => {
     return
   }
   isLoading.value = true;
-  $course.remove_attendee(interceptEvent.value.course_id, student.value.id).then((response) => {
-    //@ts-ignore
-    students.value = students.value.map(item => item.id == student.value.id ? {...item, attendances: item.attendances.filter(item => item.course_id != interceptEvent.value.course_id || !item.course_id)} : item)
-    //@ts-ignore
-    student.value.attendances = student.value.attendances.filter(item => item.course_id != interceptEvent.value.course_id || !item.course_id)
-
+  //@ts-ignore
+  $event.removeAttendee(interceptEvent.value.event.id, student.value.id).then((response) => {
     emits('update:showDialog', false)
-
+    setTimeout(() => {
+      //@ts-ignore
+      students.value = students.value.map(item => item.id == student.value.id ? {...item, attendances: item.attendances.filter(item => item.event_id != interceptEvent.value.event_id || !item.event_id)} : item)
+      //@ts-ignore
+      student.value.attendances = student.value.attendances.filter(item => item.event_id != interceptEvent.value.event_id || !item.event_id)
+    }, 500);
   });
 }
 

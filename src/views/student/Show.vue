@@ -1,8 +1,8 @@
 <template>
-  <v-container class="h-100 pb-15 pb-md-5" style="overflow-x: hidden;" v-if="student">
+  <v-container class="h-100 pb-15 pb-md-5 bg-white px-8" style="overflow-x: hidden;" v-if="student">
     <v-row>
       <v-col cols="3" class="d-flex align-end" v-if="!mobile">
-          <ImageCard height="100%" :url="student.image" class="rounded-lg bg-grey-lighten-5 w-100" v-model:image="image" :key="student.id"></ImageCard>
+          <ImageCard height="100%" :url="student.image" class="rounded-xl bg-grey-lighten-5 w-100" v-model:image="image" :key="student.id"></ImageCard>
       </v-col>
       <v-col class="px-5 pt-5">
         <v-card class="d-flex flex-column flex-lg-row stretch mb-4 bg-transparent" flat>
@@ -195,7 +195,7 @@ import ManualAttendanceDialog from "@/components/ManualAttendanceDialog.vue";
 import ShowPolicyDialog from "@/components/ShowPolicyDialog.vue";
 import useStudent from "@/composables/useStudent";
 import useChangeProfile from "@/composables/useChangeProfile";
-import useAttendance from "@/composables/useAttedance";
+import useAttendanceStudent from "@/composables/useAttedanceStudent";
 import { storeToRefs } from "pinia";
 import { useStudentStore } from "../../stores/student";
 import { onBeforeRouteUpdate } from "vue-router";
@@ -219,7 +219,7 @@ const {
   isLoading,
   showPolicyConfirmation,
   removeAttendance,
-} = useAttendance(student.value);
+} = useAttendanceStudent(student.value);
 
 
 onBeforeRouteUpdate((to, from, next) => {
