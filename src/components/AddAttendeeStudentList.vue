@@ -2,7 +2,7 @@
    <v-card class="pa-2 mb-1" flat @click="check">
     <v-row>
       <v-col md="1" cols="2">
-        <v-checkbox color="primary" :model-value="selectedStudents" @change="check" :value="student" hide-details></v-checkbox>
+        <v-checkbox color="primary" @click="check" :model-value="selectedStudents" @change="check" :value="student" hide-details></v-checkbox>
       </v-col>
       <v-col md="1" cols="2" class="d-flex align-center">
         <v-avatar class="bg-grey-lighten-2" size="45">

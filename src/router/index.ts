@@ -104,6 +104,11 @@ const routes = [
         meta: {
           title: 'Schedule',
         },
+        //@ts-ignore
+        beforeEnter: (to, from, next) => {
+          const $event = useEventStore()
+          $event.getEvents().then(() => next()).catch(() => next({name: 'Home'}))
+        },
         children: [
           {
             path: '',
@@ -118,6 +123,14 @@ const routes = [
             beforeEnter(to, from ,next){
               const {event, events} = storeToRefs(useEventStore())
               const $event = useEventStore()
+              const exists = events.value.find(item => item.id == to.params.event_id)
+
+              if(exists){
+                event.value = exists;
+                return next()
+              }
+
+
 
               $event.getEvent(to.params.event_id).then((response: any) => {
                 if(response.data){
@@ -149,9 +162,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior(){
-    return {top: 0}
-  }
 })
 
 router.afterEach(() => {

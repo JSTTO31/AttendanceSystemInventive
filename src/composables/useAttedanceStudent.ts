@@ -3,8 +3,10 @@ import { Student, useStudentStore } from "@/stores/student";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import useStudent from "./useStudent";
 
 export default (student: Student) => {
+  const router = useRouter()
   const $attendance = useAttendanceStore();
   const isLoading = ref(false);
   const showPolicyConfirmation = ref(false);
@@ -30,7 +32,17 @@ export default (student: Student) => {
     isLoading.value = true;
     $attendance.leave(student_id, attendance_id).then(() => {
       isLoading.value = false;
+      const {students} = storeToRefs(useStudentStore())
+      const student = students.value.find(item => item.id == student_id)
+      if(student){
+        const studentRef = ref(student)
+        const {work_time_total} = useStudent(studentRef)
+        if(work_time_total.value.hours >= parseInt(student.remaining)){
+          router.push({query: {type: 'completed', name: student.first_name + ' ' + student.last_name}})
+        }
+      }
     });
+
   };
   const absent = () => {
     isLoading.value = true;

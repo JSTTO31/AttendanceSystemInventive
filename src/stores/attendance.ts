@@ -113,7 +113,10 @@ export const useAttendanceStore = defineStore('attendance', {
         this.attendances.unshift(attendance)
         const { student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
+
         students.value = students.value.map(item => item.id == student_id ? {...item, attendance: attendance } : item)
+
+
 
         if(student.value.id == student_id){
           student.value.attendance = attendance
@@ -134,6 +137,8 @@ export const useAttendanceStore = defineStore('attendance', {
         const $app = useAppStore()
         $app.updateStudentAttendances(student_id, response.data);
         $student.updateStudentAttendance(student_id, response.data)
+
+
         return response
       } catch (error) {
         console.log(error);
@@ -173,14 +178,11 @@ export const useAttendanceStore = defineStore('attendance', {
       }
     },
     async manual_remove(student_id: number, attendance: any){
-      console.log(attendance);
 
       try {
         const response = await api.post(`student/${student_id}/attendances/manual-remove`, attendance);
         const {student} = storeToRefs(useStudentStore())
         const {students} = storeToRefs(useAppStore())
-
-        console.log(response.data);
 
         this.attendances = this.attendances.filter(item => new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString())
 
@@ -190,8 +192,13 @@ export const useAttendanceStore = defineStore('attendance', {
           //@ts-ignore
           student.value.attendance = null
         }
-
-        students.value = students.value.map(item => item.id == student_id ? {...item, attendances: item.attendances.filter(item =>  new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString())} : item)
+        //@ts-ignore
+        students.value = students.value.map(item =>
+          item.id == student_id ?
+          {
+            ...item, attendances: item.attendances.filter(item =>  new Date(item.created_at).toDateString() != new Date(attendance.time_in).toDateString()),
+            attendance: item.attendance && new Date(item.attendance.created_at).toDateString() == new Date(attendance.time_in).toDateString() ? null : item.attendance,
+          } : item)
 
         return response
       } catch (error) {

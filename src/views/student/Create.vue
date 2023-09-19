@@ -1,11 +1,11 @@
 <template>
-  <v-container class="px-8 pt-0">
+  <v-container class="px-2 px-md-8 pt-0">
     <div :disabled="isLoading">
       <v-form class="mt-5">
         <v-card class="pa-5 rounded-lg border" flat>
           <h3 class="mb-5">Basic Information</h3>
           <v-row>
-            <v-col>
+            <v-col md="6" cols="12">
               <label class="mb-2">First name</label>
               <v-text-field
                 v-model="$v.first_name.$model"
@@ -19,7 +19,7 @@
                 class="mt-3"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col md="6" cols="12">
               <label class="mb-2">Last name</label>
               <v-text-field
                 v-model="$v.last_name.$model"
@@ -50,7 +50,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="12" md="6">
               <label class="mb-2">Gender</label>
               <v-select
                 v-model="$v.gender.$model"
@@ -64,7 +64,7 @@
                 single-line
               ></v-select>
             </v-col>
-            <v-col>
+            <v-col cols="12" md="6">
               <label class="mb-2">Mobile</label>
               <v-text-field
                 v-model="$v.phone_number.$model"
@@ -114,7 +114,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="12" md="6">
               <label class="mb-2">School Year</label>
               <v-text-field
                 label="School Year"
@@ -128,7 +128,7 @@
                 <template #prepend-inner>SY</template>
               </v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols="12" md="6">
               <label class="mb-2">Course</label>
               <v-text-field
                 v-model="$v.course.$model"

@@ -28,11 +28,12 @@
           <CalendarBoxDayVue
             class="my-2"
             :status="'absent'"
-            v-for="day in daysInMonth"
-            :key="day"
+            v-for="day, index in daysInMonth"
+            :key="day + index"
             :day="day"
             :month="selectedMonth"
-            @click="setStartAt(day)"
+            @dblclick="setStartAt(parseInt(day.toString()))"
+            @click.prevent=""
           ></CalendarBoxDayVue>
           <v-spacer></v-spacer>
         </div>
@@ -47,17 +48,12 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import CalendarBoxDayVue from "./CalendarBoxDay.vue";
-import { useStudentStore } from "@/stores/student";
 import ManualAttendanceDialog from "./ManualAttendanceDialog.vue";
 import { watch, computed, ref } from "vue";
-import { useAttendanceStore } from "@/stores/attendance";
-const {attendances} = storeToRefs(useAttendanceStore())
 const showManualDialog = ref(false)
 const props = defineProps(['selectedMonth'])
 const emits = defineEmits(['update:selectedMonth'])
-const { student } = storeToRefs(useStudentStore());
 const start_at : any = ref(new Date());
 const monthsName = [
   "January",
@@ -78,9 +74,9 @@ const getFullYear = now.getFullYear();
 const daysInMonth = computed(() => new Date(getFullYear, props.selectedMonth + 1, 0).getDate())
 
 const setStartAt = (day: number) => {
-  const newDate = new Date();
-  newDate.setDate(day);
-  newDate.setMonth(props.selectedMonth)
+  const newDate = new Date(now.getFullYear(), props.selectedMonth, day);
+  console.log(newDate);
+
   start_at.value = newDate;
 };
 

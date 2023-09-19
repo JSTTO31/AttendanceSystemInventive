@@ -1,15 +1,15 @@
 <template>
   <v-app>
-    <v-layout class="h-100 w-100 d-flex pa-2 align-center justify-center bg-blue-darken-1">
-        <v-card class="pa-5 py-10 pa-md-10" :class="mobile ? ' rounded-lg' : 'rounded-lg h-75 w-33'" :disabled="isLoading" elevation="5">
-            <v-avatar class="mb-2 rounded-0 mx-auto" :size="46">
-            <v-img src="/src/assets/schedule.png"></v-img>
-          </v-avatar>
-          <h1 class="text-md-h4 font-weight-medium">Hello! Welcome back</h1>
-          <p class="mb-5 text-md-subtitle-2 font-weight-regular">
-            Please log in to access your attendance records and manage
-            your attendance effortlessly.
-          </p>
+    <v-layout class="h-100 w-100 d-flex pa-2 align-center justify-center" style="background-color: #000f1f;">
+        <v-card class="pa-5 pa-md-10 pb-md-15 text-white rounded-lg" style="background-color: #01172f;" :class="mobile ? ' rounded-lg' : 'rounded-lg'" :disabled="isLoading" elevation="5" width="450">
+          <h2 class="text-md-h5 pa-5 font-weight-bold d-flex justify-center" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;" @click="$router.push({name: 'Home'})">
+            <v-avatar class="mr-1 rounded-0 mb-3" size="50">
+              <v-img src="/src/assets/eAttendance Logo.png"></v-img>
+            </v-avatar>
+            <div style="line-height: 1.3;" class="text-h5 ml-2 justify-center pb-2 font-weight-bold d-flex flex-column">
+              <span class="text-white font-weight-medium">eAttendance</span>
+            </div>
+          </h2>
           <v-form class="mt-5">
             <v-text-field
               class="mb-1"
@@ -17,8 +17,8 @@
               :error-messages="showError($v.email)"
               label="Email address"
               variant="outlined"
-              single-line
               color="primary"
+              single-line
               @keyup.enter="submit"
               prepend-inner-icon="mdi-email"
             ></v-text-field>
@@ -28,8 +28,8 @@
               v-model="$v.password.$model"
               label="Password"
               variant="outlined"
-              single-line
               color="primary"
+              single-line
               @keyup.enter="submit"
               prepend-inner-icon="mdi-lock"
               :append-inner-icon="
@@ -38,17 +38,21 @@
               @click:append-inner="showPassword = !showPassword"
             ></v-text-field>
             <v-spacer v-if="mobile"></v-spacer>
-            <v-btn
-              class="mt-5"
-              @click="submit"
-              block
-              variant="elevated"
-              color="primary"
-              size="large"
-              flat
-              :loading="isLoading"
-              >Login</v-btn
-            >
+            <v-hover v-slot="{isHovering, props}">
+              <v-btn
+                v-bind="props"
+                class="mt-5"
+                @click="submit"
+                block
+                :variant="isHovering ? 'elevated' : 'outlined'"
+                color="primary"
+                size="large"
+                flat
+                :style="{boxShadow: isHovering ? '0 0 25px 5px #615dec' : 'none'}"
+                :loading="isLoading"
+                >Login</v-btn
+              >
+            </v-hover>
           </v-form>
         </v-card>
     </v-layout>

@@ -1,5 +1,5 @@
 <template>
-  <v-main class="bg-blue-grey-lighten-5">
+  <v-main class="bg-blue-grey-lighten-5 d-flex flex-column">
       <router-view v-slot="{Component}">
         <transition name="slide" mode="out-in">
           <component :is="Component"></component>
@@ -9,9 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTheme } from 'vuetify/lib/framework.mjs';
-
-const {current} = useTheme()
 </script>
 
 <style scoped>

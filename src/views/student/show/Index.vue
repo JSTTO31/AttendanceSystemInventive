@@ -1,6 +1,5 @@
 <template>
   <v-container class="px-0" fluid>
-
     <v-row align-content="stretch">
       <v-col :cols="mobile ? 12 : 8">
         <StudentLineChart
@@ -27,37 +26,35 @@
     <v-row>
       <v-col>
         <div v-if="student.attendances && student.attendances.length > 0">
-          <v-card class="border rounded-lg" flat>
-            <v-card flat>
-              <v-table style="overflow-x: auto;" hover class="w-100">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Time in</th>
-                    <th>Time out</th>
-                    <th>Work time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <AttendanceListItem
-                    v-for="attendance in attendancesReverse.slice((page - 1) * perPage, page * perPage)"
-                    :key="attendance.id"
-                    :attendance="attendance"
-                  ></AttendanceListItem>
-                </tbody>
-              </v-table>
-                <div div class="w-100 align-center mt-5  px-5 pb-5 d-flex" v-if="page_total > 1">
-                  Page {{ page }} / {{ page_total }}
-                  <v-spacer></v-spacer>
-                  <v-pagination
-                    :length="page_total"
-                    color="primary"
-                    :total-visible="mobile ? 1 : 5"
-                    v-model="page"
-                  ></v-pagination>
-                </div>
-              </v-card>
-            </v-card>
+          <v-card style="overflow-x: auto;" class="border rounded-lg d-flex flex-column" flat>
+            <v-table hover striped>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time in</th>
+                  <th>Time out</th>
+                  <th>Work time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <AttendanceListItem
+                  v-for="attendance in attendancesReverse.slice((page - 1) * perPage, page * perPage)"
+                  :key="attendance.id"
+                  :attendance="attendance"
+                ></AttendanceListItem>
+              </tbody>
+            </v-table>
+            <div div class="w-100 align-center mt-5  px-5 pb-5 d-flex" v-if="page_total > 1">
+                Page {{ page }} / {{ page_total }}
+                <v-spacer></v-spacer>
+                <v-pagination
+                  :length="page_total"
+                  color="primary"
+                  :total-visible="mobile ? 1 : 5"
+                  v-model="page"
+                ></v-pagination>
+              </div>
+          </v-card>
         </div>
 
       </v-col>
@@ -90,7 +87,6 @@ const attendancesReverse = computed(() =>
     //@ts-ignore
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 );
-// const weeks = useGroupByWeek(student.value.attendances);
 </script>
 
 <style scoped></style>

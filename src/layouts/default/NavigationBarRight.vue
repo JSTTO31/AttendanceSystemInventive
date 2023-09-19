@@ -5,6 +5,7 @@
     class="pa-0"
     :rail="!mobile"
     :color="current.dark ? 'grey-darken-4' : 'grey-lighten-5'"
+    style="z-index: 5000;"
   >
     <v-layout class="h-100 pa-0 w-100">
       <v-app-bar flat class="border-b pa-0" :color="current.dark ? 'grey-darken-4' : 'grey-lighten-5'" floating>
@@ -14,8 +15,7 @@
         <h3 class="ml-1" v-if="!rail || mobile">
         OJT Students</h3>
       </v-app-bar>
-      <v-main :class="rail ? 'disable-scroll' : ''" class="d-flex flex-column" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'"
->
+      <v-main :class="rail ? 'disable-scroll' : ''" class="d-flex flex-column" id="nav-right" :style="false ? 'overflow-y: hidden !important' : 'overflow-y: scroll !important'">
         <div :class="rail && !mobile ? '' : 'pa-5'">
           <AttendanceStudentCardVue v-for="student in students" :key="student.id" :student="student" :rail="rail"></AttendanceStudentCardVue>
         </div>
@@ -29,7 +29,6 @@
 import AttendanceStudentCardVue from "@/components/AttendanceStudentCard.vue";
 import { useAppStore } from "@/stores/app";
 import { storeToRefs } from "pinia";
-import { watch } from "vue";
 import { ref } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";

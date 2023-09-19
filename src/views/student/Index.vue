@@ -1,7 +1,7 @@
 <template>
-  <v-container class=" px-8 h-100 d-flex flex-column">
+  <v-container class="px-md-8 px-2 h-100 d-flex flex-column">
     <v-row>
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <v-card class="h-100 py-10 d-flex flex-column justify-center align-center pa-5 rounded-lg border" flat>
             <VProgressCircular :model-value="remainingPercentage" size="195" width="10" class="text-h2" color="primary">{{remainingPercentage}}%</VProgressCircular>
             <div class="px-5 mt-5 text-center">
@@ -10,7 +10,7 @@
             </div>
         </v-card>
       </v-col>
-      <v-col cols="8">
+      <v-col cols="12" md="8">
           <v-card class="rounded-lg border pa-5" flat>
             <ChartBar :chart-data="chartData"></ChartBar>
           </v-card>
@@ -20,7 +20,7 @@
       <v-col cols="12">
         <v-card class="d-flex pb-5 flex-column rounded-lg border h-100" flat>
           <div class="d-flex pa-5 pb-2">
-            <div class="w-33 font-weight-medium text-h6 d-flex align-center ">
+            <div class=" font-weight-medium text-h6 d-flex align-center " :class="name == 'xs' || name == 'sm' ? 'w-100' : 'w-33'">
               <v-text-field
                 flat
                 prepend-inner-icon="mdi-magnify"
@@ -33,8 +33,8 @@
                 @keyup.enter="($event :any) => $router.push({query: {search: $event.target.value}})"
               ></v-text-field>
             </div>
-            <v-spacer></v-spacer>
-            <v-btn prepend-icon="mdi-plus" color="primary" class="text-capitalize" @click="$router.push({name: 'CreateStudent'})" flat>Add Student</v-btn>
+            <v-spacer class="d-none d-md-block d-flex"></v-spacer>
+            <v-btn  prepend-icon="mdi-plus" color="primary" class="text-capitalize d-none d-md-flex" @click="$router.push({name: 'CreateStudent'})" flat>Add Student</v-btn>
           </div>
           <div class="d-flex pr-5 align-center">
             <v-tabs v-model="selectedTab" color="primary" class="mt-2 mt-md-0">
@@ -61,7 +61,7 @@
               >
             </v-tabs>
             <v-spacer></v-spacer>
-            <span class="text-caption">Total of studens ({{ pageOptions.total }})</span>
+            <span class="text-caption d-none d-md-block">Total of studens ({{ pageOptions.total }})</span>
 
           </div>
           <v-divider></v-divider>
@@ -111,6 +111,12 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-footer app elevation="5"  class="d-block py-2 d-md-none d-flex">
+      <v-btn prepend-icon="mdi-plus" size="small" color="primary" class="text-capitalize" @click="$router.push({name: 'CreateStudent'})" flat>Add Student</v-btn>
+      <v-spacer></v-spacer>
+      <span class="text-caption">Total of studens ({{ pageOptions.total }})</span>
+
+    </v-footer>
   </v-container>
 </template>
 
@@ -123,6 +129,7 @@ import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
 import ChartBar from "@/components/ChartBar.vue";
 import { computed } from "vue";
+const {name} = useDisplay()
 const {mobile} = useDisplay()
 const router = useRouter();
 const route = useRoute();

@@ -1,12 +1,15 @@
 <template>
-  <v-navigation-drawer width="280">
-    <div style="background-color: #000f1f;" class="h-100 pt-5 d-flex flex-column" id="nav">
+  <v-navigation-drawer width="280" style="z-index: 50000;" floating v-if="!mobile">
+    <div style="background-color: #000f1f;z-index: 2000;" class="h-100 pt-5 d-flex flex-column" id="nav">
       <h2 class="text-md-h5 pa-5 font-weight-bold d-flex justify-center" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;" @click="$router.push({name: 'Home'})">
         <v-avatar class="mr-1 rounded-0 mb-3" size="50">
           <v-img src="/src/assets/eAttendance Logo.png"></v-img>
         </v-avatar>
         <div style="line-height: 1.3;" class="text-h5 ml-2 justify-center pb-2 font-weight-bold d-flex flex-column">
           <span class="text-white font-weight-medium">eAttendance</span>
+          <v-card width="120" flat class="ml-5 bg-transparent">
+            <v-img src="/src/assets/Inventive-logo white version.png"></v-img>
+          </v-card>
         </div>
       </h2>
       <v-list class="pa-5">
@@ -80,8 +83,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useTheme } from 'vuetify/lib/framework.mjs';
+import { useDisplay, useTheme } from 'vuetify/lib/framework.mjs';
 import { useUserStore } from '@/stores/user';
+const {mobile} = useDisplay()
 const $user = useUserStore()
 const theme = useTheme()
 const currentMode = ref(theme.global.current.value.dark ? true : false)

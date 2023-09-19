@@ -1,7 +1,7 @@
 <template>
-  <v-container class="d-flex flex-column pa-5 h-100">
+  <v-container class="d-flex flex-column h-100 px-2 px-md-8 py-5">
     <v-row>
-      <v-col cols="5">
+      <v-col cols="12" md="5">
         <v-card class="h-100 d-flex justify-center align-center pa-5 pt-10 rounded-lg border" flat>
           <VProgressCircular :model-value="(presents / students.length * 100)" size="120" width="9" color="primary"  class="text-h4 font-weight-regular mb-5">{{(presents / students.length * 100).toFixed(0) }}%</VProgressCircular>
           <div class="ml-5">
@@ -10,7 +10,7 @@
           </div>
         </v-card>
       </v-col>
-      <v-col cols="7">
+      <v-col cols="12" md="7">
         <AttendanceLineChart class="h-100 pa-5 d-flex justify-center flex-column align-center  rounded-lg border"></AttendanceLineChart>
       </v-col>
       <!-- <v-col v-for="student in students" :key="student.id">
@@ -53,7 +53,7 @@ $attendance.getAll();
 const presents = computed(() => {
   let count = 0;
   students.value.forEach((student) => {
-    let isPresent = today_attendances.value.some(item => item.student_id == student.id && item.work_time)
+    let isPresent = today_attendances.value.some(item => item.student_id == student.id && item.time_in)
     if(isPresent){
       count++
     }

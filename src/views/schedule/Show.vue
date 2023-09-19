@@ -1,21 +1,22 @@
 <template>
-  <v-container>
-    <v-card class="pa-5 border rounded-lg" flat v-if="event">
-      <v-card flat class="d-flex">
-          <div class="w-25">
+  <v-container class="px-2 px-md-5">
+    <v-btn prepend-icon="mdi-arrow-left" variant="text" class="mb-2 text-capitalize" @click="$router.push({name: 'ScheduleIndex'})">Back to calendar</v-btn>
+    <v-card class="pa-md-5 border rounded-lg" flat v-if="event">
+      <v-card flat class="d-flex flex-column flex-md-row">
+          <v-col cols="12" md="4">
             <img  src="https://images.pexels.com/photos/4498362/pexels-photo-4498362.jpeg?cs=srgb&dl=pexels-karolina-grabowska-4498362.jpg&fm=jpg" class="w-100"/>
-          </div>
-          <div class="w-75 px-5">
+          </v-col>
+          <v-col cols="12" md="8" class="px-5">
             <v-chip :color="mode.color" variant="elevated" flat class="mb-2 rounded-lg">{{
               mode.label }}</v-chip>
             <h4 style="line-height: 1.2;font-family: serif !important;"
                 class="font-weight-medium text-blue-grey-darken-3 text-h5">{{ event.title }}</h4>
             <p class="text-capitalize text-subtitle-2 font-weight-regular text-grey-darken-1 mt-3">{{ event.subtitle }}</p>
-          </div>
+          </v-col>
       </v-card>
-      <v-container fluid class="px-0">
+      <v-container fluid class="px-5 px-md-0">
             <v-row class="py-5">
-                <v-col cols="6">
+                <v-col cols="12" md="6">
                     <v-card class="h-100 text-grey-darken-1 d-flex bg-grey-lighten-4 rounded-xl pa-5" flat>
                         <div class="w-20 px-2">
                             <v-icon size="25">mdi-calendar</v-icon>
@@ -31,7 +32,7 @@
                         </div>
                     </v-card>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="12" md="6">
                     <v-card class="h-100 text-grey-darken-1 d-flex bg-grey-lighten-4 rounded-xl pa-5" flat>
                         <div class="w-20 px-2">
                             <v-icon size="25">mdi-clock</v-icon>
@@ -46,7 +47,7 @@
                         </div>
                     </v-card>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="12" md="6">
                     <v-card class="h-100 text-grey-darken-1 d-flex bg-grey-lighten-4 rounded-xl pa-5" flat>
                         <div class="w-20 px-2">
                             <v-icon size="25">mdi-map-marker</v-icon>
@@ -62,7 +63,7 @@
                         </div>
                     </v-card>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="12" md="6">
                     <v-card class="h-100 text-grey-darken-1 d-flex bg-grey-lighten-4 rounded-xl pa-5" flat>
                         <div class="w-20 px-2">
                             <v-icon size="25">mdi-headphones</v-icon>
@@ -122,7 +123,7 @@
             </v-row>
         </v-container>
     </v-card>
-     <v-navigation-drawer  width="350"  flat location="right">
+     <!-- <v-navigation-drawer :model-value="(!(name == 'xs' || name =='sm') || showAttendees) && mobile"  :width="(name == 'xs' || name =='sm')  ? 500:350"  flat location="right">
         <div class="pa-5 h-100 d-flex flex-column">
           <h1 class="mb-2 text-h6 font-weight-medium text-grey-darken-3">
             <v-icon class="mr-1">mdi-account</v-icon>
@@ -145,11 +146,39 @@
            <h4 class="text-center"> No attendees</h4>
           </div>
           <v-spacer></v-spacer>
-          <v-btn prepend-icon="mdi-plus" size="large" color="blue-darken-2" @click="showAddAttendeeDialog = true">Add Attendees</v-btn>
+          <v-btn class="d-none d-md-flex" prepend-icon="mdi-plus" size="large" color="blue-darken-2" @click="showAddAttendeeDialog = true">Add Attendees</v-btn>
+          <v-btn class="d-inline d-md-none d-flex" size="large" color="grey-lighten-4" @click="showAttendees = false">Close</v-btn>
         </div>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <AddAttendees v-model:show-dialog="showAddAttendeeDialog" :event="event"></AddAttendees>
     <RemoveAttendee v-model:attendee="selectedAttendee"></RemoveAttendee>
+    <v-footer app class="py-5 d-flex flex-column" style="z-index: 100;" elevation="5">
+      <v-card flat :height="showAttendees ? 500 : 0" style="transition: .1575s ease-in;" class="mb-2 w-100">
+        <h3 class="mb-2">
+          <v-icon>mdi-account</v-icon>
+          Attendee List
+        </h3>
+        <v-card class="pa-2 mb-2 rounded-lg bg-grey-lighten-3" flat @click="selectedAttendee = student" v-for="student in event.attendees" :key="student.id">
+          <template #prepend>
+            <v-avatar size="50">
+              <v-img :src="student.image"></v-img>
+            </v-avatar>
+          </template>
+          <template #title>
+            <h6 class="text-capitalize">{{ student.first_name }} {{ student.last_name }}</h6>
+          </template>
+          <template #subtitle>
+            <h5 class="text-capitalize font-weight-regular">{{ student.position }}</h5>
+          </template>
+        </v-card>
+      </v-card>
+      <div class="w-100 d-flex">
+        <v-spacer></v-spacer>
+        <v-btn flat class="ml-2" color="primary" @click="showAddAttendeeDialog = true">Add attendees</v-btn>
+        <v-btn flat class="ml-2" width="200"  prepend-icon="mdi-chevron-down" color="grey-lighten-5" v-if="!showAttendees" @click="showAttendees = true">Show Attendees</v-btn>
+        <v-btn flat class="ml-2" width="200" prepend-icon="mdi-chevron-up" color="grey-lighten-5" v-else @click="showAttendees = false">Hide Attendees</v-btn>
+      </div>
+    </v-footer>
   </v-container>
 </template>
 
@@ -164,9 +193,14 @@ import { ref } from 'vue';
 import { computed } from 'vue';
 import { Ref } from 'vue';
 import { Student } from '@/stores/student';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+import { onBeforeRouteUpdate } from 'vue-router';
+const {mobile} = useDisplay()
+const {name} = useDisplay()
 const selectedAttendee : Ref<Student> = ref({} as Student)
+const showAttendees = ref(false)
 const showAddAttendeeDialog = ref(false)
-const {event} = storeToRefs(useEventStore())
+const {event, events} = storeToRefs(useEventStore())
 const {students} = storeToRefs(useAppStore())
 const mode = computed(() => {
     return {
@@ -196,6 +230,18 @@ const time = computed(() => {
 
 const description = computed(() => {
     return event.value.subtitle.length > 200 ? event.value.subtitle.substring(0, 200) + '...' : event.value.subtitle
+})
+
+onBeforeRouteUpdate((to, from, next) => {
+  //@ts-ignore
+  const exists = events.value.find(item => item.id == to.params.event_id)
+  if(exists){
+    //@ts-ignore
+    event.value = exists
+    return next()
+  }
+
+  return next({name: 'ScheduleIndex'})
 })
 </script>
 

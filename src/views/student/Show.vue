@@ -1,5 +1,5 @@
 <template>
-  <v-container class="h-100 pb-15 pb-md-5 bg-white px-8" style="overflow-x: hidden;" v-if="student">
+  <v-container class="h-100 pb-15 pb-md-5 bg-white px-md-8 px-2" style="overflow-x: hidden;" v-if="student">
     <v-row>
       <v-col cols="3" class="d-flex align-end" v-if="!mobile">
           <ImageCard height="100%" :url="student.image" class="rounded-xl bg-grey-lighten-5 w-100" v-model:image="image" :key="student.id"></ImageCard>
@@ -73,18 +73,7 @@
             </v-card>
           </v-menu>
         </v-card>
-        <VProgressLinear
-          height="37"
-          :color="remainingPercent >= 100 ? 'secondary' : 'primary'"
-          :model-value="remainingPercent"
-          class="bg-blue-grey-lighten-1 text-subtitle-1 my-5 text-capitalize font-weight-medium"
-          >
-            <span v-if="remainingPercent <= 100">Time Remaining {{ workTimeTotal() }}/{{student.remaining}}</span>
-            <span v-else>
-              Completed
-            </span>
-          </VProgressLinear
-        >
+        <StudentProgressLinearVue></StudentProgressLinearVue>
         <v-row v-if="!mobile">
           <v-col>
             <v-card flat class="pa-5 bg-transparent align-center d-flex rounded-lg">
@@ -187,6 +176,7 @@
 </template>
 
 <script setup lang="ts">
+import StudentProgressLinearVue from '@/components/StudentProgressLinear.vue';
 import ReloginDialog from '@/components/ReloginDialog.vue'
 import RemoveStudentDialog from '@/components/RemoveStudentDialog.vue'
 import mobileAttendanceActions from '@/components/MobileAttendanceActions.vue'
@@ -207,8 +197,8 @@ const now = new Date()
 const {mobile} = useDisplay()
 const $student = useStudentStore()
 const showManualAttendanceDialog = ref(false)
-const { student, workTimeTotal } = storeToRefs(useStudentStore());
-const { timeIn, timeOut, workTime, remainingPercent } = useStudent(student);
+const { student } = storeToRefs(useStudentStore());
+const { timeIn, timeOut, workTime } = useStudent(student);
 const {applyImage, cancelImage, image, showApplyImageDialog} = useChangeProfile()
 
 const {

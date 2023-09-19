@@ -1,21 +1,21 @@
 <template>
-  <v-container class="px-8 py-5">
+  <v-container class="px-2 px-md-8 py-5">
       <v-row align-content="stretch">
         <v-col cols="12" md="8" class="d-flex flex-column">
           <div class="d-flex">
-            <v-card flat class="border d-flex align-center rounded-lg pa-5 w-100">
+            <v-card flat class="border d-flex align-center flex-column flex-md-row rounded-lg pa-5 w-100">
               <VProgressCircular :model-value="remainingPercentage" size="85" width="5" class="text-h5" color="primary">{{remainingPercentage}}%</VProgressCircular>
-              <div class="px-5">
-                <h2 class="font-weight-medium">Remaining</h2>
-                <h4 class="font-weight-light">All students remaining</h4>
+              <div class="px-5 text-center text-md-left">
+                <h4 class="font-weight-medium text-md-h5 mt-2 mt-md-0">Remaining</h4>
+                <h4 class="font-weight-light d-none d-md-block">All students remaining</h4>
               </div>
             </v-card>
             <span class="mx-2"></span>
-            <v-card flat class="border d-flex align-center rounded-lg pa-5 w-100">
+            <v-card flat class="border d-flex align-center rounded-lg flex-column flex-md-row pa-5 w-100">
               <VProgressCircular model-value="90" size="85" width="5" color="primary"  class="text-h5">90%</VProgressCircular>
               <div class="px-5">
-                <h2 class="font-weight-medium">Attendance</h2>
-                <h4 class="font-weight-light">4 students out of 10</h4>
+                <h4 class="font-weight-medium text-md-h5 mt-2 mt-md-0">Attendance</h4>
+                <h4 class="font-weight-light d-none d-md-block">4 students out of 10</h4>
               </div>
             </v-card>
           </div>

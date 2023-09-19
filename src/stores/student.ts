@@ -57,8 +57,6 @@ export const useStudentStore = defineStore('student', {
     },
     workTimeTotal: state => () => {
       const attendances = state.student.attendances.filter(attendance => !!attendance.work_time)
-
-
       const hours = attendances.reduce((sum, item) => sum += parseInt(item.work_time), 0)
       const minutes = attendances.reduce((sum, item) => {
         return sum += parseFloat(parseFloat(item.work_time).toFixed(2).toString().split('.')[1]) || 0

@@ -147,14 +147,18 @@
 <script setup lang="ts">
 //@ts-ignore
 import useManual from "@/composables/useManual";
+import useStudent from "@/composables/useStudent";
+import { useAppStore } from "@/stores/app";
 import { useAttendanceStore } from "@/stores/attendance";
 import { useEventStore } from "@/stores/events";
 import { useStudentStore } from "@/stores/student";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useDisplay, useTheme } from "vuetify/lib/framework.mjs";
+const router=  useRouter()
 const $event = useEventStore()
 const {mobile} = useDisplay()
 const {current} = useTheme()
@@ -193,14 +197,21 @@ const interceptEvent = computed(() => {
   })
 })
 
-  console.log(interceptEvent.value);
-
 
 const submit = () => {
   isLoading.value = true;
   $attendance.manual(student.value.id, attendance.value).then(() => {
     isLoading.value = false;
     emits("update:showDialog", false);
+      const {students} = storeToRefs(useAppStore())
+      const exists = students.value.find(item => item.id == student.value.id)
+      if(exists){
+        const studentRef = ref(exists)
+        const {work_time_total} = useStudent(studentRef)
+        if(work_time_total.value.hours >= parseInt(student.value.remaining)){
+          router.push({query: {type: 'completed', name: student.value.first_name + ' ' + student.value.last_name}})
+        }
+      }
   });
 };
 const remove = () => {

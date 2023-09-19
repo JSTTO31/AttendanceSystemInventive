@@ -32,7 +32,7 @@ export const useAppStore = defineStore('app', {
         } : item)
         const student = this.students.find(item => item.id == student_id)
         if(student){
-          let existsAttendance = student.attendances.find(item => item.id == attendance.id)
+          const existsAttendance = student.attendances.find(item => item.id == attendance.id)
           if(existsAttendance){
             student.attendances = student.attendances.map(item => item.id == attendance.id ? attendance : item)
           }else{

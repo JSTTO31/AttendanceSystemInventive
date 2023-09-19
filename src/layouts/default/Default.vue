@@ -1,16 +1,79 @@
 <template>
-  <v-app>
+  <v-app style="margin: 0px !important">
     <NavigationBarLeft></NavigationBarLeft>
     <NavigationBarRight></NavigationBarRight>
-    <default-bar />
+    <default-bar v-model:show-menu="showMenu" />
+    <v-card style="z-index: 500;" flat @vue:mounted="teleportIsMounted = true" id="teleport">
+    </v-card>
     <default-view />
-    <!-- <LoadingOverlayVue :show="isLoading"></LoadingOverlayVue> -->
-    <v-banner :class="mobile ? 'banner-mobile' : 'banner'" elevation="5" v-if="showNetworkError">
+    <v-navigation-drawer style="z-index: 5000;"  class="w-100" v-model="showMenu" v-if="mobile">
+      <v-list class=" d-flex flex-column">
+          <h1 class="pa-2 px-5">Menu List</h1>
+          <v-list-item
+            class="py-5 rounded-0"
+            elevation="0"
+            active-class="bg-primary"
+            @click="$router.push({ name: 'Home' })"
+            :active="$route.name == 'Home'"
+            title="Dashboard"
+            prepend-icon="mdi-view-dashboard-outline"
+          >
+          </v-list-item>
+          <v-list-item
+            active-class="bg-primary"
+            class=" py-5 rounded-0"
+            elevation="0"
+            title="Attendance"
+            :active="$route.name == 'attendanceIndex'"
+            @click="$router.push({ name: 'attendanceIndex' })"
+            prepend-icon="mdi-finance"
+          >
+          </v-list-item>
+          <v-list-item
+            active-class="bg-primary"
+            class=" py-5 rounded-0"
+            elevation="0"
+            title="Schedule"
+            prepend-icon="mdi-calendar-outline"
+            :active="$route.name == 'ScheduleIndex'"
+            @click="$router.push({ name: 'ScheduleIndex' })"
+          >
+          </v-list-item>
+          <v-list-item
+            active-class="bg-primary"
+            class=" py-5 rounded-0"
+            elevation="0"
+            :to="{ name: 'IndexStudent' }"
+            title="Students"
+            prepend-icon="mdi-school"
+          >
+          </v-list-item>
+          <v-list-item
+            active-class="bg-primary"
+            class=" py-5 rounded-0"
+            elevation="0"
+            title="Add student"
+            :to="{ name: 'CreateStudent' }"
+            prepend-icon="mdi-plus"
+          >
+          </v-list-item>
+          <v-list-item
+              class="my-2 rounded-0"
+              elevation="0"
+              color="primary"
+              title="Logout"
+              prepend-icon="mdi-logout"
+              @click="$user.logout()"
+            >
+          </v-list-item>
+        </v-list>
+    </v-navigation-drawer>
+    <v-banner :class="mobile ? 'banner-mobile' : 'banner'" elevation="5" v-if="showNetworkError" style="z-index: 5000;">
       <template #prepend>
         <v-icon size="35">mdi-server-network-off</v-icon>
       </template>
       <v-banner-text>
-        Its seems the server is not working, please turn it on and refresh the page.
+        Its seems the server is not working properly, please turn it on and refresh the page.
       </v-banner-text>
       <v-banner-actions>
         <v-btn @click="reload" color="primary">Refresh</v-btn>
@@ -29,19 +92,25 @@
           <h2 class="font-weight-regular mt-3 text-wrap text-center">{{ $route.query.message }}</h2>
       </v-card>
     </v-dialog>
+    <CongratsDialog v-if="$route.query.type == 'completed' && $route.query.name"></CongratsDialog>
   </v-app>
 </template>
 
 <script lang="ts" setup>
+import CongratsDialog from "@/components/CongratsDialog.vue";
 import DefaultBar from "./AppBar.vue";
 import DefaultView from "./View.vue";
 import NavigationBarLeft from "./NavigationBarLeft.vue";
 import NavigationBarRight from "./NavigationBarRight.vue";
-import { storeToRefs } from "pinia";
-import { useAppStore } from "@/stores/app";
-import { ref } from "vue";
+import { ref, provide } from "vue";
 import { api } from "@/utils";
 import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useUserStore } from "@/stores/user";
+import { useRoute } from "vue-router";
+const teleportIsMounted = ref(false)
+provide('teleport-is-mounted', teleportIsMounted)
+const showMenu = ref(false)
+const $user = useUserStore()
 const {mobile} = useDisplay()
 const showNetworkError = ref(false)
 const reload = () => window.location.reload()

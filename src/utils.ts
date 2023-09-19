@@ -40,13 +40,17 @@ export interface Page{
 }
 
 export function getMonth(value: number){
+  const now = new Date()
+  const date = new Date(now.getFullYear(), value)
+
+
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-  return months[value]
+  return months[date.getMonth()]
 }
 
 export function getDay(value: number){
-  const months = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  const months = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
   return months[value]
 }
@@ -57,11 +61,11 @@ export function getAllDayInMonth(currentMonth: number){
   const month = currentDate.getMonth();
   currentDate.setDate(1)
   const first_date = new Date(currentDate)
-  first_date.setDate(-(first_date.getDay() - 2))
+  first_date.setDate(-(first_date.getDay() - 1))
   const afterMonth = new Date(fullYear, month + 1)
   const last_date = afterMonth
   last_date.setDate(0)
-  last_date.setDate(last_date.getDate() + (8 - last_date.getDay()))
+  last_date.setDate(last_date.getDate() + (7 - last_date.getDay()))
   const dateContainer = []
 
   while(first_date < last_date){
