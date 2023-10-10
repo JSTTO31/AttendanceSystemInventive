@@ -17,7 +17,6 @@ const data = computed(() => {
   const container = []
 
   while(start <= end){
-      //@ts-ignore
       const count = weekly_attendances.value.filter(attendance => new Date(attendance.created_at).toDateString() == new Date(start).toDateString() && attendance.work_time).length
       container.push(count)
       start.setDate(start.getDate() + 1)

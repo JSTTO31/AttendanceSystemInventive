@@ -1,0 +1,1 @@
+import{d as s,a7 as o,o as t,c as _,a3 as a,a4 as c,b as d,_ as n}from"./index-1b2f18c0.js";const p=e=>(a("data-v-33bdd580"),e=e(),c(),e),r={class:"pt-15 d-flex justify-center"},u=p(()=>d("h3",null,"No courses taken",-1)),i=[u],l=s({__name:"Course",setup(e){return o(),(f,h)=>(t(),_("div",r,i))}});const v=n(l,[["__scopeId","data-v-33bdd580"]]);export{v as default};

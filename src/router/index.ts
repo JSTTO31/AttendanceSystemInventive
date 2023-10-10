@@ -164,6 +164,7 @@ const router = createRouter({
   routes,
 })
 
+
 router.afterEach(() => {
   nprogress.done()
 })

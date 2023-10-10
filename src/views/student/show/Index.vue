@@ -25,7 +25,6 @@
     </v-row>
     <v-row>
       <v-col>
-        <a download="file" id="link"></a>
         <div v-if="student.attendances && student.attendances.length > 0">
           <v-card style="overflow-x: auto;" class="border rounded-lg d-flex flex-column" flat>
             <v-table hover striped>

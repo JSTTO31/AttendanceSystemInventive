@@ -6,7 +6,7 @@
     <v-app-bar-title v-else class="d-flex" @click="$router.push({name: 'Home'})" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;">
      <div class="d-flex align-center pt-2">
         <v-avatar class="mr-1 rounded-0 mb-3" size="35">
-          <v-img src="/src/assets/eAttendance Logo.png"></v-img>
+          <v-img src="/src/assets/eAttendance-logo.png"></v-img>
         </v-avatar>
         <div style="line-height: 1.3;" class="text-h5 ml-2 justify-center pb-2 font-weight-bold d-flex flex-column">
           <span class="text-white font-weight-medium">eAttendance</span>

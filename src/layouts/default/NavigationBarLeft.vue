@@ -8,7 +8,7 @@
         <div style="line-height: 1.3;" class="text-h5 ml-2 justify-center pb-2 font-weight-bold d-flex flex-column">
           <span class="text-white font-weight-medium">eAttendance</span>
           <v-card width="120" flat class="ml-5 bg-transparent">
-            <v-img src="/src/assets/Inventive-logo white version.png"></v-img>
+            <v-img src="/src/assets/Inventive-logo-white-version.png"></v-img>
           </v-card>
         </div>
       </h2>
