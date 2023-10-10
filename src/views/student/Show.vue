@@ -61,6 +61,7 @@
                   >Remove</v-list-item
                 >
                 <h4>Other</h4>
+                <v-list-item prepend-icon="mdi-printer" @click="downloadAttendancePDF">Download Attendance</v-list-item>
                 <v-list-item
                   prepend-icon="mdi-book-open-outline"
                   @click="showManualAttendanceDialog = true"
@@ -176,6 +177,7 @@
 </template>
 
 <script setup lang="ts">
+// import {attendanceSheetPdf} from '../../utils'
 import StudentProgressLinearVue from '@/components/StudentProgressLinear.vue';
 import ReloginDialog from '@/components/ReloginDialog.vue'
 import RemoveStudentDialog from '@/components/RemoveStudentDialog.vue'
@@ -218,6 +220,21 @@ onBeforeRouteUpdate((to, from, next) => {
   }
   next()
 })
+
+const downloadAttendancePDF = async () => {
+ const link = document.getElementById("link")
+
+
+//  if(link){
+//     //@ts-ignore
+//     link.href = await attendanceSheetPdf()
+//     //@ts-ignore
+//     link.download = "Attendance - " + student.value.last_name  + ".pdf";
+//     link.click()
+
+//  }
+
+}
 </script>
 
 <style scoped></style>

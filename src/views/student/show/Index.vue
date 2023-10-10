@@ -25,6 +25,7 @@
     </v-row>
     <v-row>
       <v-col>
+        <a download="file" id="link"></a>
         <div v-if="student.attendances && student.attendances.length > 0">
           <v-card style="overflow-x: auto;" class="border rounded-lg d-flex flex-column" flat>
             <v-table hover striped>
@@ -56,7 +57,6 @@
               </div>
           </v-card>
         </div>
-
       </v-col>
     </v-row>
   </v-container>
@@ -87,6 +87,8 @@ const attendancesReverse = computed(() =>
     //@ts-ignore
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 );
+
+
 </script>
 
 <style scoped></style>

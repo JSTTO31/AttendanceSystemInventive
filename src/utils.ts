@@ -1,5 +1,6 @@
 import axios from "axios"
-
+//@ts-ignore
+// import {PDFDocument, StandardFonts, rgb} from 'pdf-lib'
 export function showError(validator: any, error_message = ""){
   if(validator.$invalid && validator.$dirty){
       return error_message.length > 0 ? error_message :  validator.$errors[0].$message
@@ -83,3 +84,29 @@ export function convertToStandardTime(time: string){
   return parseInt(hour) > 12 ? parseInt(hour) - 12  + ':' + minutes + ' PM' : parseInt(hour)  + ':' + minutes + ' AM'
 }
 
+
+
+// export const attendanceSheetPdf = async () => {
+//   const pdfDoc = await PDFDocument.create()
+//   const page = pdfDoc.addPage()
+//   const HelveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+//   const Helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
+//   const page_height = 768
+//   const page_width = 1056
+//   const page_margin = 50
+
+//   page.setSize(page_width, page_height)
+
+//   page.drawText("Student Attendance Sheet", {
+//     x: page_margin,
+//     y: page_height - 55,
+//     size: 35,
+//     font: Helvetica,
+//     color: rgb(.2, .2, .2)
+//   })
+
+
+
+//   return await pdfDoc.saveAsBase64({dataUri: true})
+
+// }

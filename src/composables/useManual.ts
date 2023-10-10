@@ -15,8 +15,6 @@ export default (start_at: any) => {
     return new Date(item.created_at).getMonth() == month && new Date(item.created_at).getDate() == date
   })
 
-  console.log(start_at);
-
 
   if(exists && !!exists.time_in && !!exists.time_out){
     const time_in = new Date(exists.time_in)

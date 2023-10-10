@@ -40,7 +40,8 @@ export default{
             data: [40, 39, 10, 40, 39, 80, 40],
           },
         ],
-      })
+      }),
+      type: {} as any
     },
     options: {
       type: Object,

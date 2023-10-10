@@ -1,9 +1,9 @@
 <template>
-  <v-navigation-drawer width="280" style="z-index: 50000;" floating v-if="!mobile">
+  <v-navigation-drawer width="280" floating v-if="!mobile">
     <div style="background-color: #000f1f;z-index: 2000;" class="h-100 pt-5 d-flex flex-column" id="nav">
       <h2 class="text-md-h5 pa-5 font-weight-bold d-flex justify-center" style="cursor: pointer;font-family: 'Poppins', sans-serif !important;font-weight: 600;" @click="$router.push({name: 'Home'})">
         <v-avatar class="mr-1 rounded-0 mb-3" size="50">
-          <v-img src="/src/assets/eAttendance Logo.png"></v-img>
+          <v-img src="/src/assets/eAttendance-logo.png"></v-img>
         </v-avatar>
         <div style="line-height: 1.3;" class="text-h5 ml-2 justify-center pb-2 font-weight-bold d-flex flex-column">
           <span class="text-white font-weight-medium">eAttendance</span>

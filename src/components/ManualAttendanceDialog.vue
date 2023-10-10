@@ -87,7 +87,7 @@
         <v-spacer></v-spacer>
         <v-btn @click="remove" :disabled="!exists" color="error" prepend-icon="mdi-trash-can">Delete</v-btn>
       </v-card-actions>
-      <v-menu :close-on-content-click="false">
+      <v-menu :close-on-content-click="false" location="bottom right">
         <template #activator="{props}">
           <v-btn
             v-bind="props"
